@@ -1,0 +1,1586 @@
+Archive member included because of file (symbol)
+
+common/libcommon.a(cmd_boot.o)
+                              (__u_boot_cmd_reset)
+common/libcommon.a(cmd_bootm.o)
+                              (__u_boot_cmd_bootm)
+common/libcommon.a(cmd_flash.o)
+                              (__u_boot_cmd_erase)
+common/libcommon.a(cmd_mem.o)
+                              (__u_boot_cmd_md)
+common/libcommon.a(cmd_mii.o)
+                              (__u_boot_cmd_progmac)
+common/libcommon.a(cmd_net.o)
+                              (__u_boot_cmd_tftpboot)
+common/libcommon.a(cmd_nvedit.o)
+                              common/libcommon.a(cmd_bootm.o) (getenv)
+common/libcommon.a(command.o)
+                              (__u_boot_cmd_version)
+common/libcommon.a(console.o)
+                              common/libcommon.a(cmd_bootm.o) (printf)
+common/libcommon.a(devices.o)
+                              common/libcommon.a(console.o) (devlist)
+common/libcommon.a(dlmalloc.o)
+                              common/libcommon.a(cmd_bootm.o) (malloc)
+common/libcommon.a(env_common.o)
+                              common/libcommon.a(cmd_nvedit.o) (env_get_addr)
+common/libcommon.a(env_nowhere.o)
+                              common/libcommon.a(env_common.o) (env_relocate_spec)
+common/libcommon.a(hush.o)    common/libcommon.a(cmd_bootm.o) (parse_string_outer)
+common/libcommon.a(lists.o)   common/libcommon.a(console.o) (ListGetPtrToItem)
+common/libcommon.a(flash.o)   common/libcommon.a(cmd_mem.o) (addr2info)
+common/libcommon.a(main.o)    common/libcommon.a(cmd_nvedit.o) (do_run)
+board/ar7240/ap121/libap121.a(ar7240_flash.o)
+                              common/libcommon.a(cmd_mii.o) (write_buff)
+board/ar7240/ap121/libap121.a(flash.o)
+                              board/ar7240/ap121/libap121.a(ar7240_flash.o) (flash_get_geom)
+cpu/mips/libmips.a(cpu.o)     common/libcommon.a(cmd_boot.o) (do_reset)
+cpu/mips/libmips.a(interrupts.o)
+                              common/libcommon.a(cmd_bootm.o) (enable_interrupts)
+cpu/mips/libmips.a(cache.o)   cpu/mips/libmips.a(cpu.o) (dcache_flush_range)
+cpu/mips/ar7240/libar7240.a(hornet_serial.o)
+                              common/libcommon.a(console.o) (serial_tstc)
+lib_mips/libmips.a(board.o)   common/libcommon.a(dlmalloc.o) (sbrk)
+lib_mips/libmips.a(time.o)    common/libcommon.a(cmd_bootm.o) (udelay)
+lib_mips/libmips.a(mips_linux.o)
+                              common/libcommon.a(cmd_bootm.o) (do_bootm_linux)
+net/libnet.a(net.o)           common/libcommon.a(cmd_net.o) (copy_filename)
+net/libnet.a(tftp.o)          net/libnet.a(net.o) (TftpStart)
+net/libnet.a(eth.o)           net/libnet.a(net.o) (eth_get_dev)
+rtc/librtc.a(date.o)          common/libcommon.a(cmd_bootm.o) (to_tm)
+lib_generic/libgeneric.a(crc32.o)
+                              common/libcommon.a(cmd_bootm.o) (crc32)
+lib_generic/libgeneric.a(ctype.o)
+                              common/libcommon.a(hush.o) (_ctype)
+lib_generic/libgeneric.a(display_options.o)
+                              common/libcommon.a(cmd_bootm.o) (print_size)
+lib_generic/libgeneric.a(string.o)
+                              common/libcommon.a(hush.o) (strcat)
+lib_generic/libgeneric.a(vsprintf.o)
+                              common/libcommon.a(cmd_bootm.o) (simple_strtoul)
+lib_generic/libgeneric.a(LzmaWrapper.o)
+                              common/libcommon.a(cmd_bootm.o) (lzma_inflate)
+lib_generic/libgeneric.a(LzmaDecode.o)
+                              lib_generic/libgeneric.a(LzmaWrapper.o) (LzmaDecode)
+common/libcommon.a(exports.o)
+                              lib_mips/libmips.a(board.o) (jumptable_init)
+common/libcommon.a(miiphyutil.o)
+                              net/libnet.a(eth.o) (miiphy_init)
+board/ar7240/ap121/libap121.a(ap121.o)
+                              lib_mips/libmips.a(board.o) (checkboard)
+cpu/mips/ar7240/libar7240.a(meminit.o)
+                              board/ar7240/ap121/libap121.a(ap121.o) (ar7240_ddr_find_size)
+cpu/mips/ar7240/libar7240.a(ag7240.o)
+                              net/libnet.a(eth.o) (ag7240_enet_initialize)
+cpu/mips/ar7240/libar7240.a(hornet_ddr_init.o)
+                              board/ar7240/ap121/libap121.a(ap121.o) (hornet_ddr_tap_init)
+board/ar7240/ap121/libap121.a(ar7240_s26_phy.o)
+                              cpu/mips/ar7240/libar7240.a(ag7240.o) (athrs26_mdc_check)
+
+Allocating common symbols
+Common symbol       size              file
+
+dp_last_size        0x4               common/libcommon.a(cmd_mem.o)
+console_buffer      0x200             common/libcommon.a(main.o)
+NetArpWaitTry       0x4               net/libnet.a(net.o)
+NetArpWaitPacketMAC
+                    0x4               net/libnet.a(net.o)
+flash_info          0x14c             board/ar7240/ap121/libap121.a(ar7240_flash.o)
+NetOurEther         0x6               net/libnet.a(net.o)
+NetOurIP            0x4               net/libnet.a(net.o)
+NetPingIP           0x4               net/libnet.a(net.o)
+NetServerIP         0x4               net/libnet.a(net.o)
+monitor_flash_len   0x4               lib_mips/libmips.a(board.o)
+___strtok           0x4               lib_generic/libgeneric.a(string.o)
+NetArpWaitTxPacketSize
+                    0x4               net/libnet.a(net.o)
+NetArpWaitReplyIP   0x4               net/libnet.a(net.o)
+NetRxPackets        0x40              net/libnet.a(net.o)
+NetArpWaitTxPacket  0x4               net/libnet.a(net.o)
+NetArpWaitPacketIP  0x4               net/libnet.a(net.o)
+NetState            0x4               net/libnet.a(net.o)
+BootFile            0x80              net/libnet.a(net.o)
+dp_last_addr        0x4               common/libcommon.a(cmd_mem.o)
+mm_last_size        0x4               common/libcommon.a(cmd_mem.o)
+mm_last_addr        0x4               common/libcommon.a(cmd_mem.o)
+NetIPID             0x4               net/libnet.a(net.o)
+nesting_level       0x4               common/libcommon.a(hush.o)
+last_return_code    0x4               common/libcommon.a(hush.o)
+NetRxPkt            0x4               net/libnet.a(net.o)
+ag7240_macs         0x8               cpu/mips/ar7240/libar7240.a(ag7240.o)
+NetArpWaitPacketBuf
+                    0x620             net/libnet.a(net.o)
+header              0x40              common/libcommon.a(cmd_bootm.o)
+NetRxPktLen         0x4               net/libnet.a(net.o)
+NetBootFileXferSize
+                    0x4               net/libnet.a(net.o)
+PktBuf              0x6620            net/libnet.a(net.o)
+NetArpWaitTimerStart
+                    0x4               net/libnet.a(net.o)
+
+Discarded input sections
+
+ .reginfo       0x0000000000000000        0x0 common/libcommon.a(cmd_boot.o)
+ .reginfo       0x0000000000000000        0x0 common/libcommon.a(cmd_bootm.o)
+ .reginfo       0x0000000000000000        0x0 common/libcommon.a(cmd_flash.o)
+ .reginfo       0x0000000000000000        0x0 common/libcommon.a(cmd_mem.o)
+ .reginfo       0x0000000000000000        0x0 common/libcommon.a(cmd_mii.o)
+ .reginfo       0x0000000000000000        0x0 common/libcommon.a(cmd_net.o)
+ .reginfo       0x0000000000000000        0x0 common/libcommon.a(cmd_nvedit.o)
+ .reginfo       0x0000000000000000        0x0 common/libcommon.a(command.o)
+ .reginfo       0x0000000000000000        0x0 common/libcommon.a(console.o)
+ .reginfo       0x0000000000000000        0x0 common/libcommon.a(devices.o)
+ .reginfo       0x0000000000000000        0x0 common/libcommon.a(dlmalloc.o)
+ .reginfo       0x0000000000000000        0x0 common/libcommon.a(env_common.o)
+ .reginfo       0x0000000000000000        0x0 common/libcommon.a(env_nowhere.o)
+ .reginfo       0x0000000000000000        0x0 common/libcommon.a(hush.o)
+ .reginfo       0x0000000000000000        0x0 common/libcommon.a(lists.o)
+ .reginfo       0x0000000000000000        0x0 common/libcommon.a(flash.o)
+ .reginfo       0x0000000000000000        0x0 common/libcommon.a(main.o)
+ .reginfo       0x0000000000000000        0x0 board/ar7240/ap121/libap121.a(ar7240_flash.o)
+ .reginfo       0x0000000000000000        0x0 board/ar7240/ap121/libap121.a(flash.o)
+ .reginfo       0x0000000000000000        0x0 cpu/mips/libmips.a(cpu.o)
+ .reginfo       0x0000000000000000        0x0 cpu/mips/libmips.a(interrupts.o)
+ .reginfo       0x0000000000000000        0x0 cpu/mips/libmips.a(cache.o)
+ .reginfo       0x0000000000000000        0x0 cpu/mips/ar7240/libar7240.a(hornet_serial.o)
+ .reginfo       0x0000000000000000        0x0 lib_mips/libmips.a(board.o)
+ .reginfo       0x0000000000000000        0x0 lib_mips/libmips.a(time.o)
+ .reginfo       0x0000000000000000        0x0 lib_mips/libmips.a(mips_linux.o)
+ .reginfo       0x0000000000000000        0x0 net/libnet.a(net.o)
+ .reginfo       0x0000000000000000        0x0 net/libnet.a(tftp.o)
+ .reginfo       0x0000000000000000        0x0 net/libnet.a(eth.o)
+ .reginfo       0x0000000000000000        0x0 rtc/librtc.a(date.o)
+ .reginfo       0x0000000000000000        0x0 lib_generic/libgeneric.a(crc32.o)
+ .reginfo       0x0000000000000000        0x0 lib_generic/libgeneric.a(ctype.o)
+ .reginfo       0x0000000000000000        0x0 lib_generic/libgeneric.a(display_options.o)
+ .reginfo       0x0000000000000000        0x0 lib_generic/libgeneric.a(string.o)
+ .reginfo       0x0000000000000000        0x0 lib_generic/libgeneric.a(vsprintf.o)
+ .reginfo       0x0000000000000000        0x0 lib_generic/libgeneric.a(LzmaWrapper.o)
+ .reginfo       0x0000000000000000        0x0 lib_generic/libgeneric.a(LzmaDecode.o)
+ .reginfo       0x0000000000000000        0x0 common/libcommon.a(exports.o)
+ .reginfo       0x0000000000000000        0x0 common/libcommon.a(miiphyutil.o)
+ .reginfo       0x0000000000000000        0x0 board/ar7240/ap121/libap121.a(ap121.o)
+ .reginfo       0x0000000000000000        0x0 cpu/mips/ar7240/libar7240.a(meminit.o)
+ .reginfo       0x0000000000000000        0x0 cpu/mips/ar7240/libar7240.a(ag7240.o)
+ .reginfo       0x0000000000000000        0x0 cpu/mips/ar7240/libar7240.a(hornet_ddr_init.o)
+ .reginfo       0x0000000000000000        0x0 board/ar7240/ap121/libap121.a(ar7240_s26_phy.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+                0x0000000000000000                . = 0x0
+                0x0000000000000000                . = ALIGN (0x4)
+
+.text           0x0000000080010000    0x17ae0
+ *(.text)
+ .text          0x0000000080010000     0x3350 cpu/mips/start.o
+                0x0000000080010030                relocate_code
+                0x0000000080010000                _start
+                0x00000000800100ec                ar7240_ddr_tap_init
+ .text          0x0000000080013350        0x0 common/libcommon.a(cmd_boot.o)
+ .text          0x0000000080013350      0xb60 common/libcommon.a(cmd_bootm.o)
+                0x0000000080013350                print_image_hdr
+                0x0000000080013758                do_bootd
+                0x00000000800137a8                do_bootm
+ .text          0x0000000080013eb0      0x6a0 common/libcommon.a(cmd_flash.o)
+                0x0000000080013eb0                flash_sect_erase
+                0x00000000800140e0                do_flerase
+ .text          0x0000000080014550      0xaf0 common/libcommon.a(cmd_mem.o)
+                0x0000000080014994                do_mem_mw
+                0x0000000080014cf4                do_mem_nm
+                0x0000000080014d3c                do_mem_mm
+                0x00000000800147e0                do_mem_cp
+                0x0000000080014550                do_mem_mtest
+                0x0000000080014734                cmd_get_data_size
+                0x0000000080014d84                do_mem_md
+ .text          0x0000000080015040      0x140 common/libcommon.a(cmd_mii.o)
+                0x0000000080015040                do_mac
+ .text          0x0000000080015180      0x480 common/libcommon.a(cmd_net.o)
+                0x0000000080015180                do_ping
+                0x000000008001524c                do_tftpb
+ .text          0x0000000080015600      0xd90 common/libcommon.a(cmd_nvedit.o)
+                0x00000000800157f8                getenv
+                0x00000000800158f0                _do_setenv
+                0x00000000800156bc                getenv_r
+                0x000000008001611c                do_printenv
+                0x00000000800160c8                setenv
+                0x0000000080016060                do_setenv
+ .text          0x0000000080016390      0x3c0 common/libcommon.a(command.o)
+                0x0000000080016390                find_cmd
+                0x0000000080016490                do_help
+                0x000000008001670c                do_version
+ .text          0x0000000080016750      0x8c0 common/libcommon.a(console.o)
+                0x0000000080016c14                console_init_r
+                0x0000000080016ba8                printf
+                0x0000000080016988                console_assign
+                0x0000000080016f54                getc
+                0x0000000080016b1c                puts
+                0x0000000080016968                dbg
+                0x0000000080016e80                serial_printf
+                0x000000008001686c                ftstc
+                0x0000000080016aa8                fprintf
+                0x0000000080016f24                tstc
+                0x0000000080016b50                vprintf
+                0x0000000080016f84                ctrlc
+                0x0000000080016eec                putc
+                0x000000008001691c                disable_ctrlc
+                0x0000000080016830                fgetc
+                0x0000000080016938                had_ctrlc
+                0x00000000800168a8                fputc
+                0x0000000080016978                console_init_f
+                0x0000000080016950                clear_ctrlc
+                0x00000000800168e4                fputs
+ .text          0x0000000080017010      0x190 common/libcommon.a(devices.o)
+                0x000000008001704c                device_register
+                0x0000000080017010                devices_done
+                0x0000000080017090                devices_init
+ .text          0x00000000800171a0     0x13a0 common/libcommon.a(dlmalloc.o)
+                0x0000000080017658                malloc
+                0x0000000080017eb4                pvalloc
+                0x0000000080017ef4                calloc
+                0x00000000800171e4                malloc_usable_size
+                0x0000000080018000                realloc
+                0x00000000800172d0                malloc_trim
+                0x00000000800171a0                malloc_bin_reloc
+                0x000000008001723c                mallopt
+                0x0000000080017d30                memalign
+                0x0000000080017640                cfree
+                0x0000000080017ed8                valloc
+                0x00000000800173f0                free
+ .text          0x0000000080018540      0x1d0 common/libcommon.a(env_common.o)
+                0x0000000080018574                env_get_addr
+                0x0000000080018620                env_relocate
+                0x00000000800185d0                env_crc_update
+                0x0000000080018540                env_get_char_memory
+ .text          0x0000000080018710       0x40 common/libcommon.a(env_nowhere.o)
+                0x0000000080018710                env_relocate_spec
+                0x0000000080018718                env_get_char_spec
+                0x0000000080018728                env_init
+ .text          0x0000000080018750     0x2790 common/libcommon.a(hush.o)
+                0x0000000080018b94                new_pipe
+                0x00000000800187d4                mapset
+                0x000000008001a2f4                parse_string_outer
+                0x0000000080019a0c                update_ifs_map
+                0x000000008001a290                parse_file_outer
+                0x0000000080018750                simple_itoa
+                0x0000000080018f48                reserved_word
+                0x0000000080018808                u_boot_hush_start
+ .text          0x000000008001aee0      0x570 common/libcommon.a(lists.o)
+                0x000000008001b2ac                DisposeHandle
+                0x000000008001b308                ListDispose
+                0x000000008001b064                ListInsertItems
+                0x000000008001aee8                ListSetAllocationPolicy
+                0x000000008001af40                ListGetItemSize
+                0x000000008001af34                ListGetDataPtr
+                0x000000008001b320                NewHandle
+                0x000000008001afb0                SetHandleSize
+                0x000000008001b294                ListInsertItem
+                0x000000008001aee0                GetHandleSize
+                0x000000008001af4c                ListNumItems
+                0x000000008001aef8                ListGetPtrToItem
+                0x000000008001b3cc                ListCreate
+                0x000000008001af58                ListGetItems
+ .text          0x000000008001b450      0x4e0 common/libcommon.a(flash.o)
+                0x000000008001b798                flash_write
+                0x000000008001b5d4                flash_protect
+                0x000000008001b450                addr2info
+                0x000000008001b4a0                flash_perror
+ .text          0x000000008001b930      0xbe0 common/libcommon.a(main.o)
+                0x000000008001b9fc                run_command
+                0x000000008001b930                do_run
+                0x000000008001c0b4                readline
+                0x000000008001c36c                main_loop
+ .text          0x000000008001c510      0x6c0 board/ar7240/ap121/libap121.a(ar7240_flash.o)
+                0x000000008001c804                flash_erase
+                0x000000008001ca54                flash_init
+                0x000000008001ca38                flash_print_info
+                0x000000008001c59c                write_buff
+ .text          0x000000008001cbd0       0xa0 board/ar7240/ap121/libap121.a(flash.o)
+                0x000000008001cbd0                flash_get_geom
+ .text          0x000000008001cc70       0x80 cpu/mips/libmips.a(cpu.o)
+                0x000000008001ccc4                flush_cache
+                0x000000008001cc70                do_reset
+                0x000000008001cc8c                write_one_tlb
+ .text          0x000000008001ccf0       0x10 cpu/mips/libmips.a(interrupts.o)
+                0x000000008001ccf8                disable_interrupts
+                0x000000008001ccf0                enable_interrupts
+ .text          0x000000008001cd00      0x360 cpu/mips/libmips.a(cache.o)
+                0x000000008001cf68                dcache_flush_range
+                0x000000008001cd48                mips_cache_reset
+                0x000000008001cf0c                mips_cache_lock
+                0x000000008001cd00                simple_mips_cache_reset
+                0x000000008001cfe4                mips_icache_flush_ix
+                0x000000008001d014                mips_cache_lock_24k
+                0x000000008001cf90                mips_cache_flush
+                0x000000008001cee0                dcache_status
+                0x000000008001cef0                dcache_disable
+ .text          0x000000008001d060      0x2e0 cpu/mips/ar7240/libar7240.a(hornet_serial.o)
+                0x000000008001d2d8                serial_setbrg
+                0x000000008001d24c                serial_tstc
+                0x000000008001d284                serial_putc
+                0x000000008001d060                ar7240_sys_frequency
+                0x000000008001d184                serial_init
+                0x000000008001d2e0                serial_puts
+                0x000000008001d25c                serial_getc
+ .text          0x000000008001d340      0x690 lib_mips/libmips.a(board.o)
+                0x000000008001d45c                hang
+                0x000000008001d48c                board_init_r
+                0x000000008001d340                sbrk
+                0x000000008001d76c                board_init_f
+ .text          0x000000008001d9d0       0xb0 lib_mips/libmips.a(time.o)
+                0x000000008001da00                set_timer
+                0x000000008001d9e4                reset_timer
+                0x000000008001da74                get_tbclk
+                0x000000008001d9f4                get_timer
+                0x000000008001d9d0                timer_init
+                0x000000008001da0c                udelay
+                0x000000008001da68                get_ticks
+ .text          0x000000008001da80      0x8b0 lib_mips/libmips.a(mips_linux.o)
+                0x000000008001dba8                do_bootm_linux
+ .text          0x000000008001e330     0x19c0 net/libnet.a(net.o)
+                0x000000008001e5b8                getenv_IPaddr
+                0x000000008001e3a4                NetCksumOk
+                0x000000008001f1d4                NetSetTimeout
+                0x000000008001e41c                copy_filename
+                0x000000008001e3e4                NetEthHdrSize
+                0x000000008001e650                ip_to_string
+                0x000000008001f5c8                ArpTimeoutCheck
+                0x000000008001eac0                NetReceive
+                0x000000008001e4fc                string_to_ip
+                0x000000008001f238                NetSendUDPPacket
+                0x000000008001e6a8                print_IPaddr
+                0x000000008001e828                NetSetEther
+                0x000000008001f684                NetLoop
+                0x000000008001e950                ArpRequest
+                0x000000008001e5f4                VLAN_to_string
+                0x000000008001e4c0                getenv_VLAN
+                0x000000008001e36c                NetCksum
+                0x000000008001e6f8                NetSetIP
+                0x000000008001e464                string_to_VLAN
+                0x000000008001f458                NetStartAgain
+                0x000000008001e354                NetSetHandler
+                0x000000008001f010                PingSend
+                0x000000008001e938                NetSendPacket
+ .text          0x000000008001fcf0      0x880 net/libnet.a(tftp.o)
+                0x000000008001fefc                TftpStart
+ .text          0x0000000080020570      0x920 net/libnet.a(eth.o)
+                0x0000000080020588                eth_get_dev_by_name
+                0x0000000080020644                eth_halt
+                0x00000000800208e4                eth_register
+                0x0000000080020570                eth_get_dev
+                0x00000000800207f8                eth_try_another
+                0x0000000080020a98                eth_set_enetaddr
+                0x0000000080020be8                eth_initialize
+                0x0000000080020728                eth_set_current
+                0x00000000800206d0                eth_rx
+                0x00000000800205f0                eth_get_dev_index
+                0x00000000800209d4                eth_init
+                0x00000000800206fc                eth_get_name
+                0x000000008002069c                eth_send
+ .text          0x0000000080020e90      0x2c0 rtc/librtc.a(date.o)
+                0x0000000080020e90                GregorianDay
+                0x0000000080021098                mktime
+                0x0000000080020fac                to_tm
+ .text          0x0000000080021150      0x190 lib_generic/libgeneric.a(crc32.o)
+                0x0000000080021150                crc32
+ .text          0x00000000800212e0        0x0 lib_generic/libgeneric.a(ctype.o)
+ .text          0x00000000800212e0      0x130 lib_generic/libgeneric.a(display_options.o)
+                0x00000000800213c4                display_options
+                0x00000000800212e0                print_size
+ .text          0x0000000080021410      0x620 lib_generic/libgeneric.a(string.o)
+                0x0000000080021830                memmove
+                0x0000000080021804                memcpy
+                0x0000000080021790                strswab
+                0x00000000800215d4                strnlen
+                0x0000000080021560                strrchr
+                0x0000000080021498                strcat
+                0x0000000080021988                memchr
+                0x00000000800218cc                strstr
+                0x0000000080021670                strtok
+                0x0000000080021894                memcmp
+                0x00000000800214c4                strncat
+                0x00000000800219b4                strdup
+                0x00000000800217e0                memset
+                0x000000008002172c                strsep
+                0x0000000080021410                strnicmp
+                0x00000000800215fc                strspn
+                0x0000000080021548                strlen
+                0x0000000080021518                strchr
+                0x0000000080021638                strpbrk
+ .text          0x0000000080021a30      0x8f0 lib_generic/libgeneric.a(vsprintf.o)
+                0x0000000080021e1c                vsprintf
+                0x0000000080021b00                simple_strtol
+                0x0000000080021d94                panic
+                0x00000000800222dc                sprintf
+                0x0000000080021a30                simple_strtoul
+ .text          0x0000000080022320      0x2c0 lib_generic/libgeneric.a(LzmaWrapper.o)
+                0x0000000080022320                lzma_inflate
+ .text          0x00000000800225e0      0xcf0 lib_generic/libgeneric.a(LzmaDecode.o)
+                0x00000000800231fc                LzmaDecodeProperties
+                0x00000000800225e0                LzmaDecode
+ .text          0x00000000800232d0       0xc0 common/libcommon.a(exports.o)
+                0x00000000800232e0                jumptable_init
+                0x00000000800232d8                get_version
+ .text          0x0000000080023390      0x9d0 common/libcommon.a(miiphyutil.o)
+                0x00000000800237b0                miiphy_speed
+                0x00000000800239c8                miiphy_info
+                0x000000008002388c                miiphy_reset
+                0x0000000080023b14                miiphy_set_current_dev
+                0x00000000800233e0                miiphy_listdev
+                0x0000000080023570                miiphy_read
+                0x00000000800233b8                miiphy_get_current_dev
+                0x00000000800236d4                miiphy_duplex
+                0x00000000800234ac                miiphy_write
+                0x0000000080023bb4                miiphy_register
+                0x0000000080023390                miiphy_init
+                0x0000000080023630                miiphy_link
+ .text          0x0000000080023d60      0x1d0 board/ar7240/ap121/libap121.a(ap121.o)
+                0x0000000080023d60                ar7240_usb_initial_config
+                0x0000000080023e94                ar7240_mem_config
+                0x0000000080023d88                ar7240_usb_otp_config
+                0x0000000080023e64                checkboard
+                0x0000000080023e18                ar7240_gpio_config
+                0x0000000080023f10                initdram
+ .text          0x0000000080023f30      0x2e0 cpu/mips/ar7240/libar7240.a(meminit.o)
+                0x0000000080023fa4                ar7240_ddr_initial_config
+                0x0000000080023f60                ar7240_ddr_find_size
+                0x0000000080023f30                ar7240_ddr_tap_set
+ .text          0x0000000080024210     0x1e60 cpu/mips/ar7240/libar7240.a(ag7240.o)
+                0x0000000080025100                ag7240_mii_setup
+                0x00000000800255b0                ag7240_enet_initialize
+                0x0000000080024264                ag7240_miiphy_write
+                0x000000008002446c                ag7240_miiphy_read
+                0x000000008002425c                ag7240_mac_addr_loc
+ .text          0x0000000080026070      0x870 cpu/mips/ar7240/libar7240.a(hornet_ddr_init.o)
+                0x0000000080026480                hornet_ddr_tap_init
+                0x0000000080026070                hornet_ddr_init
+ .text          0x00000000800268e0     0x1200 board/ar7240/ap121/libap121.a(ar7240_s26_phy.o)
+                0x00000000800270ac                athrs26_phy_is_up
+                0x0000000080026d78                athrs26_mdc_check
+                0x00000000800271e8                athrs26_phy_is_link_alive
+                0x0000000080026f9c                athrs26_powersave_off
+                0x0000000080026df0                s26_wr_phy
+                0x00000000800277e8                athrs26_reg_init_lan
+                0x0000000080027638                athrs26_phy_speed
+                0x0000000080026f48                athrs26_sleep_off
+                0x00000000800268e0                athrs26_reg_write
+                0x0000000080027334                athrs26_phy_setup
+                0x0000000080026eb0                athrs26_reg_init
+                0x0000000080026b80                athrs26_reg_read
+                0x0000000080027238                athrs26_phy_is_fdx
+                0x0000000080026ff0                s26_rd_phy
+                0x0000000080027ae0                . = ALIGN (0x4)
+
+.rodata         0x0000000080027ae0      0x5b0
+ *(.rodata)
+ .rodata        0x0000000080027ae0       0xb0 common/libcommon.a(cmd_bootm.o)
+ .rodata        0x0000000080027b90       0x20 common/libcommon.a(hush.o)
+ .rodata        0x0000000080027bb0       0x30 lib_mips/libmips.a(board.o)
+                0x0000000080027bb0                version_string
+ .rodata        0x0000000080027be0       0x10 net/libnet.a(net.o)
+ .rodata        0x0000000080027bf0       0x20 net/libnet.a(tftp.o)
+ .rodata        0x0000000080027c10       0x30 rtc/librtc.a(date.o)
+ .rodata        0x0000000080027c40      0x400 lib_generic/libgeneric.a(crc32.o)
+ .rodata        0x0000000080028040       0x50 cpu/mips/ar7240/libar7240.a(ag7240.o)
+
+.reginfo        0x0000000080028090       0x18
+ .reginfo       0x0000000080028090       0x18 cpu/mips/start.o
+
+.rodata.str1.4  0x00000000800280a8     0x2840
+ .rodata.str1.4
+                0x00000000800280a8       0x2c common/libcommon.a(cmd_boot.o)
+ .rodata.str1.4
+                0x00000000800280d4      0x669 common/libcommon.a(cmd_bootm.o)
+                                        0x67c (size before relaxing)
+ *fill*         0x000000008002873d        0x3 00
+ .rodata.str1.4
+                0x0000000080028740      0x37e common/libcommon.a(cmd_flash.o)
+                                        0x380 (size before relaxing)
+ *fill*         0x0000000080028abe        0x2 00
+ .rodata.str1.4
+                0x0000000080028ac0      0x320 common/libcommon.a(cmd_mem.o)
+                                        0x330 (size before relaxing)
+ .rodata.str1.4
+                0x0000000080028de0       0xda common/libcommon.a(cmd_mii.o)
+                                         0xdc (size before relaxing)
+ *fill*         0x0000000080028eba        0x2 00
+ .rodata.str1.4
+                0x0000000080028ebc      0x171 common/libcommon.a(cmd_net.o)
+                                        0x18c (size before relaxing)
+ *fill*         0x000000008002902d        0x3 00
+ .rodata.str1.4
+                0x0000000080029030      0x317 common/libcommon.a(cmd_nvedit.o)
+                                        0x340 (size before relaxing)
+ *fill*         0x0000000080029347        0x1 00
+ .rodata.str1.4
+                0x0000000080029348      0x21c common/libcommon.a(command.o)
+ .rodata.str1.4
+                0x0000000080029564       0x75 common/libcommon.a(console.o)
+                                         0x7c (size before relaxing)
+ *fill*         0x00000000800295d9        0x3 00
+ .rodata.str1.4
+                0x00000000800295dc       0x2f common/libcommon.a(devices.o)
+                                         0x48 (size before relaxing)
+ *fill*         0x000000008002960b        0x1 00
+ .rodata.str1.4
+                0x000000008002960c       0x1c common/libcommon.a(env_common.o)
+ .rodata.str1.4
+                0x0000000080029628      0x1d9 common/libcommon.a(hush.o)
+                                        0x1f4 (size before relaxing)
+ *fill*         0x0000000080029801        0x3 00
+ .rodata.str1.4
+                0x0000000080029804      0x177 common/libcommon.a(flash.o)
+                                        0x178 (size before relaxing)
+ *fill*         0x000000008002997b        0x1 00
+ .rodata.str1.4
+                0x000000008002997c       0xa4 common/libcommon.a(main.o)
+                                        0x114 (size before relaxing)
+ .rodata.str1.4
+                0x0000000080029a20       0x99 board/ar7240/ap121/libap121.a(ar7240_flash.o)
+                                         0xa0 (size before relaxing)
+ *fill*         0x0000000080029ab9        0x3 00
+ .rodata.str1.4
+                0x0000000080029abc       0x22 board/ar7240/ap121/libap121.a(flash.o)
+                                         0x24 (size before relaxing)
+ *fill*         0x0000000080029ade        0x2 00
+ .rodata.str1.4
+                0x0000000080029ae0      0x199 lib_mips/libmips.a(board.o)
+                                        0x1d4 (size before relaxing)
+ *fill*         0x0000000080029c79        0x3 00
+ .rodata.str1.4
+                0x0000000080029c7c      0x16b lib_mips/libmips.a(mips_linux.o)
+                                        0x1bc (size before relaxing)
+ *fill*         0x0000000080029de7        0x1 00
+ .rodata.str1.4
+                0x0000000080029de8      0x21d net/libnet.a(net.o)
+                                        0x254 (size before relaxing)
+ *fill*         0x000000008002a005        0x3 00
+ .rodata.str1.4
+                0x000000008002a008      0x1c9 net/libnet.a(tftp.o)
+                                        0x1e8 (size before relaxing)
+ *fill*         0x000000008002a1d1        0x3 00
+ .rodata.str1.4
+                0x000000008002a1d4       0xc6 net/libnet.a(eth.o)
+                                         0xdc (size before relaxing)
+ *fill*         0x000000008002a29a        0x2 00
+ .rodata.str1.4
+                0x000000008002a29c       0x17 lib_generic/libgeneric.a(display_options.o)
+                                         0x20 (size before relaxing)
+ *fill*         0x000000008002a2b3        0x1 00
+ .rodata.str1.4
+                0x000000008002a2b4       0x57 lib_generic/libgeneric.a(vsprintf.o)
+                                         0x58 (size before relaxing)
+ *fill*         0x000000008002a30b        0x1 00
+ .rodata.str1.4
+                0x000000008002a30c       0x9c lib_generic/libgeneric.a(LzmaWrapper.o)
+                                         0xa0 (size before relaxing)
+ .rodata.str1.4
+                0x000000008002a3a8       0x2f lib_generic/libgeneric.a(LzmaDecode.o)
+                                         0x30 (size before relaxing)
+ *fill*         0x000000008002a3d7        0x1 00
+ .rodata.str1.4
+                0x000000008002a3d8      0x262 common/libcommon.a(miiphyutil.o)
+                                        0x268 (size before relaxing)
+ *fill*         0x000000008002a63a        0x2 00
+ .rodata.str1.4
+                0x000000008002a63c       0x16 board/ar7240/ap121/libap121.a(ap121.o)
+                                         0x18 (size before relaxing)
+ *fill*         0x000000008002a652        0x2 00
+ .rodata.str1.4
+                0x000000008002a654      0x24b cpu/mips/ar7240/libar7240.a(ag7240.o)
+                                        0x254 (size before relaxing)
+ *fill*         0x000000008002a89f        0x1 00
+ .rodata.str1.4
+                0x000000008002a8a0       0x48 board/ar7240/ap121/libap121.a(ar7240_s26_phy.o)
+                                         0x58 (size before relaxing)
+
+.rel.dyn        0x000000008002a8e8        0x0
+ .rel.dyn       0x0000000000000000        0x0 cpu/mips/start.o
+                0x000000008002a8e8                . = ALIGN (0x4)
+
+.data           0x000000008002a8f0      0x370
+ *(.data)
+ .data          0x000000008002a8f0        0x0 cpu/mips/start.o
+ .data          0x000000008002a8f0        0x0 common/libcommon.a(cmd_boot.o)
+ .data          0x000000008002a8f0       0x10 common/libcommon.a(cmd_bootm.o)
+                0x000000008002a8f0                load_addr
+ .data          0x000000008002a900        0x0 common/libcommon.a(cmd_flash.o)
+ .data          0x000000008002a900       0x10 common/libcommon.a(cmd_mem.o)
+                0x000000008002a900                dp_last_length
+ .data          0x000000008002a910        0x0 common/libcommon.a(cmd_mii.o)
+ .data          0x000000008002a910        0x0 common/libcommon.a(cmd_net.o)
+ .data          0x000000008002a910        0x0 common/libcommon.a(cmd_nvedit.o)
+ .data          0x000000008002a910        0x0 common/libcommon.a(command.o)
+ .data          0x000000008002a910        0x0 common/libcommon.a(console.o)
+ .data          0x000000008002a910        0x0 common/libcommon.a(devices.o)
+ .data          0x000000008002a910       0x10 common/libcommon.a(dlmalloc.o)
+ .data          0x000000008002a920      0x140 common/libcommon.a(env_common.o)
+                0x000000008002a920                default_environment
+ .data          0x000000008002aa60        0x0 common/libcommon.a(env_nowhere.o)
+ .data          0x000000008002aa60        0x0 common/libcommon.a(hush.o)
+ .data          0x000000008002aa60        0x0 common/libcommon.a(lists.o)
+ .data          0x000000008002aa60        0x0 common/libcommon.a(flash.o)
+ .data          0x000000008002aa60       0x10 common/libcommon.a(main.o)
+ .data          0x000000008002aa70        0x0 board/ar7240/ap121/libap121.a(ar7240_flash.o)
+ .data          0x000000008002aa70        0x0 board/ar7240/ap121/libap121.a(flash.o)
+ .data          0x000000008002aa70        0x0 cpu/mips/libmips.a(cpu.o)
+ .data          0x000000008002aa70        0x0 cpu/mips/libmips.a(interrupts.o)
+ .data          0x000000008002aa70        0x0 cpu/mips/libmips.a(cache.o)
+ .data          0x000000008002aa70        0x0 cpu/mips/ar7240/libar7240.a(hornet_serial.o)
+ .data          0x000000008002aa70        0x0 lib_mips/libmips.a(board.o)
+ .data          0x000000008002aa70        0x0 lib_mips/libmips.a(time.o)
+ .data          0x000000008002aa70        0x0 lib_mips/libmips.a(mips_linux.o)
+ .data          0x000000008002aa70       0x10 net/libnet.a(net.o)
+                0x000000008002aa70                NetBcastAddr
+                0x000000008002aa78                NetOurNativeVLAN
+                0x000000008002aa76                NetOurVLAN
+ .data          0x000000008002aa80        0x0 net/libnet.a(tftp.o)
+ .data          0x000000008002aa80        0x0 net/libnet.a(eth.o)
+ .data          0x000000008002aa80       0x30 rtc/librtc.a(date.o)
+ .data          0x000000008002aab0        0x0 lib_generic/libgeneric.a(crc32.o)
+ .data          0x000000008002aab0      0x100 lib_generic/libgeneric.a(ctype.o)
+                0x000000008002aab0                _ctype
+ .data          0x000000008002abb0        0x0 lib_generic/libgeneric.a(display_options.o)
+ .data          0x000000008002abb0        0x0 lib_generic/libgeneric.a(string.o)
+ .data          0x000000008002abb0        0x0 lib_generic/libgeneric.a(vsprintf.o)
+ .data          0x000000008002abb0        0x0 lib_generic/libgeneric.a(LzmaWrapper.o)
+ .data          0x000000008002abb0        0x0 lib_generic/libgeneric.a(LzmaDecode.o)
+ .data          0x000000008002abb0        0x0 common/libcommon.a(exports.o)
+ .data          0x000000008002abb0        0x0 common/libcommon.a(miiphyutil.o)
+ .data          0x000000008002abb0        0x0 board/ar7240/ap121/libap121.a(ap121.o)
+ .data          0x000000008002abb0       0x20 cpu/mips/ar7240/libar7240.a(meminit.o)
+                0x000000008002abb0                tap_settings
+                0x000000008002abbc                tap_pattern
+ .data          0x000000008002abd0        0x0 cpu/mips/ar7240/libar7240.a(ag7240.o)
+ .data          0x000000008002abd0        0x0 cpu/mips/ar7240/libar7240.a(hornet_ddr_init.o)
+ .data          0x000000008002abd0       0x90 board/ar7240/ap121/libap121.a(ar7240_s26_phy.o)
+
+.got.plt        0x000000008002ac60        0x0
+ .got.plt       0x0000000000000000        0x0 cpu/mips/start.o
+
+.data.rel.local
+                0x000000008002ac60      0x49c
+ .data.rel.local
+                0x000000008002ac60        0xc common/libcommon.a(devices.o)
+                0x000000008002ac60                stdio_names
+ .data.rel.local
+                0x000000008002ac6c      0x408 common/libcommon.a(dlmalloc.o)
+ .data.rel.local
+                0x000000008002b074        0x4 common/libcommon.a(env_common.o)
+                0x000000008002b074                env_get_char
+ .data.rel.local
+                0x000000008002b078       0x84 common/libcommon.a(hush.o)
+
+.data.rel       0x000000008002b0fc       0x14
+ .data.rel      0x000000008002b0fc       0x14 lib_mips/libmips.a(board.o)
+                0x000000008002b0fc                init_sequence
+
+.data.rel.ro.local
+                0x000000008002b110        0x4
+ .data.rel.ro.local
+                0x000000008002b110        0x4 lib_generic/libgeneric.a(LzmaWrapper.o)
+                0x000000008002b114                . = ALIGN (0x4)
+
+.sdata
+ *(.sdata)
+ *(.sdata)
+                0x000000008002b120                _gp = ALIGN (0x10)
+                0x000000008002b114                __got_start = .
+
+.got            0x000000008002b120      0x3c4
+ *(.got)
+ .got           0x000000008002b120      0x3c4 cpu/mips/start.o
+                0x000000008002b120                _GLOBAL_OFFSET_TABLE_
+                0x000000008002b4e4                __got_end = .
+                0x000000008002b4e4                __u_boot_cmd_start = .
+
+.u_boot_cmd     0x000000008002b4e4      0x1e0
+ *(.u_boot_cmd)
+ .u_boot_cmd    0x000000008002b4e4       0x18 common/libcommon.a(cmd_boot.o)
+                0x000000008002b4e4                __u_boot_cmd_reset
+ .u_boot_cmd    0x000000008002b4fc       0x48 common/libcommon.a(cmd_bootm.o)
+                0x000000008002b4fc                __u_boot_cmd_bootm
+                0x000000008002b52c                __u_boot_cmd_bootd
+                0x000000008002b514                __u_boot_cmd_boot
+ .u_boot_cmd    0x000000008002b544       0x18 common/libcommon.a(cmd_flash.o)
+                0x000000008002b544                __u_boot_cmd_erase
+ .u_boot_cmd    0x000000008002b55c       0x90 common/libcommon.a(cmd_mem.o)
+                0x000000008002b55c                __u_boot_cmd_md
+                0x000000008002b5a4                __u_boot_cmd_mw
+                0x000000008002b574                __u_boot_cmd_mm
+                0x000000008002b58c                __u_boot_cmd_nm
+                0x000000008002b5bc                __u_boot_cmd_mtest
+                0x000000008002b5d4                __u_boot_cmd_cp
+ .u_boot_cmd    0x000000008002b5ec       0x18 common/libcommon.a(cmd_mii.o)
+                0x000000008002b5ec                __u_boot_cmd_progmac
+ .u_boot_cmd    0x000000008002b604       0x30 common/libcommon.a(cmd_net.o)
+                0x000000008002b61c                __u_boot_cmd_ping
+                0x000000008002b604                __u_boot_cmd_tftpboot
+ .u_boot_cmd    0x000000008002b634       0x48 common/libcommon.a(cmd_nvedit.o)
+                0x000000008002b664                __u_boot_cmd_run
+                0x000000008002b634                __u_boot_cmd_printenv
+                0x000000008002b64c                __u_boot_cmd_setenv
+ .u_boot_cmd    0x000000008002b67c       0x48 common/libcommon.a(command.o)
+                0x000000008002b6ac                __u_boot_cmd_question_mark
+                0x000000008002b67c                __u_boot_cmd_version
+                0x000000008002b694                __u_boot_cmd_help
+                0x000000008002b6c4                __u_boot_cmd_end = .
+                0x000000008002b6c4                uboot_end_data = .
+                0x00000000000000f4                num_got_entries = ((__got_end - __got_start) >> 0x2)
+                0x000000008002b6c4                . = ALIGN (0x4)
+
+.sbss
+ *(.sbss)
+
+.bss            0x000000008002b6d0     0x75cc
+ *(.bss)
+ .bss           0x000000008002b6d0        0x0 cpu/mips/start.o
+ .bss           0x000000008002b6d0        0x0 common/libcommon.a(cmd_boot.o)
+ .bss           0x000000008002b6d0        0x0 common/libcommon.a(cmd_bootm.o)
+ .bss           0x000000008002b6d0        0x0 common/libcommon.a(cmd_flash.o)
+ .bss           0x000000008002b6d0        0x0 common/libcommon.a(cmd_mem.o)
+ .bss           0x000000008002b6d0        0x0 common/libcommon.a(cmd_mii.o)
+ .bss           0x000000008002b6d0        0x0 common/libcommon.a(cmd_net.o)
+ .bss           0x000000008002b6d0        0x0 common/libcommon.a(cmd_nvedit.o)
+ .bss           0x000000008002b6d0        0x0 common/libcommon.a(command.o)
+ .bss           0x000000008002b6d0       0x10 common/libcommon.a(console.o)
+ .bss           0x000000008002b6e0       0x10 common/libcommon.a(devices.o)
+                0x000000008002b6e0                devlist
+                0x000000008002b6e4                stdio_devices
+ .bss           0x000000008002b6f0       0x40 common/libcommon.a(dlmalloc.o)
+ .bss           0x000000008002b730        0x0 common/libcommon.a(env_common.o)
+ .bss           0x000000008002b730       0x10 common/libcommon.a(env_nowhere.o)
+                0x000000008002b730                env_ptr
+ .bss           0x000000008002b740      0x350 common/libcommon.a(hush.o)
+ .bss           0x000000008002ba90        0x0 common/libcommon.a(lists.o)
+ .bss           0x000000008002ba90        0x0 common/libcommon.a(flash.o)
+ .bss           0x000000008002ba90        0x0 common/libcommon.a(main.o)
+ .bss           0x000000008002ba90        0x0 board/ar7240/ap121/libap121.a(ar7240_flash.o)
+ .bss           0x000000008002ba90        0x0 board/ar7240/ap121/libap121.a(flash.o)
+ .bss           0x000000008002ba90        0x0 cpu/mips/libmips.a(cpu.o)
+ .bss           0x000000008002ba90        0x0 cpu/mips/libmips.a(interrupts.o)
+ .bss           0x000000008002ba90        0x0 cpu/mips/libmips.a(cache.o)
+ .bss           0x000000008002ba90        0x0 cpu/mips/ar7240/libar7240.a(hornet_serial.o)
+ .bss           0x000000008002ba90       0x10 lib_mips/libmips.a(board.o)
+ .bss           0x000000008002baa0        0x0 lib_mips/libmips.a(time.o)
+ .bss           0x000000008002baa0       0x20 lib_mips/libmips.a(mips_linux.o)
+ .bss           0x000000008002bac0       0xd0 net/libnet.a(net.o)
+                0x000000008002bacc                NetOurNISDomain
+                0x000000008002bb50                NetServerEther
+                0x000000008002bac0                NetOurSubnetMask
+                0x000000008002bb4c                NetBootFileSize
+                0x000000008002baec                NetOurHostName
+                0x000000008002bac4                NetOurGatewayIP
+                0x000000008002bb58                NetEtherNullAddr
+                0x000000008002bb60                NetRestartWrap
+                0x000000008002bb64                NetTxPacket
+                0x000000008002bac8                NetOurDNSIP
+                0x000000008002bb0c                NetOurRootPath
+ .bss           0x000000008002bb90       0x40 net/libnet.a(tftp.o)
+ .bss           0x000000008002bbd0       0x10 net/libnet.a(eth.o)
+ .bss           0x000000008002bbe0        0x0 rtc/librtc.a(date.o)
+ .bss           0x000000008002bbe0        0x0 lib_generic/libgeneric.a(crc32.o)
+ .bss           0x000000008002bbe0        0x0 lib_generic/libgeneric.a(ctype.o)
+ .bss           0x000000008002bbe0        0x0 lib_generic/libgeneric.a(display_options.o)
+ .bss           0x000000008002bbe0        0x0 lib_generic/libgeneric.a(string.o)
+ .bss           0x000000008002bbe0        0x0 lib_generic/libgeneric.a(vsprintf.o)
+ .bss           0x000000008002bbe0       0x10 lib_generic/libgeneric.a(LzmaWrapper.o)
+ .bss           0x000000008002bbf0        0x0 lib_generic/libgeneric.a(LzmaDecode.o)
+ .bss           0x000000008002bbf0        0x0 common/libcommon.a(exports.o)
+ .bss           0x000000008002bbf0       0x10 common/libcommon.a(miiphyutil.o)
+ .bss           0x000000008002bc00        0x0 board/ar7240/ap121/libap121.a(ap121.o)
+ .bss           0x000000008002bc00        0x0 cpu/mips/ar7240/libar7240.a(meminit.o)
+ .bss           0x000000008002bc00        0x0 cpu/mips/ar7240/libar7240.a(ag7240.o)
+ .bss           0x000000008002bc00        0x0 cpu/mips/ar7240/libar7240.a(hornet_ddr_init.o)
+ .bss           0x000000008002bc00       0x10 board/ar7240/ap121/libap121.a(ar7240_s26_phy.o)
+ COMMON         0x000000008002bc10       0x40 common/libcommon.a(cmd_bootm.o)
+                0x000000008002bc10                header
+ COMMON         0x000000008002bc50      0x200 common/libcommon.a(main.o)
+                0x000000008002bc50                console_buffer
+ COMMON         0x000000008002be50      0x14c board/ar7240/ap121/libap121.a(ar7240_flash.o)
+                0x000000008002be50                flash_info
+ COMMON         0x000000008002bf9c     0x6d00 net/libnet.a(net.o)
+                0x000000008002bf9c                NetRxPackets
+                0x000000008002bfdc                BootFile
+                0x000000008002c05c                NetArpWaitPacketBuf
+                0x000000008002c67c                PktBuf
+                0x0000000080032c9c                uboot_end = .
+Address of section .text set to 0x80010000
+LOAD cpu/mips/start.o
+START GROUP
+LOAD lib_generic/libgeneric.a
+LOAD common/libcommon.a
+LOAD board/ar7240/ap121/libap121.a
+LOAD cpu/mips/libmips.a
+LOAD cpu/mips/ar7240/libar7240.a
+LOAD lib_mips/libmips.a
+LOAD drivers/libdrivers.a
+LOAD net/libnet.a
+LOAD rtc/librtc.a
+END GROUP
+LOAD /work1/u1114ar9331/build/gcc-4.3.3/build_mips/staging_dir/usr/bin-ccache/../lib/gcc/mips-linux-uclibc/4.3.3/libgcc.a
+OUTPUT(u-boot elf32-tradbigmips)
+
+.scommon        0x0000000080032c9c       0x6c
+ .scommon       0x0000000080032c9c       0x10 common/libcommon.a(cmd_mem.o)
+                0x0000000080032c9c                dp_last_size
+                0x0000000080032ca0                dp_last_addr
+                0x0000000080032ca4                mm_last_size
+                0x0000000080032ca8                mm_last_addr
+ .scommon       0x0000000080032cac        0x8 common/libcommon.a(hush.o)
+                0x0000000080032cac                nesting_level
+                0x0000000080032cb0                last_return_code
+ .scommon       0x0000000080032cb4        0x4 lib_mips/libmips.a(board.o)
+                0x0000000080032cb4                monitor_flash_len
+ .scommon       0x0000000080032cb8       0x44 net/libnet.a(net.o)
+                0x0000000080032cb8                NetArpWaitTry
+                0x0000000080032cbc                NetArpWaitPacketMAC
+                0x0000000080032cc0                NetOurEther
+                0x0000000080032cc8                NetOurIP
+                0x0000000080032ccc                NetPingIP
+                0x0000000080032cd0                NetServerIP
+                0x0000000080032cd4                NetArpWaitTxPacketSize
+                0x0000000080032cd8                NetArpWaitReplyIP
+                0x0000000080032cdc                NetArpWaitTxPacket
+                0x0000000080032ce0                NetArpWaitPacketIP
+                0x0000000080032ce4                NetState
+                0x0000000080032ce8                NetIPID
+                0x0000000080032cec                NetRxPkt
+                0x0000000080032cf0                NetRxPktLen
+                0x0000000080032cf4                NetBootFileXferSize
+                0x0000000080032cf8                NetArpWaitTimerStart
+ .scommon       0x0000000080032cfc        0x4 lib_generic/libgeneric.a(string.o)
+                0x0000000080032cfc                ___strtok
+ .scommon       0x0000000080032d00        0x8 cpu/mips/ar7240/libar7240.a(ag7240.o)
+                0x0000000080032d00                ag7240_macs
+
+.pdr            0x0000000000000000     0x2420
+ .pdr           0x0000000000000000       0x40 cpu/mips/start.o
+ .pdr           0x0000000000000040        0x0 common/libcommon.a(cmd_boot.o)
+ .pdr           0x0000000000000040       0x60 common/libcommon.a(cmd_bootm.o)
+ .pdr           0x00000000000000a0       0x40 common/libcommon.a(cmd_flash.o)
+ .pdr           0x00000000000000e0      0x100 common/libcommon.a(cmd_mem.o)
+ .pdr           0x00000000000001e0       0x20 common/libcommon.a(cmd_mii.o)
+ .pdr           0x0000000000000200       0x40 common/libcommon.a(cmd_net.o)
+ .pdr           0x0000000000000240       0xe0 common/libcommon.a(cmd_nvedit.o)
+ .pdr           0x0000000000000320       0x60 common/libcommon.a(command.o)
+ .pdr           0x0000000000000380      0x2a0 common/libcommon.a(console.o)
+ .pdr           0x0000000000000620       0x60 common/libcommon.a(devices.o)
+ .pdr           0x0000000000000680      0x180 common/libcommon.a(dlmalloc.o)
+ .pdr           0x0000000000000800       0xa0 common/libcommon.a(env_common.o)
+ .pdr           0x00000000000008a0       0x60 common/libcommon.a(env_nowhere.o)
+ .pdr           0x0000000000000900      0x320 common/libcommon.a(hush.o)
+ .pdr           0x0000000000000c20      0x1c0 common/libcommon.a(lists.o)
+ .pdr           0x0000000000000de0       0x80 common/libcommon.a(flash.o)
+ .pdr           0x0000000000000e60       0xa0 common/libcommon.a(main.o)
+ .pdr           0x0000000000000f00       0xa0 board/ar7240/ap121/libap121.a(ar7240_flash.o)
+ .pdr           0x0000000000000fa0       0x20 board/ar7240/ap121/libap121.a(flash.o)
+ .pdr           0x0000000000000fc0       0x60 cpu/mips/libmips.a(cpu.o)
+ .pdr           0x0000000000001020       0x40 cpu/mips/libmips.a(interrupts.o)
+ .pdr           0x0000000000001060      0x120 cpu/mips/libmips.a(cache.o)
+ .pdr           0x0000000000001180       0xe0 cpu/mips/ar7240/libar7240.a(hornet_serial.o)
+ .pdr           0x0000000000001260       0xc0 lib_mips/libmips.a(board.o)
+ .pdr           0x0000000000001320       0xe0 lib_mips/libmips.a(time.o)
+ .pdr           0x0000000000001400       0x40 lib_mips/libmips.a(mips_linux.o)
+ .pdr           0x0000000000001440      0x360 net/libnet.a(net.o)
+ .pdr           0x00000000000017a0       0x80 net/libnet.a(tftp.o)
+ .pdr           0x0000000000001820      0x1a0 net/libnet.a(eth.o)
+ .pdr           0x00000000000019c0       0x60 rtc/librtc.a(date.o)
+ .pdr           0x0000000000001a20       0x20 lib_generic/libgeneric.a(crc32.o)
+ .pdr           0x0000000000001a40        0x0 lib_generic/libgeneric.a(ctype.o)
+ .pdr           0x0000000000001a40       0x40 lib_generic/libgeneric.a(display_options.o)
+ .pdr           0x0000000000001a80      0x260 lib_generic/libgeneric.a(string.o)
+ .pdr           0x0000000000001ce0       0xc0 lib_generic/libgeneric.a(vsprintf.o)
+ .pdr           0x0000000000001da0       0x20 lib_generic/libgeneric.a(LzmaWrapper.o)
+ .pdr           0x0000000000001dc0       0x40 lib_generic/libgeneric.a(LzmaDecode.o)
+ .pdr           0x0000000000001e00       0x60 common/libcommon.a(exports.o)
+ .pdr           0x0000000000001e60      0x180 common/libcommon.a(miiphyutil.o)
+ .pdr           0x0000000000001fe0       0xc0 board/ar7240/ap121/libap121.a(ap121.o)
+ .pdr           0x00000000000020a0       0x60 cpu/mips/ar7240/libar7240.a(meminit.o)
+ .pdr           0x0000000000002100      0x140 cpu/mips/ar7240/libar7240.a(ag7240.o)
+ .pdr           0x0000000000002240       0x20 cpu/mips/ar7240/libar7240.a(hornet_ddr_init.o)
+ .pdr           0x0000000000002260      0x1c0 board/ar7240/ap121/libap121.a(ar7240_s26_phy.o)
+
+.stab           0x0000000000000000     0xb0a0
+ .stab          0x0000000000000000     0x990c cpu/mips/start.o
+ .stab          0x000000000000990c      0x6a8 cpu/mips/libmips.a(cache.o)
+                                        0x6b4 (size before relaxing)
+ .stab          0x0000000000009fb4     0x10ec cpu/mips/ar7240/libar7240.a(hornet_ddr_init.o)
+                                       0x10f8 (size before relaxing)
+
+.stabstr        0x0000000000000000      0x1ba
+ .stabstr       0x0000000000000000      0x1ba cpu/mips/start.o
+
+.mdebug.abi32   0x0000000000000000        0x0
+ .mdebug.abi32  0x0000000000000000        0x0 common/libcommon.a(cmd_boot.o)
+ .mdebug.abi32  0x0000000000000000        0x0 common/libcommon.a(cmd_bootm.o)
+ .mdebug.abi32  0x0000000000000000        0x0 common/libcommon.a(cmd_flash.o)
+ .mdebug.abi32  0x0000000000000000        0x0 common/libcommon.a(cmd_mem.o)
+ .mdebug.abi32  0x0000000000000000        0x0 common/libcommon.a(cmd_mii.o)
+ .mdebug.abi32  0x0000000000000000        0x0 common/libcommon.a(cmd_net.o)
+ .mdebug.abi32  0x0000000000000000        0x0 common/libcommon.a(cmd_nvedit.o)
+ .mdebug.abi32  0x0000000000000000        0x0 common/libcommon.a(command.o)
+ .mdebug.abi32  0x0000000000000000        0x0 common/libcommon.a(console.o)
+ .mdebug.abi32  0x0000000000000000        0x0 common/libcommon.a(devices.o)
+ .mdebug.abi32  0x0000000000000000        0x0 common/libcommon.a(dlmalloc.o)
+ .mdebug.abi32  0x0000000000000000        0x0 common/libcommon.a(env_common.o)
+ .mdebug.abi32  0x0000000000000000        0x0 common/libcommon.a(env_nowhere.o)
+ .mdebug.abi32  0x0000000000000000        0x0 common/libcommon.a(hush.o)
+ .mdebug.abi32  0x0000000000000000        0x0 common/libcommon.a(lists.o)
+ .mdebug.abi32  0x0000000000000000        0x0 common/libcommon.a(flash.o)
+ .mdebug.abi32  0x0000000000000000        0x0 common/libcommon.a(main.o)
+ .mdebug.abi32  0x0000000000000000        0x0 board/ar7240/ap121/libap121.a(ar7240_flash.o)
+ .mdebug.abi32  0x0000000000000000        0x0 board/ar7240/ap121/libap121.a(flash.o)
+ .mdebug.abi32  0x0000000000000000        0x0 cpu/mips/libmips.a(cpu.o)
+ .mdebug.abi32  0x0000000000000000        0x0 cpu/mips/libmips.a(interrupts.o)
+ .mdebug.abi32  0x0000000000000000        0x0 cpu/mips/ar7240/libar7240.a(hornet_serial.o)
+ .mdebug.abi32  0x0000000000000000        0x0 lib_mips/libmips.a(board.o)
+ .mdebug.abi32  0x0000000000000000        0x0 lib_mips/libmips.a(time.o)
+ .mdebug.abi32  0x0000000000000000        0x0 lib_mips/libmips.a(mips_linux.o)
+ .mdebug.abi32  0x0000000000000000        0x0 net/libnet.a(net.o)
+ .mdebug.abi32  0x0000000000000000        0x0 net/libnet.a(tftp.o)
+ .mdebug.abi32  0x0000000000000000        0x0 net/libnet.a(eth.o)
+ .mdebug.abi32  0x0000000000000000        0x0 rtc/librtc.a(date.o)
+ .mdebug.abi32  0x0000000000000000        0x0 lib_generic/libgeneric.a(crc32.o)
+ .mdebug.abi32  0x0000000000000000        0x0 lib_generic/libgeneric.a(ctype.o)
+ .mdebug.abi32  0x0000000000000000        0x0 lib_generic/libgeneric.a(display_options.o)
+ .mdebug.abi32  0x0000000000000000        0x0 lib_generic/libgeneric.a(string.o)
+ .mdebug.abi32  0x0000000000000000        0x0 lib_generic/libgeneric.a(vsprintf.o)
+ .mdebug.abi32  0x0000000000000000        0x0 lib_generic/libgeneric.a(LzmaWrapper.o)
+ .mdebug.abi32  0x0000000000000000        0x0 lib_generic/libgeneric.a(LzmaDecode.o)
+ .mdebug.abi32  0x0000000000000000        0x0 common/libcommon.a(exports.o)
+ .mdebug.abi32  0x0000000000000000        0x0 common/libcommon.a(miiphyutil.o)
+ .mdebug.abi32  0x0000000000000000        0x0 board/ar7240/ap121/libap121.a(ap121.o)
+ .mdebug.abi32  0x0000000000000000        0x0 cpu/mips/ar7240/libar7240.a(meminit.o)
+ .mdebug.abi32  0x0000000000000000        0x0 cpu/mips/ar7240/libar7240.a(ag7240.o)
+ .mdebug.abi32  0x0000000000000000        0x0 board/ar7240/ap121/libap121.a(ar7240_s26_phy.o)
+
+.debug_abbrev   0x0000000000000000     0x4d46
+ .debug_abbrev  0x0000000000000000       0xca common/libcommon.a(cmd_boot.o)
+ .debug_abbrev  0x00000000000000ca      0x2a5 common/libcommon.a(cmd_bootm.o)
+ .debug_abbrev  0x000000000000036f      0x1fa common/libcommon.a(cmd_flash.o)
+ .debug_abbrev  0x0000000000000569      0x1e7 common/libcommon.a(cmd_mem.o)
+ .debug_abbrev  0x0000000000000750      0x124 common/libcommon.a(cmd_mii.o)
+ .debug_abbrev  0x0000000000000874      0x1ee common/libcommon.a(cmd_net.o)
+ .debug_abbrev  0x0000000000000a62      0x27e common/libcommon.a(cmd_nvedit.o)
+ .debug_abbrev  0x0000000000000ce0      0x1f6 common/libcommon.a(command.o)
+ .debug_abbrev  0x0000000000000ed6      0x333 common/libcommon.a(console.o)
+ .debug_abbrev  0x0000000000001209      0x1bc common/libcommon.a(devices.o)
+ .debug_abbrev  0x00000000000013c5      0x250 common/libcommon.a(dlmalloc.o)
+ .debug_abbrev  0x0000000000001615      0x16c common/libcommon.a(env_common.o)
+ .debug_abbrev  0x0000000000001781      0x147 common/libcommon.a(env_nowhere.o)
+ .debug_abbrev  0x00000000000018c8      0x3ee common/libcommon.a(hush.o)
+ .debug_abbrev  0x0000000000001cb6      0x21a common/libcommon.a(lists.o)
+ .debug_abbrev  0x0000000000001ed0      0x18c common/libcommon.a(flash.o)
+ .debug_abbrev  0x000000000000205c      0x268 common/libcommon.a(main.o)
+ .debug_abbrev  0x00000000000022c4      0x1c7 board/ar7240/ap121/libap121.a(ar7240_flash.o)
+ .debug_abbrev  0x000000000000248b       0xb1 board/ar7240/ap121/libap121.a(flash.o)
+ .debug_abbrev  0x000000000000253c      0x12c cpu/mips/libmips.a(cpu.o)
+ .debug_abbrev  0x0000000000002668       0x65 cpu/mips/libmips.a(interrupts.o)
+ .debug_abbrev  0x00000000000026cd      0x1e8 cpu/mips/ar7240/libar7240.a(hornet_serial.o)
+ .debug_abbrev  0x00000000000028b5      0x2b3 lib_mips/libmips.a(board.o)
+ .debug_abbrev  0x0000000000002b68      0x179 lib_mips/libmips.a(time.o)
+ .debug_abbrev  0x0000000000002ce1      0x23b lib_mips/libmips.a(mips_linux.o)
+ .debug_abbrev  0x0000000000002f1c      0x43b net/libnet.a(net.o)
+ .debug_abbrev  0x0000000000003357      0x1e0 net/libnet.a(tftp.o)
+ .debug_abbrev  0x0000000000003537      0x300 net/libnet.a(eth.o)
+ .debug_abbrev  0x0000000000003837      0x130 rtc/librtc.a(date.o)
+ .debug_abbrev  0x0000000000003967       0x9c lib_generic/libgeneric.a(crc32.o)
+ .debug_abbrev  0x0000000000003a03       0x4b lib_generic/libgeneric.a(ctype.o)
+ .debug_abbrev  0x0000000000003a4e       0xcb lib_generic/libgeneric.a(display_options.o)
+ .debug_abbrev  0x0000000000003b19      0x261 lib_generic/libgeneric.a(string.o)
+ .debug_abbrev  0x0000000000003d7a      0x21a lib_generic/libgeneric.a(vsprintf.o)
+ .debug_abbrev  0x0000000000003f94      0x1a7 lib_generic/libgeneric.a(LzmaWrapper.o)
+ .debug_abbrev  0x000000000000413b      0x139 lib_generic/libgeneric.a(LzmaDecode.o)
+ .debug_abbrev  0x0000000000004274      0x114 common/libcommon.a(exports.o)
+ .debug_abbrev  0x0000000000004388      0x23e common/libcommon.a(miiphyutil.o)
+ .debug_abbrev  0x00000000000045c6      0x152 board/ar7240/ap121/libap121.a(ap121.o)
+ .debug_abbrev  0x0000000000004718      0x112 cpu/mips/ar7240/libar7240.a(meminit.o)
+ .debug_abbrev  0x000000000000482a      0x3a9 cpu/mips/ar7240/libar7240.a(ag7240.o)
+ .debug_abbrev  0x0000000000004bd3      0x173 board/ar7240/ap121/libap121.a(ar7240_s26_phy.o)
+
+.debug_info     0x0000000000000000     0xfe67
+ .debug_info    0x0000000000000000      0x299 common/libcommon.a(cmd_boot.o)
+ .debug_info    0x0000000000000299      0xa98 common/libcommon.a(cmd_bootm.o)
+ .debug_info    0x0000000000000d31      0x714 common/libcommon.a(cmd_flash.o)
+ .debug_info    0x0000000000001445      0x77e common/libcommon.a(cmd_mem.o)
+ .debug_info    0x0000000000001bc3      0x278 common/libcommon.a(cmd_mii.o)
+ .debug_info    0x0000000000001e3b      0x4d7 common/libcommon.a(cmd_net.o)
+ .debug_info    0x0000000000002312      0xb08 common/libcommon.a(cmd_nvedit.o)
+ .debug_info    0x0000000000002e1a      0x46e common/libcommon.a(command.o)
+ .debug_info    0x0000000000003288      0x992 common/libcommon.a(console.o)
+ .debug_info    0x0000000000003c1a      0x503 common/libcommon.a(devices.o)
+ .debug_info    0x000000000000411d      0xcc4 common/libcommon.a(dlmalloc.o)
+ .debug_info    0x0000000000004de1      0x35e common/libcommon.a(env_common.o)
+ .debug_info    0x000000000000513f      0x2c3 common/libcommon.a(env_nowhere.o)
+ .debug_info    0x0000000000005402     0x1c7e common/libcommon.a(hush.o)
+ .debug_info    0x0000000000007080      0x556 common/libcommon.a(lists.o)
+ .debug_info    0x00000000000075d6      0x327 common/libcommon.a(flash.o)
+ .debug_info    0x00000000000078fd      0x698 common/libcommon.a(main.o)
+ .debug_info    0x0000000000007f95      0x5f3 board/ar7240/ap121/libap121.a(ar7240_flash.o)
+ .debug_info    0x0000000000008588      0x157 board/ar7240/ap121/libap121.a(flash.o)
+ .debug_info    0x00000000000086df      0x23f cpu/mips/libmips.a(cpu.o)
+ .debug_info    0x000000000000891e       0xa8 cpu/mips/libmips.a(interrupts.o)
+ .debug_info    0x00000000000089c6      0x361 cpu/mips/ar7240/libar7240.a(hornet_serial.o)
+ .debug_info    0x0000000000008d27      0x663 lib_mips/libmips.a(board.o)
+ .debug_info    0x000000000000938a      0x28e lib_mips/libmips.a(time.o)
+ .debug_info    0x0000000000009618      0x830 lib_mips/libmips.a(mips_linux.o)
+ .debug_info    0x0000000000009e48     0x162b net/libnet.a(net.o)
+ .debug_info    0x000000000000b473      0x4fa net/libnet.a(tftp.o)
+ .debug_info    0x000000000000b96d      0x7db net/libnet.a(eth.o)
+ .debug_info    0x000000000000c148      0x264 rtc/librtc.a(date.o)
+ .debug_info    0x000000000000c3ac      0x136 lib_generic/libgeneric.a(crc32.o)
+ .debug_info    0x000000000000c4e2       0x52 lib_generic/libgeneric.a(ctype.o)
+ .debug_info    0x000000000000c534      0x12a lib_generic/libgeneric.a(display_options.o)
+ .debug_info    0x000000000000c65e      0x7cb lib_generic/libgeneric.a(string.o)
+ .debug_info    0x000000000000ce29      0x47b lib_generic/libgeneric.a(vsprintf.o)
+ .debug_info    0x000000000000d2a4      0x366 lib_generic/libgeneric.a(LzmaWrapper.o)
+ .debug_info    0x000000000000d60a      0x4f1 lib_generic/libgeneric.a(LzmaDecode.o)
+ .debug_info    0x000000000000dafb      0x29f common/libcommon.a(exports.o)
+ .debug_info    0x000000000000dd9a      0x817 common/libcommon.a(miiphyutil.o)
+ .debug_info    0x000000000000e5b1      0x1fb board/ar7240/ap121/libap121.a(ap121.o)
+ .debug_info    0x000000000000e7ac      0x1f8 cpu/mips/ar7240/libar7240.a(meminit.o)
+ .debug_info    0x000000000000e9a4      0xdb3 cpu/mips/ar7240/libar7240.a(ag7240.o)
+ .debug_info    0x000000000000f757      0x710 board/ar7240/ap121/libap121.a(ar7240_s26_phy.o)
+
+.debug_line     0x0000000000000000     0x4e1b
+ .debug_line    0x0000000000000000       0xa7 common/libcommon.a(cmd_boot.o)
+ .debug_line    0x00000000000000a7      0x275 common/libcommon.a(cmd_bootm.o)
+ .debug_line    0x000000000000031c      0x1eb common/libcommon.a(cmd_flash.o)
+ .debug_line    0x0000000000000507      0x219 common/libcommon.a(cmd_mem.o)
+ .debug_line    0x0000000000000720       0xf0 common/libcommon.a(cmd_mii.o)
+ .debug_line    0x0000000000000810      0x174 common/libcommon.a(cmd_net.o)
+ .debug_line    0x0000000000000984      0x31e common/libcommon.a(cmd_nvedit.o)
+ .debug_line    0x0000000000000ca2      0x182 common/libcommon.a(command.o)
+ .debug_line    0x0000000000000e24      0x2d5 common/libcommon.a(console.o)
+ .debug_line    0x00000000000010f9      0x13f common/libcommon.a(devices.o)
+ .debug_line    0x0000000000001238      0x324 common/libcommon.a(dlmalloc.o)
+ .debug_line    0x000000000000155c      0x102 common/libcommon.a(env_common.o)
+ .debug_line    0x000000000000165e       0xd3 common/libcommon.a(env_nowhere.o)
+ .debug_line    0x0000000000001731      0x807 common/libcommon.a(hush.o)
+ .debug_line    0x0000000000001f38      0x124 common/libcommon.a(lists.o)
+ .debug_line    0x000000000000205c      0x142 common/libcommon.a(flash.o)
+ .debug_line    0x000000000000219e      0x284 common/libcommon.a(main.o)
+ .debug_line    0x0000000000002422      0x1f2 board/ar7240/ap121/libap121.a(ar7240_flash.o)
+ .debug_line    0x0000000000002614       0xc0 board/ar7240/ap121/libap121.a(flash.o)
+ .debug_line    0x00000000000026d4       0xed cpu/mips/libmips.a(cpu.o)
+ .debug_line    0x00000000000027c1       0x3f cpu/mips/libmips.a(interrupts.o)
+ .debug_line    0x0000000000002800       0xfb cpu/mips/ar7240/libar7240.a(hornet_serial.o)
+ .debug_line    0x00000000000028fb      0x21f lib_mips/libmips.a(board.o)
+ .debug_line    0x0000000000002b1a       0xd8 lib_mips/libmips.a(time.o)
+ .debug_line    0x0000000000002bf2      0x26c lib_mips/libmips.a(mips_linux.o)
+ .debug_line    0x0000000000002e5e      0x569 net/libnet.a(net.o)
+ .debug_line    0x00000000000033c7      0x260 net/libnet.a(tftp.o)
+ .debug_line    0x0000000000003627      0x1d2 net/libnet.a(eth.o)
+ .debug_line    0x00000000000037f9       0xaa rtc/librtc.a(date.o)
+ .debug_line    0x00000000000038a3       0xbd lib_generic/libgeneric.a(crc32.o)
+ .debug_line    0x0000000000003960       0x28 lib_generic/libgeneric.a(ctype.o)
+ .debug_line    0x0000000000003988       0x98 lib_generic/libgeneric.a(display_options.o)
+ .debug_line    0x0000000000003a20      0x1b6 lib_generic/libgeneric.a(string.o)
+ .debug_line    0x0000000000003bd6      0x220 lib_generic/libgeneric.a(vsprintf.o)
+ .debug_line    0x0000000000003df6      0x145 lib_generic/libgeneric.a(LzmaWrapper.o)
+ .debug_line    0x0000000000003f3b      0x1ee lib_generic/libgeneric.a(LzmaDecode.o)
+ .debug_line    0x0000000000004129       0xdd common/libcommon.a(exports.o)
+ .debug_line    0x0000000000004206      0x24d common/libcommon.a(miiphyutil.o)
+ .debug_line    0x0000000000004453       0xc3 board/ar7240/ap121/libap121.a(ap121.o)
+ .debug_line    0x0000000000004516      0x10d cpu/mips/ar7240/libar7240.a(meminit.o)
+ .debug_line    0x0000000000004623      0x527 cpu/mips/ar7240/libar7240.a(ag7240.o)
+ .debug_line    0x0000000000004b4a      0x2d1 board/ar7240/ap121/libap121.a(ar7240_s26_phy.o)
+
+.debug_pubnames
+                0x0000000000000000     0x185e
+ .debug_pubnames
+                0x0000000000000000       0x30 common/libcommon.a(cmd_boot.o)
+ .debug_pubnames
+                0x0000000000000030       0xa4 common/libcommon.a(cmd_bootm.o)
+ .debug_pubnames
+                0x00000000000000d4       0x4d common/libcommon.a(cmd_flash.o)
+ .debug_pubnames
+                0x0000000000000121      0x151 common/libcommon.a(cmd_mem.o)
+ .debug_pubnames
+                0x0000000000000272       0x36 common/libcommon.a(cmd_mii.o)
+ .debug_pubnames
+                0x00000000000002a8       0x5b common/libcommon.a(cmd_net.o)
+ .debug_pubnames
+                0x0000000000000303       0xb0 common/libcommon.a(cmd_nvedit.o)
+ .debug_pubnames
+                0x00000000000003b3       0x88 common/libcommon.a(command.o)
+ .debug_pubnames
+                0x000000000000043b      0x115 common/libcommon.a(console.o)
+ .debug_pubnames
+                0x0000000000000550       0x7d common/libcommon.a(devices.o)
+ .debug_pubnames
+                0x00000000000005cd       0xba common/libcommon.a(dlmalloc.o)
+ .debug_pubnames
+                0x0000000000000687       0x8f common/libcommon.a(env_common.o)
+ .debug_pubnames
+                0x0000000000000716       0x5e common/libcommon.a(env_nowhere.o)
+ .debug_pubnames
+                0x0000000000000774       0xcf common/libcommon.a(hush.o)
+ .debug_pubnames
+                0x0000000000000843      0x116 common/libcommon.a(lists.o)
+ .debug_pubnames
+                0x0000000000000959       0x53 common/libcommon.a(flash.o)
+ .debug_pubnames
+                0x00000000000009ac       0x5b common/libcommon.a(main.o)
+ .debug_pubnames
+                0x0000000000000a07       0x64 board/ar7240/ap121/libap121.a(ar7240_flash.o)
+ .debug_pubnames
+                0x0000000000000a6b       0x25 board/ar7240/ap121/libap121.a(flash.o)
+ .debug_pubnames
+                0x0000000000000a90       0x41 cpu/mips/libmips.a(cpu.o)
+ .debug_pubnames
+                0x0000000000000ad1       0x3f cpu/mips/libmips.a(interrupts.o)
+ .debug_pubnames
+                0x0000000000000b10       0x8d cpu/mips/ar7240/libar7240.a(hornet_serial.o)
+ .debug_pubnames
+                0x0000000000000b9d       0x88 lib_mips/libmips.a(board.o)
+ .debug_pubnames
+                0x0000000000000c25       0x74 lib_mips/libmips.a(time.o)
+ .debug_pubnames
+                0x0000000000000c99       0x2c lib_mips/libmips.a(mips_linux.o)
+ .debug_pubnames
+                0x0000000000000cc5      0x40c net/libnet.a(net.o)
+ .debug_pubnames
+                0x00000000000010d1       0x20 net/libnet.a(tftp.o)
+ .debug_pubnames
+                0x00000000000010f1       0xf4 net/libnet.a(eth.o)
+ .debug_pubnames
+                0x00000000000011e5       0x38 rtc/librtc.a(date.o)
+ .debug_pubnames
+                0x000000000000121d       0x1c lib_generic/libgeneric.a(crc32.o)
+ .debug_pubnames
+                0x0000000000001239       0x1d lib_generic/libgeneric.a(ctype.o)
+ .debug_pubnames
+                0x0000000000001256       0x35 lib_generic/libgeneric.a(display_options.o)
+ .debug_pubnames
+                0x000000000000128b       0xf9 lib_generic/libgeneric.a(string.o)
+ .debug_pubnames
+                0x0000000000001384       0x5a lib_generic/libgeneric.a(vsprintf.o)
+ .debug_pubnames
+                0x00000000000013de       0x23 lib_generic/libgeneric.a(LzmaWrapper.o)
+ .debug_pubnames
+                0x0000000000001401       0x3a lib_generic/libgeneric.a(LzmaDecode.o)
+ .debug_pubnames
+                0x000000000000143b       0x3c common/libcommon.a(exports.o)
+ .debug_pubnames
+                0x0000000000001477       0xf4 common/libcommon.a(miiphyutil.o)
+ .debug_pubnames
+                0x000000000000156b       0x93 board/ar7240/ap121/libap121.a(ap121.o)
+ .debug_pubnames
+                0x00000000000015fe       0x81 cpu/mips/ar7240/libar7240.a(meminit.o)
+ .debug_pubnames
+                0x000000000000167f       0x99 cpu/mips/ar7240/libar7240.a(ag7240.o)
+ .debug_pubnames
+                0x0000000000001718      0x146 board/ar7240/ap121/libap121.a(ar7240_s26_phy.o)
+
+.debug_str      0x0000000000000000     0x313b
+ .debug_str     0x0000000000000000      0x1a9 common/libcommon.a(cmd_boot.o)
+                                        0x1f5 (size before relaxing)
+ .debug_str     0x00000000000001a9      0x239 common/libcommon.a(cmd_bootm.o)
+                                        0x446 (size before relaxing)
+ .debug_str     0x00000000000003e2      0x132 common/libcommon.a(cmd_flash.o)
+                                        0x288 (size before relaxing)
+ .debug_str     0x0000000000000514      0x177 common/libcommon.a(cmd_mem.o)
+                                        0x2c3 (size before relaxing)
+ .debug_str     0x000000000000068b       0x37 common/libcommon.a(cmd_mii.o)
+                                        0x195 (size before relaxing)
+ .debug_str     0x00000000000006c2      0x131 common/libcommon.a(cmd_net.o)
+                                        0x26d (size before relaxing)
+ .debug_str     0x00000000000007f3       0xd5 common/libcommon.a(cmd_nvedit.o)
+                                        0x322 (size before relaxing)
+ .debug_str     0x00000000000008c8       0xc8 common/libcommon.a(command.o)
+                                        0x216 (size before relaxing)
+ .debug_str     0x0000000000000990      0x248 common/libcommon.a(console.o)
+                                        0x45b (size before relaxing)
+ .debug_str     0x0000000000000bd8       0x56 common/libcommon.a(devices.o)
+                                        0x2d3 (size before relaxing)
+ .debug_str     0x0000000000000c2e      0x2fa common/libcommon.a(dlmalloc.o)
+                                        0x509 (size before relaxing)
+ .debug_str     0x0000000000000f28       0x8c common/libcommon.a(env_common.o)
+                                        0x24a (size before relaxing)
+ .debug_str     0x0000000000000fb4       0x3b common/libcommon.a(env_nowhere.o)
+                                        0x21c (size before relaxing)
+ .debug_str     0x0000000000000fef      0x507 common/libcommon.a(hush.o)
+                                        0x7d5 (size before relaxing)
+ .debug_str     0x00000000000014f6      0x1dc common/libcommon.a(lists.o)
+                                        0x312 (size before relaxing)
+ .debug_str     0x00000000000016d2       0x52 common/libcommon.a(flash.o)
+                                        0x187 (size before relaxing)
+ .debug_str     0x0000000000001724       0xf5 common/libcommon.a(main.o)
+                                        0x247 (size before relaxing)
+ .debug_str     0x0000000000001819      0x119 board/ar7240/ap121/libap121.a(ar7240_flash.o)
+                                        0x23f (size before relaxing)
+ .debug_str     0x0000000000001932        0xf board/ar7240/ap121/libap121.a(flash.o)
+                                        0x135 (size before relaxing)
+ .debug_str     0x0000000000001941       0x5b cpu/mips/libmips.a(cpu.o)
+                                        0x164 (size before relaxing)
+ .debug_str     0x000000000000199c       0x32 cpu/mips/libmips.a(interrupts.o)
+                                         0xf2 (size before relaxing)
+ .debug_str     0x00000000000019ce      0x15d cpu/mips/ar7240/libar7240.a(hornet_serial.o)
+                                        0x1f4 (size before relaxing)
+ .debug_str     0x0000000000001b2b      0x163 lib_mips/libmips.a(board.o)
+                                        0x381 (size before relaxing)
+ .debug_str     0x0000000000001c8e       0x66 lib_mips/libmips.a(time.o)
+                                        0x158 (size before relaxing)
+ .debug_str     0x0000000000001cf4       0xe0 lib_mips/libmips.a(mips_linux.o)
+                                        0x3e0 (size before relaxing)
+ .debug_str     0x0000000000001dd4      0x52c net/libnet.a(net.o)
+                                        0x826 (size before relaxing)
+ .debug_str     0x0000000000002300       0xde net/libnet.a(tftp.o)
+                                        0x282 (size before relaxing)
+ .debug_str     0x00000000000023de      0x17e net/libnet.a(eth.o)
+                                        0x334 (size before relaxing)
+ .debug_str     0x000000000000255c       0x70 rtc/librtc.a(date.o)
+                                        0x161 (size before relaxing)
+ .debug_str     0x00000000000025cc       0x5b lib_generic/libgeneric.a(crc32.o)
+                                         0xfe (size before relaxing)
+ .debug_str     0x0000000000002627        0x8 lib_generic/libgeneric.a(ctype.o)
+                                         0x57 (size before relaxing)
+ .debug_str     0x000000000000262f       0x2d lib_generic/libgeneric.a(display_options.o)
+                                        0x10a (size before relaxing)
+ .debug_str     0x000000000000265c       0xb1 lib_generic/libgeneric.a(string.o)
+                                        0x1c5 (size before relaxing)
+ .debug_str     0x000000000000270d       0x72 lib_generic/libgeneric.a(vsprintf.o)
+                                        0x1b2 (size before relaxing)
+ .debug_str     0x000000000000277f      0x110 lib_generic/libgeneric.a(LzmaWrapper.o)
+                                        0x242 (size before relaxing)
+ .debug_str     0x000000000000288f      0x139 lib_generic/libgeneric.a(LzmaDecode.o)
+                                        0x23e (size before relaxing)
+ .debug_str     0x00000000000029c8       0x1f common/libcommon.a(exports.o)
+                                        0x268 (size before relaxing)
+ .debug_str     0x00000000000029e7      0x126 common/libcommon.a(miiphyutil.o)
+                                        0x292 (size before relaxing)
+ .debug_str     0x0000000000002b0d       0xa6 board/ar7240/ap121/libap121.a(ap121.o)
+                                        0x19e (size before relaxing)
+ .debug_str     0x0000000000002bb3       0xba cpu/mips/ar7240/libar7240.a(meminit.o)
+                                        0x1a5 (size before relaxing)
+ .debug_str     0x0000000000002c6d      0x24c cpu/mips/ar7240/libar7240.a(ag7240.o)
+                                        0x4a4 (size before relaxing)
+ .debug_str     0x0000000000002eb9      0x282 board/ar7240/ap121/libap121.a(ar7240_s26_phy.o)
+                                        0x39c (size before relaxing)
+
+.comment        0x0000000000000000      0x2f4
+ .comment       0x0000000000000000       0x12 common/libcommon.a(cmd_boot.o)
+ .comment       0x0000000000000012       0x12 common/libcommon.a(cmd_bootm.o)
+ .comment       0x0000000000000024       0x12 common/libcommon.a(cmd_flash.o)
+ .comment       0x0000000000000036       0x12 common/libcommon.a(cmd_mem.o)
+ .comment       0x0000000000000048       0x12 common/libcommon.a(cmd_mii.o)
+ .comment       0x000000000000005a       0x12 common/libcommon.a(cmd_net.o)
+ .comment       0x000000000000006c       0x12 common/libcommon.a(cmd_nvedit.o)
+ .comment       0x000000000000007e       0x12 common/libcommon.a(command.o)
+ .comment       0x0000000000000090       0x12 common/libcommon.a(console.o)
+ .comment       0x00000000000000a2       0x12 common/libcommon.a(devices.o)
+ .comment       0x00000000000000b4       0x12 common/libcommon.a(dlmalloc.o)
+ .comment       0x00000000000000c6       0x12 common/libcommon.a(env_common.o)
+ .comment       0x00000000000000d8       0x12 common/libcommon.a(env_nowhere.o)
+ .comment       0x00000000000000ea       0x12 common/libcommon.a(hush.o)
+ .comment       0x00000000000000fc       0x12 common/libcommon.a(lists.o)
+ .comment       0x000000000000010e       0x12 common/libcommon.a(flash.o)
+ .comment       0x0000000000000120       0x12 common/libcommon.a(main.o)
+ .comment       0x0000000000000132       0x12 board/ar7240/ap121/libap121.a(ar7240_flash.o)
+ .comment       0x0000000000000144       0x12 board/ar7240/ap121/libap121.a(flash.o)
+ .comment       0x0000000000000156       0x12 cpu/mips/libmips.a(cpu.o)
+ .comment       0x0000000000000168       0x12 cpu/mips/libmips.a(interrupts.o)
+ .comment       0x000000000000017a       0x12 cpu/mips/ar7240/libar7240.a(hornet_serial.o)
+ .comment       0x000000000000018c       0x12 lib_mips/libmips.a(board.o)
+ .comment       0x000000000000019e       0x12 lib_mips/libmips.a(time.o)
+ .comment       0x00000000000001b0       0x12 lib_mips/libmips.a(mips_linux.o)
+ .comment       0x00000000000001c2       0x12 net/libnet.a(net.o)
+ .comment       0x00000000000001d4       0x12 net/libnet.a(tftp.o)
+ .comment       0x00000000000001e6       0x12 net/libnet.a(eth.o)
+ .comment       0x00000000000001f8       0x12 rtc/librtc.a(date.o)
+ .comment       0x000000000000020a       0x12 lib_generic/libgeneric.a(crc32.o)
+ .comment       0x000000000000021c       0x12 lib_generic/libgeneric.a(ctype.o)
+ .comment       0x000000000000022e       0x12 lib_generic/libgeneric.a(display_options.o)
+ .comment       0x0000000000000240       0x12 lib_generic/libgeneric.a(string.o)
+ .comment       0x0000000000000252       0x12 lib_generic/libgeneric.a(vsprintf.o)
+ .comment       0x0000000000000264       0x12 lib_generic/libgeneric.a(LzmaWrapper.o)
+ .comment       0x0000000000000276       0x12 lib_generic/libgeneric.a(LzmaDecode.o)
+ .comment       0x0000000000000288       0x12 common/libcommon.a(exports.o)
+ .comment       0x000000000000029a       0x12 common/libcommon.a(miiphyutil.o)
+ .comment       0x00000000000002ac       0x12 board/ar7240/ap121/libap121.a(ap121.o)
+ .comment       0x00000000000002be       0x12 cpu/mips/ar7240/libar7240.a(meminit.o)
+ .comment       0x00000000000002d0       0x12 cpu/mips/ar7240/libar7240.a(ag7240.o)
+ .comment       0x00000000000002e2       0x12 board/ar7240/ap121/libap121.a(ar7240_s26_phy.o)
+
+.gnu.attributes
+                0x0000000000000000       0x10
+ .gnu.attributes
+                0x0000000000000000       0x10 common/libcommon.a(cmd_boot.o)
+ .gnu.attributes
+                0x0000000000000010       0x10 common/libcommon.a(cmd_bootm.o)
+ .gnu.attributes
+                0x0000000000000020       0x10 common/libcommon.a(cmd_flash.o)
+ .gnu.attributes
+                0x0000000000000030       0x10 common/libcommon.a(cmd_mem.o)
+ .gnu.attributes
+                0x0000000000000040       0x10 common/libcommon.a(cmd_mii.o)
+ .gnu.attributes
+                0x0000000000000050       0x10 common/libcommon.a(cmd_net.o)
+ .gnu.attributes
+                0x0000000000000060       0x10 common/libcommon.a(cmd_nvedit.o)
+ .gnu.attributes
+                0x0000000000000070       0x10 common/libcommon.a(command.o)
+ .gnu.attributes
+                0x0000000000000080       0x10 common/libcommon.a(console.o)
+ .gnu.attributes
+                0x0000000000000090       0x10 common/libcommon.a(devices.o)
+ .gnu.attributes
+                0x00000000000000a0       0x10 common/libcommon.a(dlmalloc.o)
+ .gnu.attributes
+                0x00000000000000b0       0x10 common/libcommon.a(env_common.o)
+ .gnu.attributes
+                0x00000000000000c0       0x10 common/libcommon.a(env_nowhere.o)
+ .gnu.attributes
+                0x00000000000000d0       0x10 common/libcommon.a(hush.o)
+ .gnu.attributes
+                0x00000000000000e0       0x10 common/libcommon.a(lists.o)
+ .gnu.attributes
+                0x00000000000000f0       0x10 common/libcommon.a(flash.o)
+ .gnu.attributes
+                0x0000000000000100       0x10 common/libcommon.a(main.o)
+ .gnu.attributes
+                0x0000000000000110       0x10 board/ar7240/ap121/libap121.a(ar7240_flash.o)
+ .gnu.attributes
+                0x0000000000000120       0x10 board/ar7240/ap121/libap121.a(flash.o)
+ .gnu.attributes
+                0x0000000000000130       0x10 cpu/mips/libmips.a(cpu.o)
+ .gnu.attributes
+                0x0000000000000140       0x10 cpu/mips/libmips.a(interrupts.o)
+ .gnu.attributes
+                0x0000000000000150       0x10 cpu/mips/ar7240/libar7240.a(hornet_serial.o)
+ .gnu.attributes
+                0x0000000000000160       0x10 lib_mips/libmips.a(board.o)
+ .gnu.attributes
+                0x0000000000000170       0x10 lib_mips/libmips.a(time.o)
+ .gnu.attributes
+                0x0000000000000180       0x10 lib_mips/libmips.a(mips_linux.o)
+ .gnu.attributes
+                0x0000000000000190       0x10 net/libnet.a(net.o)
+ .gnu.attributes
+                0x00000000000001a0       0x10 net/libnet.a(tftp.o)
+ .gnu.attributes
+                0x00000000000001b0       0x10 net/libnet.a(eth.o)
+ .gnu.attributes
+                0x00000000000001c0       0x10 rtc/librtc.a(date.o)
+ .gnu.attributes
+                0x00000000000001d0       0x10 lib_generic/libgeneric.a(crc32.o)
+ .gnu.attributes
+                0x00000000000001e0       0x10 lib_generic/libgeneric.a(ctype.o)
+ .gnu.attributes
+                0x00000000000001f0       0x10 lib_generic/libgeneric.a(display_options.o)
+ .gnu.attributes
+                0x0000000000000200       0x10 lib_generic/libgeneric.a(string.o)
+ .gnu.attributes
+                0x0000000000000210       0x10 lib_generic/libgeneric.a(vsprintf.o)
+ .gnu.attributes
+                0x0000000000000220       0x10 lib_generic/libgeneric.a(LzmaWrapper.o)
+ .gnu.attributes
+                0x0000000000000230       0x10 lib_generic/libgeneric.a(LzmaDecode.o)
+ .gnu.attributes
+                0x0000000000000240       0x10 common/libcommon.a(exports.o)
+ .gnu.attributes
+                0x0000000000000250       0x10 common/libcommon.a(miiphyutil.o)
+ .gnu.attributes
+                0x0000000000000260       0x10 board/ar7240/ap121/libap121.a(ap121.o)
+ .gnu.attributes
+                0x0000000000000270       0x10 cpu/mips/ar7240/libar7240.a(meminit.o)
+ .gnu.attributes
+                0x0000000000000280       0x10 cpu/mips/ar7240/libar7240.a(ag7240.o)
+ .gnu.attributes
+                0x0000000000000290       0x10 board/ar7240/ap121/libap121.a(ar7240_s26_phy.o)
+
+.debug_frame    0x0000000000000000     0x1d4c
+ .debug_frame   0x0000000000000000       0x74 common/libcommon.a(cmd_bootm.o)
+ .debug_frame   0x0000000000000074       0x4c common/libcommon.a(cmd_flash.o)
+ .debug_frame   0x00000000000000c0      0x114 common/libcommon.a(cmd_mem.o)
+ .debug_frame   0x00000000000001d4       0x30 common/libcommon.a(cmd_mii.o)
+ .debug_frame   0x0000000000000204       0x4c common/libcommon.a(cmd_net.o)
+ .debug_frame   0x0000000000000250      0x100 common/libcommon.a(cmd_nvedit.o)
+ .debug_frame   0x0000000000000350       0x74 common/libcommon.a(command.o)
+ .debug_frame   0x00000000000003c4      0x1c4 common/libcommon.a(console.o)
+ .debug_frame   0x0000000000000588       0x58 common/libcommon.a(devices.o)
+ .debug_frame   0x00000000000005e0      0x124 common/libcommon.a(dlmalloc.o)
+ .debug_frame   0x0000000000000704       0x70 common/libcommon.a(env_common.o)
+ .debug_frame   0x0000000000000774       0x40 common/libcommon.a(env_nowhere.o)
+ .debug_frame   0x00000000000007b4      0x2bc common/libcommon.a(hush.o)
+ .debug_frame   0x0000000000000a70      0x12c common/libcommon.a(lists.o)
+ .debug_frame   0x0000000000000b9c       0x7c common/libcommon.a(flash.o)
+ .debug_frame   0x0000000000000c18       0xc8 common/libcommon.a(main.o)
+ .debug_frame   0x0000000000000ce0       0x98 board/ar7240/ap121/libap121.a(ar7240_flash.o)
+ .debug_frame   0x0000000000000d78       0x28 board/ar7240/ap121/libap121.a(flash.o)
+ .debug_frame   0x0000000000000da0       0x40 cpu/mips/libmips.a(cpu.o)
+ .debug_frame   0x0000000000000de0       0x30 cpu/mips/libmips.a(interrupts.o)
+ .debug_frame   0x0000000000000e10       0x90 cpu/mips/ar7240/libar7240.a(hornet_serial.o)
+ .debug_frame   0x0000000000000ea0       0xb4 lib_mips/libmips.a(board.o)
+ .debug_frame   0x0000000000000f54       0x88 lib_mips/libmips.a(time.o)
+ .debug_frame   0x0000000000000fdc       0x58 lib_mips/libmips.a(mips_linux.o)
+ .debug_frame   0x0000000000001034      0x2a8 net/libnet.a(net.o)
+ .debug_frame   0x00000000000012dc       0x7c net/libnet.a(tftp.o)
+ .debug_frame   0x0000000000001358      0x13c net/libnet.a(eth.o)
+ .debug_frame   0x0000000000001494       0x48 rtc/librtc.a(date.o)
+ .debug_frame   0x00000000000014dc       0x20 lib_generic/libgeneric.a(crc32.o)
+ .debug_frame   0x00000000000014fc       0x44 lib_generic/libgeneric.a(display_options.o)
+ .debug_frame   0x0000000000001540      0x17c lib_generic/libgeneric.a(string.o)
+ .debug_frame   0x00000000000016bc       0xa4 lib_generic/libgeneric.a(vsprintf.o)
+ .debug_frame   0x0000000000001760       0x38 lib_generic/libgeneric.a(LzmaWrapper.o)
+ .debug_frame   0x0000000000001798       0x50 lib_generic/libgeneric.a(LzmaDecode.o)
+ .debug_frame   0x00000000000017e8       0x48 common/libcommon.a(exports.o)
+ .debug_frame   0x0000000000001830      0x14c common/libcommon.a(miiphyutil.o)
+ .debug_frame   0x000000000000197c       0x78 board/ar7240/ap121/libap121.a(ap121.o)
+ .debug_frame   0x00000000000019f4       0x54 cpu/mips/ar7240/libar7240.a(meminit.o)
+ .debug_frame   0x0000000000001a48      0x144 cpu/mips/ar7240/libar7240.a(ag7240.o)
+ .debug_frame   0x0000000000001b8c      0x1c0 board/ar7240/ap121/libap121.a(ar7240_s26_phy.o)
+
+.debug_loc      0x0000000000000000     0xbf60
+ .debug_loc     0x0000000000000000      0x647 common/libcommon.a(cmd_bootm.o)
+ .debug_loc     0x0000000000000647      0x733 common/libcommon.a(cmd_flash.o)
+ .debug_loc     0x0000000000000d7a      0x951 common/libcommon.a(cmd_mem.o)
+ .debug_loc     0x00000000000016cb       0x8e common/libcommon.a(cmd_mii.o)
+ .debug_loc     0x0000000000001759      0x23b common/libcommon.a(cmd_net.o)
+ .debug_loc     0x0000000000001994      0xdef common/libcommon.a(cmd_nvedit.o)
+ .debug_loc     0x0000000000002783      0x471 common/libcommon.a(command.o)
+ .debug_loc     0x0000000000002bf4      0x4a1 common/libcommon.a(console.o)
+ .debug_loc     0x0000000000003095       0xb5 common/libcommon.a(devices.o)
+ .debug_loc     0x000000000000314a     0x10d9 common/libcommon.a(dlmalloc.o)
+ .debug_loc     0x0000000000004223       0x5c common/libcommon.a(env_common.o)
+ .debug_loc     0x000000000000427f       0x13 common/libcommon.a(env_nowhere.o)
+ .debug_loc     0x0000000000004292     0x186c common/libcommon.a(hush.o)
+ .debug_loc     0x0000000000005afe      0x3fc common/libcommon.a(lists.o)
+ .debug_loc     0x0000000000005efa      0x3f2 common/libcommon.a(flash.o)
+ .debug_loc     0x00000000000062ec      0x852 common/libcommon.a(main.o)
+ .debug_loc     0x0000000000006b3e      0x286 board/ar7240/ap121/libap121.a(ar7240_flash.o)
+ .debug_loc     0x0000000000006dc4       0x50 board/ar7240/ap121/libap121.a(flash.o)
+ .debug_loc     0x0000000000006e14       0x4c cpu/mips/libmips.a(cpu.o)
+ .debug_loc     0x0000000000006e60      0x19e cpu/mips/ar7240/libar7240.a(hornet_serial.o)
+ .debug_loc     0x0000000000006ffe      0x21b lib_mips/libmips.a(board.o)
+ .debug_loc     0x0000000000007219       0x6b lib_mips/libmips.a(time.o)
+ .debug_loc     0x0000000000007284      0x46c lib_mips/libmips.a(mips_linux.o)
+ .debug_loc     0x00000000000076f0      0xc04 net/libnet.a(net.o)
+ .debug_loc     0x00000000000082f4      0x371 net/libnet.a(tftp.o)
+ .debug_loc     0x0000000000008665      0x6b7 net/libnet.a(eth.o)
+ .debug_loc     0x0000000000008d1c      0x169 rtc/librtc.a(date.o)
+ .debug_loc     0x0000000000008e85       0xc8 lib_generic/libgeneric.a(crc32.o)
+ .debug_loc     0x0000000000008f4d       0xbb lib_generic/libgeneric.a(display_options.o)
+ .debug_loc     0x0000000000009008      0x407 lib_generic/libgeneric.a(string.o)
+ .debug_loc     0x000000000000940f      0x500 lib_generic/libgeneric.a(vsprintf.o)
+ .debug_loc     0x000000000000990f      0x23a lib_generic/libgeneric.a(LzmaWrapper.o)
+ .debug_loc     0x0000000000009b49      0xbe4 lib_generic/libgeneric.a(LzmaDecode.o)
+ .debug_loc     0x000000000000a72d       0x1f common/libcommon.a(exports.o)
+ .debug_loc     0x000000000000a74c      0x855 common/libcommon.a(miiphyutil.o)
+ .debug_loc     0x000000000000afa1       0xb2 board/ar7240/ap121/libap121.a(ap121.o)
+ .debug_loc     0x000000000000b053       0xc8 cpu/mips/ar7240/libar7240.a(meminit.o)
+ .debug_loc     0x000000000000b11b      0x7c8 cpu/mips/ar7240/libar7240.a(ag7240.o)
+ .debug_loc     0x000000000000b8e3      0x67d board/ar7240/ap121/libap121.a(ar7240_s26_phy.o)
+
+.debug_aranges  0x0000000000000000      0x500
+ .debug_aranges
+                0x0000000000000000       0x20 common/libcommon.a(cmd_bootm.o)
+ .debug_aranges
+                0x0000000000000020       0x20 common/libcommon.a(cmd_flash.o)
+ .debug_aranges
+                0x0000000000000040       0x20 common/libcommon.a(cmd_mem.o)
+ .debug_aranges
+                0x0000000000000060       0x20 common/libcommon.a(cmd_mii.o)
+ .debug_aranges
+                0x0000000000000080       0x20 common/libcommon.a(cmd_net.o)
+ .debug_aranges
+                0x00000000000000a0       0x20 common/libcommon.a(cmd_nvedit.o)
+ .debug_aranges
+                0x00000000000000c0       0x20 common/libcommon.a(command.o)
+ .debug_aranges
+                0x00000000000000e0       0x20 common/libcommon.a(console.o)
+ .debug_aranges
+                0x0000000000000100       0x20 common/libcommon.a(devices.o)
+ .debug_aranges
+                0x0000000000000120       0x20 common/libcommon.a(dlmalloc.o)
+ .debug_aranges
+                0x0000000000000140       0x20 common/libcommon.a(env_common.o)
+ .debug_aranges
+                0x0000000000000160       0x20 common/libcommon.a(env_nowhere.o)
+ .debug_aranges
+                0x0000000000000180       0x20 common/libcommon.a(hush.o)
+ .debug_aranges
+                0x00000000000001a0       0x20 common/libcommon.a(lists.o)
+ .debug_aranges
+                0x00000000000001c0       0x20 common/libcommon.a(flash.o)
+ .debug_aranges
+                0x00000000000001e0       0x20 common/libcommon.a(main.o)
+ .debug_aranges
+                0x0000000000000200       0x20 board/ar7240/ap121/libap121.a(ar7240_flash.o)
+ .debug_aranges
+                0x0000000000000220       0x20 board/ar7240/ap121/libap121.a(flash.o)
+ .debug_aranges
+                0x0000000000000240       0x20 cpu/mips/libmips.a(cpu.o)
+ .debug_aranges
+                0x0000000000000260       0x20 cpu/mips/libmips.a(interrupts.o)
+ .debug_aranges
+                0x0000000000000280       0x20 cpu/mips/ar7240/libar7240.a(hornet_serial.o)
+ .debug_aranges
+                0x00000000000002a0       0x20 lib_mips/libmips.a(board.o)
+ .debug_aranges
+                0x00000000000002c0       0x20 lib_mips/libmips.a(time.o)
+ .debug_aranges
+                0x00000000000002e0       0x20 lib_mips/libmips.a(mips_linux.o)
+ .debug_aranges
+                0x0000000000000300       0x20 net/libnet.a(net.o)
+ .debug_aranges
+                0x0000000000000320       0x20 net/libnet.a(tftp.o)
+ .debug_aranges
+                0x0000000000000340       0x20 net/libnet.a(eth.o)
+ .debug_aranges
+                0x0000000000000360       0x20 rtc/librtc.a(date.o)
+ .debug_aranges
+                0x0000000000000380       0x20 lib_generic/libgeneric.a(crc32.o)
+ .debug_aranges
+                0x00000000000003a0       0x20 lib_generic/libgeneric.a(display_options.o)
+ .debug_aranges
+                0x00000000000003c0       0x20 lib_generic/libgeneric.a(string.o)
+ .debug_aranges
+                0x00000000000003e0       0x20 lib_generic/libgeneric.a(vsprintf.o)
+ .debug_aranges
+                0x0000000000000400       0x20 lib_generic/libgeneric.a(LzmaWrapper.o)
+ .debug_aranges
+                0x0000000000000420       0x20 lib_generic/libgeneric.a(LzmaDecode.o)
+ .debug_aranges
+                0x0000000000000440       0x20 common/libcommon.a(exports.o)
+ .debug_aranges
+                0x0000000000000460       0x20 common/libcommon.a(miiphyutil.o)
+ .debug_aranges
+                0x0000000000000480       0x20 board/ar7240/ap121/libap121.a(ap121.o)
+ .debug_aranges
+                0x00000000000004a0       0x20 cpu/mips/ar7240/libar7240.a(meminit.o)
+ .debug_aranges
+                0x00000000000004c0       0x20 cpu/mips/ar7240/libar7240.a(ag7240.o)
+ .debug_aranges
+                0x00000000000004e0       0x20 board/ar7240/ap121/libap121.a(ar7240_s26_phy.o)
+
+.debug_ranges   0x0000000000000000     0x1308
+ .debug_ranges  0x0000000000000000       0x90 common/libcommon.a(cmd_bootm.o)
+ .debug_ranges  0x0000000000000090       0xe0 common/libcommon.a(cmd_flash.o)
+ .debug_ranges  0x0000000000000170       0x20 common/libcommon.a(cmd_mem.o)
+ .debug_ranges  0x0000000000000190       0x50 common/libcommon.a(cmd_net.o)
+ .debug_ranges  0x00000000000001e0       0x68 common/libcommon.a(cmd_nvedit.o)
+ .debug_ranges  0x0000000000000248       0x38 common/libcommon.a(command.o)
+ .debug_ranges  0x0000000000000280       0x70 common/libcommon.a(console.o)
+ .debug_ranges  0x00000000000002f0       0x70 common/libcommon.a(dlmalloc.o)
+ .debug_ranges  0x0000000000000360      0x540 common/libcommon.a(hush.o)
+ .debug_ranges  0x00000000000008a0       0x20 common/libcommon.a(flash.o)
+ .debug_ranges  0x00000000000008c0      0x110 common/libcommon.a(main.o)
+ .debug_ranges  0x00000000000009d0      0x288 board/ar7240/ap121/libap121.a(ar7240_flash.o)
+ .debug_ranges  0x0000000000000c58       0x18 lib_mips/libmips.a(board.o)
+ .debug_ranges  0x0000000000000c70       0xd8 lib_mips/libmips.a(mips_linux.o)
+ .debug_ranges  0x0000000000000d48      0x140 net/libnet.a(net.o)
+ .debug_ranges  0x0000000000000e88       0xc0 net/libnet.a(tftp.o)
+ .debug_ranges  0x0000000000000f48       0x48 net/libnet.a(eth.o)
+ .debug_ranges  0x0000000000000f90       0x18 lib_generic/libgeneric.a(string.o)
+ .debug_ranges  0x0000000000000fa8       0x20 lib_generic/libgeneric.a(vsprintf.o)
+ .debug_ranges  0x0000000000000fc8       0x98 lib_generic/libgeneric.a(LzmaWrapper.o)
+ .debug_ranges  0x0000000000001060      0x128 lib_generic/libgeneric.a(LzmaDecode.o)
+ .debug_ranges  0x0000000000001188       0x18 common/libcommon.a(miiphyutil.o)
+ .debug_ranges  0x00000000000011a0      0x168 cpu/mips/ar7240/libar7240.a(ag7240.o)
