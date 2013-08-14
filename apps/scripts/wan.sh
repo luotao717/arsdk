@@ -1,0 +1,118 @@
+#!/bin/sh
+#
+# $Id: wan.sh,v 1.6.8.3 2008-08-06 01:23:14 winfred Exp $
+#
+# usage: wan.sh
+#
+
+. /sbin/global.sh
+
+# stop all
+killall -q syslogd
+killall -q udhcpc
+killall -q udhcpplus
+killall -q l2tpd
+killall -q pppd
+killall -q dnrd
+
+clone_en=`nvram_get 2860 macCloneEnabled`
+clone_mac=`nvram_get 2860 macCloneMac`
+wan_mac=`nvram_get 2860 WANMAC`
+#MAC Clone: bridge mode doesn't support MAC Clone
+	ifconfig $wan_if down
+	ifconfig $wan_if hw ether $wan_mac
+	ifconfig $wan_if up
+if [ "$opmode" != "0" -a "$clone_en" = "1" ]; then
+	ifconfig $wan_if down
+	ifconfig $wan_if hw ether $clone_mac
+	ifconfig $wan_if up
+fi
+
+if [ "$wanmode" = "STATIC" -o "$opmode" = "0" ]; then
+	#always treat bridge mode having static wan connection
+	ip=`nvram_get 2860 wan_ipaddr`
+	nm=`nvram_get 2860 wan_netmask`
+	gw=`nvram_get 2860 wan_gateway`
+	pd=`nvram_get 2860 wan_primary_dns`
+	sd=`nvram_get 2860 wan_secondary_dns`
+	mtu=`nvram_get 2860 wan_static_mtu`
+
+	#lan and wan ip should not be the same except in bridge mode
+	if [ "$opmode" != "0" ]; then
+		lan_ip=`nvram_get 2860 lan_ipaddr`
+		if [ "$ip" = "$lan_ip" ]; then
+			echo "wan.sh: warning: WAN's IP address is set identical to LAN"
+			exit 0
+		fi
+	else
+		#use lan's ip address instead
+		ip=`nvram_get 2860 lan_ipaddr`
+		nm=`nvram_get 2860 lan_netmask`
+	fi
+	ifconfig $wan_if $ip netmask $nm mtu $mtu
+	route del default
+	if [ "$gw" != "" ]; then
+	route add default gw $gw
+	fi
+	config-dns.sh $pd $sd
+	dnsmasq /etc/resolv.conf &
+elif [ "$wanmode" = "DHCP" ]; then
+	hostname=`nvram_get 2860 HostName`
+	dhcp_mtu=`nvram_get 2860 wan_dhcp_mtu`
+	ifconfig $wan_if mtu $dhcp_mtu
+	udhcpc -i $wan_if -s /sbin/udhcpc.sh -H $hostname -p /var/run/udhcpc.pid &
+elif [ "$wanmode" = "DHCPPLUS" ]; then
+	dhcppuser=`nvram_get 2860 wan_dhcppuser`
+	dhcpppassword=`nvram_get 2860 wan_dhcpppassword`
+	udhcpplus $dhcppuser $dhcpppassword &
+elif [ "$wanmode" = "PPPOE" ]; then
+	user=`nvram_get 2860 wan_pppoe_user`
+	pw=`nvram_get 2860 wan_pppoe_pass`
+	mtu=`nvram_get 2860 wan_pppoe_mtu`
+	mru=`nvram_get 2860 wan_pppoe_mru`
+	pppConnectType=`nvram_get 2860 pppConnectType`
+	pppoe_specific=`nvram_get 2860 pppoe_specific`
+#	pppoe_opmode=`nvram_get 2860 wan_pppoe_opmode`
+#	pppoe_optime=`nvram_get 2860 wan_pppoe_optime`
+	if [ "$pppoe_specific" = "2" -a "$pppConnectType" != "2" ]; then
+		kill `ps | grep specific_pppoe.sh | grep -v grep | awk '{print $1}'`
+		specific_pppoe.sh &
+	else
+		config-pppoe.sh $user $pw $wan_if 1452 1452
+	fi
+#	config-pppoe.sh $u $pw $wan_if $pppoe_opmode $pppoe_optime
+elif [ "$wanmode" = "L2TP" ]; then
+	srv=`nvram_get 2860 wan_l2tp_server`
+	u=`nvram_get 2860 wan_l2tp_user`
+	pw=`nvram_get 2860 wan_l2tp_pass`
+	mode=`nvram_get 2860 wan_l2tp_mode`
+	l2tp_opmode=`nvram_get 2860 wan_l2tp_opmode`
+	l2tp_optime=`nvram_get 2860 wan_l2tp_optime`
+	if [ "$mode" = "0" ]; then
+		ip=`nvram_get 2860 wan_l2tp_ip`
+		nm=`nvram_get 2860 wan_l2tp_netmask`
+		gw=`nvram_get 2860 wan_l2tp_gateway`
+		config-l2tp.sh static $wan_if $ip $nm $gw $srv $u $pw $l2tp_opmode $l2tp_optime
+	else
+		config-l2tp.sh dhcp $wan_if $srv $u $pw $l2tp_opmode $l2tp_optime
+	fi
+elif [ "$wanmode" = "PPTP" ]; then
+	srv=`nvram_get 2860 wan_pptp_server`
+	u=`nvram_get 2860 wan_pptp_user`
+	pw=`nvram_get 2860 wan_pptp_pass`
+	mode=`nvram_get 2860 wan_pptp_mode`
+	pptp_opmode=`nvram_get 2860 wan_pptp_opmode`
+	pptp_optime=`nvram_get 2860 wan_pptp_optime`
+	if [ "$mode" = "0" ]; then
+		ip=`nvram_get 2860 wan_pptp_ip`
+		nm=`nvram_get 2860 wan_pptp_netmask`
+		gw=`nvram_get 2860 wan_pptp_gateway`
+		config-pptp.sh static $wan_if $ip $nm $gw $srv $u $pw $pptp_opmode $pptp_optime
+	else
+		config-pptp.sh dhcp $wan_if $srv $u $pw $pptp_opmode $pptp_optime
+	fi
+else
+	echo "wan.sh: unknown wan connection type: $wanmode"
+	exit 1
+fi
+
