@@ -1,0 +1,53 @@
+/* CSS Document */
+* { font-family:Arial, Helvetica, sans-serif
+}
+td {
+	font-size: 12px; color: #344b57; font-family:Arial, Helvetica, sans-serif
+}
+body {
+    font-size: 12px; font-family:Arial, Helvetica, sans-serif
+}
+.button {
+	font-size: 12px; font-family:Arial, Helvetica, sans-serif; width:100px;
+}
+.button3 {
+	font-size: 12px; font-family:Arial, Helvetica, sans-serif; width:130px;
+}
+.table {
+	border: #1651ab 1px solid; list-style-position: inside; font-size: 12px; width-space: normal; list-style-type: circle
+}
+.title {
+	font-weight:bold; font-size:14px; color:#344b57
+}
+.title2 {
+	font-weight:bold; color:#344b57
+}
+.thead {
+	width:200px; color:#344b57
+}
+.thead2 {
+	width:220px; color:#344b57
+}
+.tcenter {
+	background-color:#f2f2f2; height:25px; font-weight:bold;
+}
+
+#wps_progress_bar {
+	width:250px; height:15; margin:0 auto; border:1px solid gray;
+}
+
+#loading {
+   	width:300px; height:121px; background-image:url(../style/wait_bg.gif); color:#344b57; position:absolute; left:50%; top:50%; margin-top:-150px; margin-left:-250px; text-align:center; font-family:Arial, Helvetica, sans-serif; font-weight:bold;
+}
+
+blockquote {
+	font-size: 12px; color: #344b57; font-family:Arial, Helvetica, sans-serif
+}
+
+p {
+	font-size: 12px; color: #344b57; font-family:Arial, Helvetica, sans-serif
+}
+
+h2 {
+	font-weight:bold; font-size:14px;
+}

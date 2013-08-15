@@ -1,0 +1,32 @@
+.EXPORT_ALL_VARIABLES:
+
+DIRS = src
+
+ROOT_DIRECTORY = /etc_ro/web
+ifeq ("$(CONFIG_RT_FIRST_CARD)", "2860")
+FIRST_CARD=RT$(CONFIG_RT_FIRST_CARD)V2
+else
+ifeq ("$(CONFIG_RT_FIRST_CARD)", "7610")
+FIRST_CARD=MT$(CONFIG_RT_FIRST_CARD)
+else
+endif
+FIRST_CARD=RT$(CONFIG_RT_FIRST_CARD)
+endif
+FIRST_WDS=CONFIG_$(FIRST_CARD)_AP_WDS
+SECOND_WDS=CONFIG_$(CONFIG_RT_SECOND_CARD)_AP_WDS
+FIRST_APCLI=CONFIG_$(FIRST_CARD)_AP_APCLI
+
+all:
+	for i in $(DIRS) ; do make -C $$i $@ || exit $?; done
+
+romfs:
+	$(ROMFSINST) $(ROOT_DIRECTORY)
+ifeq ("$(CONFIG_USER_PPPOECD)", "y")
+	mv $(ROMFSDIR)$(ROOT_DIRECTORY)/internet/wan_simple.asp $(ROMFSDIR)$(ROOT_DIRECTORY)/internet/wan.asp
+else
+	rm -rf $(ROMFSDIR)$(ROOT_DIRECTORY)/internet/wan_simple.asp
+endif
+	for i in $(DIRS) ; do make -C $$i $@ ; done
+clean:
+	for i in $(DIRS) ; do make -C $$i clean ; done
+

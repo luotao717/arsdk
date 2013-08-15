@@ -1,0 +1,36 @@
+body { margin:0; padding:0; line-height:100%; font-family:Verdana}
+
+/*top frame*/
+.toper { margin:0; padding:0; background:url(images/headerbg.gif) repeat-x top; width:100%; }
+.topname { font-size:18px; font-weight:bold; padding:25px 0 25px 50px; color:#003399;}
+/*left frame*/
+.lefter { width:200px; margin:0; padding:0;}
+.menu { margin:0; padding:0;}
+.column {text-align: left;width: 150px;	height: 23px;padding: 5px 0 0 35px; font-size:12px;}
+.column a, .column a:visited {float: left;background: url(images/columnbg.gif) no-repeat left top;color:#000000;font-weight: bold;width: 150px;height: 23px;padding: 5px 0 0 35px; text-decoration:none;}
+.column a:hover {background: url(images/columnbg_over.gif) no-repeat left top;color: #ffffff; text-decoration:none;}
+.xiala {float: left;width: 148px;padding-left: 10px; font-size:12px;}
+.xiala li {background: url(images/dot.gif) no-repeat left 10px; float: left;width: 148px;padding: 5px 0 0 17px; list-style:none;}
+.xiala li a {color: #000000; text-decoration:none; font-weight:normal}
+.xiala li a:hover {color: #ffffff; text-decoration:none;}
+
+/*main frame*/
+table.body { margin:20px; padding:20px; font-size:12px; width:90%; border:0;}
+.tips { font-size:14px; border: 1px solid #B3D5F0; width:100%; background-color:#EEF7FD; padding:10px;}
+.content { border: 1px solid #B3D5F0; width:100%; background-color:#EEF7FD;}
+.title{ background: url(images/titlebg.gif) repeat-x left;height: 26px;font-size:12px;font-weight: bold;padding: 0 10px;line-height:180%;}
+.head { width:30%; font-size:12px; padding-left:10px;}
+input.text { margin:0; padding:0;}
+input.button { margin:0; padding:0; width:90px;}
+input.button2 { margin:0; padding:0; width:120px;}
+input.button3 { margin:0; padding:0; width:50px;}
+/**/
+.on {display:on}
+.off {display:none}
+td { font-size:12px;}
+h1 { font-size:18px; }
+a { color:#3399ff; font-weight:bold;}
+
+#loading { width: 340px;height: 140px; font-size:12px; background-color: #3399ff; position: absolute;
+			left: 50%; top: 50%; margin-top: -150px;margin-left: -250px; text-align: center; padding:5px;}
+#wps_progress_bar { width:250px;height:15;margin: 0 auto;border: 1px solid gray;}
