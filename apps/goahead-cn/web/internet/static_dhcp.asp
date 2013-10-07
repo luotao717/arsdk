@@ -146,7 +146,7 @@ function resetForm()
 <table width=700><tr><td>
 <table width=100% border=0 cellpadding=3 cellspacing=1> 
 <tr><td class="title"><script>dw(MM_static_dhcp_settings)</script></td></tr>
-<tr><td><script>dw(JS_msg_static_dhcp)</script></td></tr>
+<tr><td><script>dw(JS_msg_static_dhcp)</script><% needRebootWaring(); %></td></tr>
 <tr><td><hr></td></tr>
 </table>
 

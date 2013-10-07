@@ -2164,7 +2164,7 @@ static void setLan(webs_t wp, char_t *path, char_t *query)
 	//doSystem("lktos_networkconfig ra5350 initlan");
 	//initInternet();
 //#endif
-
+	doSystem("lktos_initconfig ar9331hc lan");
 	websRedirect(wp, submitUrl);
 }
 
@@ -2206,6 +2206,7 @@ static void setStaticDhcp(webs_t wp, char_t *path, char_t *query)
 	//doSystem("lktos_networkconfig ra5350 initlan");
 	//initInternet();
 //#endif
+	doSystem("lktos_initconfig ar9331hc lan");
 	websRedirect(wp, submitUrl);
 }
 
@@ -2717,7 +2718,7 @@ static void setWan(webs_t wp, char_t *path, char_t *query)
 	char_t  *l2tp_srv, *l2tp_mode;
 	char_t   *tmpstr;
 	char_t	vlansetBuf[32]={0};
-	int tmpflag=0;
+	int pid,tmpflag=0;
 #ifdef CONFIG_USER_3G
 	char_t  *simpin, *choicetype, *dialnum, *usrname, *passwd, *apn;
 	int		pid_pppd=0;
@@ -3620,8 +3621,18 @@ static void setWan(webs_t wp, char_t *path, char_t *query)
 	//doSystem("lktos_networkconfig ra5350 initwan");
 	//initInternet();
 //#endif
-
+	printf("\r\nstart----start\r\n");
+	//system("lktos_initconfig ar9331hc wan &");
+	//pid=fork();
+	//if(pid==0)
+	//{
+		//system("lktos_initconfig ar9331hc wan &");
+		//exit(0);
+	//}
+	//OK_MSG_luo(submitUrl);
+	doSystem("lktos_initconfig ar9331hc wan");
 	websRedirect(wp, submitUrl);
+	return;
 }
 
 
@@ -3970,7 +3981,7 @@ static void setWan2(webs_t wp, char_t *path, char_t *query)
 	//doSystem("lktos_networkconfig ra5350 initwan");
 	//initInternet();
 //#endif
-
+	doSystem("lktos_initconfig ar9331hc wan");
 	websRedirect(wp, submitUrl);
 }
 

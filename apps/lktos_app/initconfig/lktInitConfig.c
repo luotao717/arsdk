@@ -383,6 +383,214 @@ static void addWds2Br0Ralink(T_LKTOS_INITCONFIG_PLATFORM_TYPE_  platform)
 	
 }
 
+static int arInitConfigWan(T_LKTOS_INITCONFIG_PLATFORM_TYPE_ platform)
+{
+	int ralinkMode=RT2860_NVRAM;
+
+	char *wan_mac=NULL;	
+	char *opmode=NULL;	
+	char *bssidnum=NULL;
+	char *wan_mode=NULL;
+	char *connectName=NULL;
+	char *connectOperationMode=NULL;
+	char *connectethports=NULL;
+	char *connectwifiports=NULL;
+	char *connectvlanid=NULL;
+	char *connectvlanEn=NULL;
+	char *connectvlanPrio=NULL;
+	char *connectbrName=NULL;
+	char *tmpstr=NULL;
+	char lan_if[32];
+	char wan_if[32];
+	char vlan_wan_if[32];
+	char wan_ppp_if[32];
+	char para[16], flash_mac[18];
+	char tmpbuf[64]={0};
+	int i=0,intVal=0,j=0;
+	int opMode=0;
+	int vlanflag=0;
+	int vlanid=1;
+	int brindex=1;
+	char connectVlanEnArr[18]={0};
+	int connectVlanIdArr[18]={1};
+	char connectVlanPrioArr[18]={0};
+
+	
+	memset(lan_if, 0, sizeof(lan_if));	
+	memset(wan_if, 0, sizeof(wan_if));	
+	memset(wan_ppp_if, 0, sizeof(wan_ppp_if));	
+	memset(para, 0, sizeof(para));
+	opmode=nvram_bufget(RT2860_NVRAM,"OperationMode");	
+	bssidnum=nvram_bufget(RT2860_NVRAM,"BssidNum");
+	wan_mode=nvram_bufget(RT2860_NVRAM, "wanConnectionMode");
+
+	eval("ifconfig","br0","down");
+	eval("brctl","delbr","br0");
+	eval("brctl","addbr","br0");
+	if(atoi(nvram_bufget(ralinkMode, "stpEnabled")))
+	{
+		eval("brctl","setfd","br0","15");
+		eval("brctl","stp","br0","1");
+	}
+	else
+	{
+		eval("brctl","setfd","br0","1");
+		eval("brctl","stp","br0","0");
+	}
+	while(1)
+	{
+		i++;
+		sprintf(tmpbuf,"Connect%dName",i);
+		connectName=nvram_bufget(ralinkMode,tmpbuf);
+		system("echo 66666");
+		printf("\r\nconnctname=%c---%d---%s\r\n",*connectName,*connectName,connectName);
+		if(*connectName == 0)
+			break;
+
+		sprintf(tmpbuf,"Connect%dvlanEn",i);
+		connectvlanEn=nvram_bufget(ralinkMode,tmpbuf);
+		connectVlanEnArr[i]=atoi(connectvlanEn);
+		if(atoi(connectvlanEn) == 1)
+		{
+			sprintf(tmpbuf,"Connect%dvlanid",i);
+			connectvlanid=nvram_bufget(ralinkMode,tmpbuf);
+			vlanid=atoi(connectvlanid);
+			connectVlanIdArr[i]=vlanid;
+			sprintf(tmpbuf,"Connect%dvlanprio",i);
+			connectvlanPrio=nvram_bufget(ralinkMode,tmpbuf);
+			connectVlanPrioArr[i]=atoi(connectvlanPrio);
+			if((vlanid >0) && (vlanid < 4096))
+			{
+				vlanflag=1;
+				eval("vconfig", "add", "eth0", connectvlanid);
+				sprintf(tmpbuf,"eth0.%d",vlanid);
+				eval("vconfig","set_egress_map", tmpbuf, "0",connectvlanPrio);
+				eval("vconfig","set_egress_map", tmpbuf, "1",connectvlanPrio);
+				eval("vconfig","set_egress_map", tmpbuf, "2",connectvlanPrio);
+				eval("vconfig","set_egress_map", tmpbuf, "3",connectvlanPrio);
+				eval("vconfig","set_egress_map", tmpbuf, "4",connectvlanPrio);
+				eval("vconfig","set_egress_map", tmpbuf, "5",connectvlanPrio);
+				eval("vconfig","set_egress_map", tmpbuf, "6",connectvlanPrio);
+				eval("vconfig","set_egress_map", tmpbuf, "7",connectvlanPrio);
+				//eval("vconfig","set_flag", tmpbuf, "1");
+				eval("ifconfig", tmpbuf, "0.0.0.0");
+				strcpy(wan_if,tmpbuf);
+			}
+		}
+		else
+			strcpy(wan_if,"eth0");
+		sprintf(tmpbuf,"Connect%dOperationMode",i);
+		connectOperationMode=nvram_bufget(ralinkMode,tmpbuf);
+
+		if(atoi(connectOperationMode) == 0)
+		{
+			sprintf(tmpbuf,"Connect%dethports",i);
+			connectethports=nvram_bufget(ralinkMode,tmpbuf);
+			if(atoi(connectethports) == 3)
+				eval("brctl", "addif", "br0", "eth1");
+			sprintf(tmpbuf,"Connect%dwifiports",i);
+			connectwifiports=nvram_bufget(ralinkMode,tmpbuf);
+			if(connectwifiports != NULL)
+			{
+				for(j=0;j<10;j+=2)
+				{
+					sprintf(tmpbuf,"ath%c",*(connectwifiports+j));
+					eval("brctl", "addif", "br0", tmpbuf);
+					if(*(connectwifiports+j+1) != ';')
+						break;
+				}
+			}
+			sprintf(tmpbuf,"Connect%dbrName",i);
+			connectbrName=nvram_bufget(ralinkMode,tmpbuf);
+			eval("ifconfig", connectbrName,"down");
+			eval("brctl", "delbr", connectbrName);
+			eval("brctl", "addbr", connectbrName);
+			eval("brctl", "addif", connectbrName,wan_if);
+			intVal=lktos_networkconfig_init_wan_ar9331HC(platform,connectbrName,vlanflag,vlanid,tmpbuf);
+			if(!intVal)
+			{
+				printf("\r\ninit wan field\r\n");
+			}
+			intVal=lktos_networkconfig_init_lan(platform,tmpbuf);
+			if(!intVal)
+			{
+				printf("\r\ninit Lan field\r\n");
+			}
+		}
+		else if(atoi(connectOperationMode) == 1)
+		{
+			
+			sprintf(tmpbuf,"Connect%dbrName",i);
+			connectbrName=nvram_bufget(ralinkMode,tmpbuf);
+			eval("ifconfig", connectbrName,"down");
+			eval("brctl", "delbr", connectbrName);
+			eval("brctl", "addbr", connectbrName);
+			strcpy(vlan_wan_if,connectbrName);
+			if(connectVlanEnArr[1] ==0 && connectVlanEnArr[2] == 0)
+			{
+				strcpy(vlan_wan_if,"br1");
+			}
+			else if(connectVlanIdArr[1] == connectVlanIdArr[2])
+			{
+				strcpy(vlan_wan_if,"br1");
+			}
+			else
+			{
+				eval("brctl", "addif", vlan_wan_if, wan_if);
+				eval("ifconfig", vlan_wan_if, "up");
+			}
+			sprintf(tmpbuf,"Connect%dethports",i);
+			connectethports=nvram_bufget(ralinkMode,tmpbuf);
+			if(atoi(connectethports) == 3)
+				eval("brctl", "addif", vlan_wan_if, "eth1");
+			sprintf(tmpbuf,"Connect%dwifiports",i);
+			connectwifiports=nvram_bufget(ralinkMode,tmpbuf);
+			if(connectwifiports != NULL)
+			{
+				for(j=0;j<10;j+=2)
+				{
+					if(vlanflag)
+					{
+						sprintf(tmpbuf,"ath%c",*(connectwifiports+j));
+						eval("vconfig", "add", tmpbuf, connectvlanid);
+						sprintf(tmpbuf,"ath%c.%s",*(connectwifiports+j),connectvlanid);
+						eval("brctl", "addif", vlan_wan_if, tmpbuf);
+						eval("vconfig","set_egress_map", tmpbuf, "0",connectvlanPrio);
+						eval("vconfig","set_egress_map", tmpbuf, "1",connectvlanPrio);
+						eval("vconfig","set_egress_map", tmpbuf, "2",connectvlanPrio);
+						eval("vconfig","set_egress_map", tmpbuf, "3",connectvlanPrio);
+						eval("vconfig","set_egress_map", tmpbuf, "4",connectvlanPrio);
+						eval("vconfig","set_egress_map", tmpbuf, "5",connectvlanPrio);
+						eval("vconfig","set_egress_map", tmpbuf, "6",connectvlanPrio);
+						eval("vconfig","set_egress_map", tmpbuf, "7",connectvlanPrio);
+						//eval("vconfig","set_flag", tmpbuf, "1");
+						sprintf(tmpbuf,"ath%c.%s",*(connectwifiports+j),connectvlanid);
+						eval("ifconfig", tmpbuf, "0.0.0.0");
+					}
+					else
+					{
+						sprintf(tmpbuf,"ath%c",*(connectwifiports+j));
+						eval("brctl", "addif", vlan_wan_if, tmpbuf);
+					}
+					if(*(connectwifiports+j+1) != ';')
+						break;
+				}
+			}
+			
+		}
+		else
+		{
+			printf("\r\nerror connect mode on connect %d",i);
+		}
+
+	}
+	
+	system("echo 1 > /proc/sys/net/ipv4/ip_forward");
+	eval("route", "add", "-host", "255.255.255.255", "dev", "br0");
+	eval("nat.sh br1");
+	return 1;
+}
+
 static int arInitConfigAll(T_LKTOS_INITCONFIG_PLATFORM_TYPE_ platform)
 {
 	int ralinkMode=RT2860_NVRAM;
@@ -800,5 +1008,46 @@ int lktos_initconfig_init_all(T_LKTOS_INITCONFIG_PLATFORM_TYPE_ platform,unsigne
 	return resultFlag;
 }
 
-
+int lktos_initconfig_init_wan(T_LKTOS_INITCONFIG_PLATFORM_TYPE_ platform,unsigned char* errormsg)
+{
+	int resultFlag=0;
+	unsigned char macBuf[7]={0};
+	
+	strcpy(errormsg,"nothing!");
+	if(errormsg == NULL)
+	{
+		printf("\r\n the second papa error");
+		return resultFlag;
+	}
+	if((platform <= UNDEFINED) || (platform >= UNKNOW) )
+	{
+		printf("\r\n the first para(platform type) error");
+		return resultFlag;
+	}
+	switch(platform)
+	{
+		case RALINK3052_STD:
+			
+			break;
+		case RALINK3050_STD:
+			
+			break;
+		case RALINK5350_STD:
+			resultFlag=ralinkInitConfigAll(platform);
+			//system("nat.sh");
+			break;
+		case MTK7620_STD:
+			resultFlag=ralinkInitConfigAll(platform);
+			//system("nat.sh");
+			break;
+		case AR9331_HEXICOM:
+			resultFlag=arInitConfigWan(platform);
+			break;
+		default:
+			strcpy(errormsg,"wrong palt form!");
+			return resultFlag;
+			
+	}
+	return resultFlag;
+}
 

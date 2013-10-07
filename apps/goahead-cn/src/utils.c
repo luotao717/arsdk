@@ -901,7 +901,7 @@ static int getTitle(int eid, webs_t wp, int argc, char_t **argv)
 	return websWrite(wp, T("TOTOLINK"));
 #else
 	//return websWrite(wp, T("HC WIFI-M"));
-	return websWrite(wp, T("GKC204NUW"));
+	return websWrite(wp, T("CNU204-HC"));
 #endif
 }
 

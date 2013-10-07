@@ -1,13 +1,9 @@
 #!/bin/sh
-brctl addbr br1
-ifconfig br1 up
-brctl addbr br2
-ifconfig br2 up
 
 RadioOff=`nvram_get 2860 RadioOff`
 RadioOff2=`nvram_get 2860 RadioOff2`
 RadioOff3=`nvram_get 2860 RadioOff3`
-RadioOff4=`nvram_get 2860 RadioOff4`
+RadioOff4=`nvram_get 2860 RadioOff3`
 WirelessMode=`nvram_get 2860 WirelessMode`
 SSID1=`nvram_get 2860 SSID1`
 SSID2=`nvram_get 2860 SSID2`
@@ -64,34 +60,8 @@ HT_BW=`nvram_get 2860 HT_BW`
 HT_BSSCoexistence=`nvram_get 2860 HT_BSSCoexistence`
 countryconde=`nvram_get 2860 CountryCode`
 
-#cfg wlan up
-#apdown
-#apup
-
-if [ x$RadioOff = x"0" -o x$RadioOff2 = x"0" -o x$RadioOff3 = x"0" -o x$RadioOff4 = x"0" ]; then
-    insmod /lib/modules/2.6.31/net/asf.ko
-    insmod /lib/modules/2.6.31/net/adf.ko
-    insmod /lib/modules/2.6.31/net/ath_hal.ko
-    insmod /lib/modules/2.6.31/net/ath_rate_atheros.ko
-    insmod /lib/modules/2.6.31/net/ath_dev.ko
-    insmod /lib/modules/2.6.31/net/umac.ko
-#    iwpriv wifi0 setCountryID $ATH_countrycode
-fi
-
-
 iwpriv wifi0 setCountry $countryconde
-if [ x$RadioOff = x"0" ]; then
-wlanconfig ath0 create wlandev wifi0 wlanmode ap
-fi
-if [ x$RadioOff2 = x"0" ]; then
-wlanconfig ath1 create wlandev wifi0 wlanmode ap
-fi
-if [ x$RadioOff3 = x"0" ]; then
-wlanconfig ath2 create wlandev wifi0 wlanmode ap
-fi
-if [ x$RadioOff4 = x"0" ]; then
-wlanconfig ath3 create wlandev wifi0 wlanmode ap
-fi
+
 started=`ifconfig ath0 2>/dev/null`
 echo $started
 # 判断无线是否启动
@@ -147,6 +117,8 @@ vlanbridgename=br2;
 elif [ x$AuthMode = x"0" ]; then
 vlanbridgename=br1;
 fi
+
+killall hostapd
 
 if [ x$EncrypType = x"WEP" ]; then
 # 设置WEP加密
@@ -211,6 +183,7 @@ fi
 #ifconfig ath0 up
 #fi
 
+ifconfig ath0 up
 
 elif [ x$RadioOff = x"1" -a x$started != "x" ];then
 ifconfig ath0 down
@@ -220,18 +193,18 @@ if [ x$RadioOff = x"1" ];then
 ifconfig ath0 down
 fi
 
+#if [ x$RadioOff = x"0" ]; then
+#ifconfig ath0 up
+#fi
+
 #######ath1
 
 
 
-
+#started=`ifconfig ath1 2>/dev/null`
 
 # 判断无线是否启动
 if [ x$RadioOff2 = x"0" ]; then
-
-echo ath1start1
-
-
 
 # 设置无线SSID
 if [ "$SSID2" != "" ];then
@@ -249,6 +222,8 @@ WPAn=2;
 elif [ x$AuthMode2 = x"WPAPSK" ]; then
 WPAn=1;
 fi
+
+#pid=`ps -ef | grep "hostapd -Bdd /tmp/hostapd2.conf" | grep -v grep | cut -c 0-5`
 
 if [ x$EncrypType2 = x"WEP" ]; then
 # 设置WEP加密
@@ -311,8 +286,9 @@ fi
 #ifconfig ath1 up
 #fi
 
+ifconfig ath1 up
 
-elif [ x$RadioOff2 = x"1" -a x$started != "x" ];then
+elif [ x$RadioOff2 = x"1" ];then
 ifconfig ath1 down
 fi
 
@@ -320,7 +296,7 @@ fi
 
 
 
-
+#started=`ifconfig ath2 2>/dev/null`
 
 
 
@@ -347,7 +323,6 @@ WPAn=2;
 elif [ x$AuthMode3 = x"WPAPSK" ]; then
 WPAn=1;
 fi
-
 
 if [ x$EncrypType3 = x"WEP" ]; then
 # 设置WEP加密
@@ -411,7 +386,9 @@ fi
 #ifconfig ath2 up
 #fi
 
-elif [ x$RadioOff3 = x"1" -a x$started != "x" ];then
+ifconfig ath2 up
+
+elif [ x$RadioOff3 = x"1" ];then
 ifconfig ath2 down
 fi
 
@@ -422,6 +399,7 @@ fi
 
 #######ath3
 
+#started=`ifconfig ath3 2>/dev/null`
 
 # 判断无线是否启动
 if [ x$RadioOff4 = x"0" ]; then
@@ -447,7 +425,6 @@ WPAn=2;
 elif [ x$AuthMode4 = x"WPAPSK" ]; then
 WPAn=1;
 fi
-
 
 if [ x$EncrypType4 = x"WEP" ]; then
 # 设置WEP加密
@@ -510,20 +487,15 @@ fi
 #if [ x$started = x ]; then
 #ifconfig ath3 up
 #fi
+ifconfig ath3 up
 
-
-elif [ x$RadioOff4 = x"1" -a x$started != "x" ];then
+elif [ x$RadioOff4 = x"1" ];then
 ifconfig ath3 down
 fi
 
-if [ x$RadioOff = x"0" ]; then
-ifconfig ath0 up
-fi
-ifconfig ath1 up
-ifconfig ath2 up
-ifconfig ath3 up
-
-sleep 5
+#ifconfig ath1 up
+#ifconfig ath2 up
+#ifconfig ath3 up
 
 if [ x$HT_BSSCoexistence=x"0" ];then
 	iwpriv ath0 disablecoext 1

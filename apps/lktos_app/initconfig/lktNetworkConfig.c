@@ -726,7 +726,7 @@ int lktos_networkconfig_init_wan_ar9331HC(T_LKTOS_INITCONFIG_PLATFORM_TYPE_ plat
 	
 	system("killall -q udhcpc");
 	system("killall -q ppp_daemon");
-	system("killall -q pppd");
+	//system("killall -q pppd");
 	system("killall -q dnsmasq");
 	
 	strcpy(wanIfName,wanName);

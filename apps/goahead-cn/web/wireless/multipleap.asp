@@ -311,6 +311,9 @@ function Load_Setting()
 	var Ch11aIdx;
 	var CurrChLen;
 	var radio_off = '<% getCfgZero(1, "RadioOff"); %>';
+	var radio_off2 = '<% getCfgZero(1, "RadioOff2"); %>';
+	var radio_off3 = '<% getCfgZero(1, "RadioOff3"); %>';
+	var radio_off4 = '<% getCfgZero(1, "RadioOff4"); %>';
 	var wifi_off = '<% getCfgZero(1, "WiFiOff"); %>';
 	var mssid1 = "<% getCfgToHTML(1, "SSID2"); %>";
 	var mssid2 = "<% getCfgToHTML(1, "SSID3"); %>";
@@ -760,6 +763,21 @@ function Load_Setting()
 	else
 		document.basic_form.wlan_disabled.checked = false;
 	
+	if (1*radio_off2 == 1)
+		document.basic_form.wlan_ssid2_disabled.checked = true;
+	else
+		document.basic_form.wlan_ssid2_disabled.checked = false;
+	
+	if (1*radio_off3 == 1)
+		document.basic_form.wlan_ssid3_disabled.checked = true;
+	else
+		document.basic_form.wlan_ssid3_disabled.checked = false;
+		
+	if (1*radio_off4 == 1)
+		document.basic_form.wlan_ssid4_disabled.checked = true;
+	else
+		document.basic_form.wlan_ssid4_disabled.checked = false;
+	
 	if (mssid1 == "" && mssid2 == "")	
 		document.basic_form.multipleap.disabled  = true;
 	else
@@ -1079,7 +1097,8 @@ function resetForm()
       <span style="display:none">&nbsp;&nbsp;<script>dw(MM_hidden)</script>
       <input type=checkbox name=hssid value="1">
       &nbsp;&nbsp;<script>dw(MM_isolated)</script>
-      <input type=checkbox name=isolated_ssid value="1"></span></td>
+      <input type=checkbox name=isolated_ssid value="1"></span>&nbsp;&nbsp;<script>dw(MM_disable)</script>
+      <input type=checkbox name=wlan_ssid2_disabled value="1"></td>
   </tr>
   <tr id="div_hssid2"> 
     <td class="thead">SSID 2:</td>
@@ -1087,7 +1106,8 @@ function resetForm()
       <span style="display:none">&nbsp;&nbsp;<script>dw(MM_hidden)</script>
       <input type=checkbox name=hssid value="2">
       &nbsp;&nbsp;<script>dw(MM_isolated)</script>
-      <input type=checkbox name=isolated_ssid value="2"></span></td>
+      <input type=checkbox name=isolated_ssid value="2"></span>&nbsp;&nbsp;<script>dw(MM_disable)</script>
+      <input type=checkbox name=wlan_ssid3_disabled value="1"></td>
   </tr>
   <tr id="div_hssid3"> 
     <td class="thead">SSID 3:</td>
@@ -1095,7 +1115,8 @@ function resetForm()
       <span style="display:none">&nbsp;&nbsp;<script>dw(MM_hidden)</script>
       <input type=checkbox name=hssid value="3">
       &nbsp;&nbsp;<script>dw(MM_isolated)</script>
-      <input type=checkbox name=isolated_ssid value="3"></span></td>
+      <input type=checkbox name=isolated_ssid value="3"></span>&nbsp;&nbsp;<script>dw(MM_disable)</script>
+      <input type=checkbox name=wlan_ssid4_disabled value="1"></td>
   </tr>
   <tr id="div_hssid4"> 
     <td class="thead"><script>dw(MM_multiple)</script> SSID 4:</td>

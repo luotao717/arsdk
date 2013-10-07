@@ -953,7 +953,12 @@ static void wirelessBasic(webs_t wp, char_t *path, char_t *query)
 		websRedirect(wp, submitUrl);
 		return;
 	}
-
+	radio = websGetVar(wp, T("wlan_ssid2_disabled"), T("0"));
+	nvram_set(RT2860_NVRAM, "RadioOff2", radio);
+	radio = websGetVar(wp, T("wlan_ssid3_disabled"), T("0"));
+	nvram_set(RT2860_NVRAM, "RadioOff3", radio);
+	radio = websGetVar(wp, T("wlan_ssid4_disabled"), T("0"));
+	nvram_set(RT2860_NVRAM, "RadioOff4", radio);
 	//fetch from web input
 	wirelessmode = websGetVar(wp, T("wirelessmode"), T("9")); //9: bgn mode
 	mssid_0 = websGetVar(wp, T("mssid_0"), T("")); 
@@ -1400,6 +1405,7 @@ static void wirelessBasic(webs_t wp, char_t *path, char_t *query)
 
 end:
 	websRedirect(wp, submitUrl);
+	doSystem("runwlan.sh");
 }
 
 /* goform/wirelessAdvanced */
@@ -2646,6 +2652,7 @@ void Security(int nvram, webs_t wp, char_t *path, char_t *query)
 static void APSecurity(webs_t wp, char_t *path, char_t *query)
 {
 	Security(RT2860_NVRAM, wp, path, query);
+	doSystem("runwlan.sh");
 }
 
 void DeleteAccessPolicyList(int nvram, webs_t wp, char_t *path, char_t *query)

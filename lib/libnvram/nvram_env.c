@@ -448,7 +448,7 @@ int nvram_commit(int index)
 #endif
 
 	fb[index].dirty = 0;
-	nvram_bufset(RT2860_NVRAM, "needreboot","yes");
+//	nvram_bufset(RT2860_NVRAM, "needreboot","yes");
 	return 0;
 }
 

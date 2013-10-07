@@ -8,7 +8,7 @@ RadioOff=`nvram_get 2860 RadioOff`
 RadioOff2=`nvram_get 2860 RadioOff2`
 RadioOff3=`nvram_get 2860 RadioOff3`
 RadioOff4=`nvram_get 2860 RadioOff3`
-WirelessMode=`nvram_get 2860 staWirelessMode`
+WirelessMode=`nvram_get 2860 WirelessMode`
 SSID1=`nvram_get 2860 SSID1`
 SSID2=`nvram_get 2860 SSID2`
 SSID3=`nvram_get 2860 SSID3`
@@ -62,6 +62,7 @@ HideSSID3=`echo "$HideSSID"|awk -F ';' '{print $4}'`
 
 HT_BW=`nvram_get 2860 HT_BW`
 HT_BSSCoexistence=`nvram_get 2860 HT_BSSCoexistence`
+countryconde=`nvram_get 2860 CountryCode`
 
 #cfg wlan up
 #apdown
@@ -78,14 +79,23 @@ if [ x$RadioOff = x"0" -o x$RadioOff2 = x"0" -o x$RadioOff3 = x"0" -o x$RadioOff
 fi
 
 
+iwpriv wifi0 setCountry $countryconde
+if [ x$RadioOff = x"0" ]; then
+wlanconfig ath0 create wlandev wifi0 wlanmode ap
+fi
+if [ x$RadioOff2 = x"0" ]; then
+wlanconfig ath1 create wlandev wifi0 wlanmode ap
+fi
+if [ x$RadioOff3 = x"0" ]; then
+wlanconfig ath2 create wlandev wifi0 wlanmode ap
+fi
+if [ x$RadioOff4 = x"0" ]; then
+wlanconfig ath3 create wlandev wifi0 wlanmode ap
+fi
 started=`ifconfig ath0 2>/dev/null`
 echo $started
 # 判断无线是否启动
 if [ x$RadioOff = x"0" ]; then
-
-if [ x$started = x ]; then
-wlanconfig ath0 create wlandev wifi0 wlanmode ap
-fi
 
 
 # 设置无线模式
@@ -107,11 +117,6 @@ elif [ x$WirelessMode = x"9" -o x$WirelessMode = x"6" ];then
 	fi
 fi
 
-if [ x$HT_BSSCoexistence=x"0" ];then
-	iwpriv ath0 disablecoext 1
-fi
-
-
 # 设置无线SSID
 if [ "$SSID1" != "" ];then
 iwconfig ath0 essid "$SSID1"
@@ -122,7 +127,7 @@ fi
 iwpriv ath0 hide_ssid $HideSSID0
 
 # 设置扩展频段
-iwpriv ath0 chextoffset $HT_EXTCHA
+#iwpriv ath0 chextoffset $HT_EXTCHA
 
 # 设置频段信道
 iwconfig ath0 channel $Channel
@@ -202,9 +207,9 @@ iwconfig ath0 key off
 echo $EncrypType
 fi
 
-if [ x$started = x ]; then
-ifconfig ath0 up
-fi
+#if [ x$started = x ]; then
+#ifconfig ath0 up
+#fi
 
 
 elif [ x$RadioOff = x"1" -a x$started != "x" ];then
@@ -218,54 +223,24 @@ fi
 #######ath1
 
 
-echo ath1start
 
 
-started=`ifconfig ath1 2>/dev/null`
 
 # 判断无线是否启动
 if [ x$RadioOff2 = x"0" ]; then
 
-if [ x$started = x ]; then
-wlanconfig ath1 create wlandev wifi0 wlanmode ap
-fi
 echo ath1start1
 
-# 设置无线模式
-if [ x$WirelessMode = x"1" ];then
-iwpriv ath1 mode 11B
-elif [ x$WirelessMode = x"4" ];then
-iwpriv ath1 mode 11G
-elif [ x$WirelessMode = x"0" ];then
-iwpriv ath1 mode 11G
-elif [ x$WirelessMode = x"9" -o x$WirelessMode = x"6" ];then
-if [ x$HT_BW = x"0" ];then
-		iwpriv ath0 mode 11NGHT20
-  elif [ x$HT_BW = x"1" ];then
-			if [ $Channel -gt 7 ];then
-				iwpriv ath0 mode 11NGHT40MINUS
-			else
-				iwpriv ath0 mode 11NGHT40PLUS
-			fi
-fi
-fi
-
-if [ x$HT_BSSCoexistence=x"0" ];then
-	iwpriv ath0 disablecoext 1
-fi
 
 
 # 设置无线SSID
 if [ "$SSID2" != "" ];then
+echo $SSID2
 iwconfig ath1 essid "$SSID2"
 fi
 # 设置SSID是否隐藏
 iwpriv ath1 hide_ssid $HideSSID1
 
-# 设置扩展频段
-iwpriv ath1 chextoffset $HT_EXTCHA
-# 设置频段信道
-iwconfig ath1 channel $Channel
 WPAn=0;
 if [ x$AuthMode2 = x"WPAPSKWPA2PSK" ]; then
 WPAn=3;
@@ -332,9 +307,9 @@ elif [ x$AuthMode2 = x"OPEN" -a x$EncrypType2 = x"NONE" ]; then
 iwconfig ath1 key off
 fi
 
-if [ x$started = x ]; then
-ifconfig ath1 up
-fi
+#if [ x$started = x ]; then
+#ifconfig ath1 up
+#fi
 
 
 elif [ x$RadioOff2 = x"1" -a x$started != "x" ];then
@@ -348,53 +323,21 @@ fi
 
 
 
-started=`ifconfig ath2 2>/dev/null`
 
 # 判断无线是否启动
 if [ x$RadioOff3 = x"0" ]; then
 
-if [ x$started = x ]; then
-wlanconfig ath2 create wlandev wifi0 wlanmode ap
-fi
 
 
-# 设置无线模式
-if [ x$WirelessMode = x"1" ];then
-iwpriv ath2 mode 11B
-elif [ x$WirelessMode = x"4" ];then
-iwpriv ath2 mode 11G
-elif [ x$WirelessMode = x"0" ];then
-iwpriv ath2 mode 11G
-elif [ x$WirelessMode = x"9" -o x$WirelessMode = x"6" ];then
-	if [ x$HT_BW = x"0" ];then
-		iwpriv ath0 mode 11NGHT20
-  elif [ x$HT_BW = x"1" ];then
-			if [ $Channel -gt 7 ];then
-				iwpriv ath0 mode 11NGHT40MINUS
-			else
-				iwpriv ath0 mode 11NGHT40PLUS
-			fi
-	fi
-fi
-
-
-if [ x$HT_BSSCoexistence=x"0" ];then
-	iwpriv ath0 disablecoext 1
-fi
 
 # 设置无线SSID
 if [ "$SSID3" != "" ];then
+echo $SSID3
 iwconfig ath2 essid "$SSID3"
 fi
 
 # 设置SSID是否隐藏
 iwpriv ath2 hide_ssid $HideSSID2
-
-# 设置扩展频段
-iwpriv ath2 chextoffset $HT_EXTCHA
-
-# 设置频段信道
-iwconfig ath2 channel $Channel
 
 WPAn=0;
 if [ x$AuthMode3 = x"WPAPSKWPA2PSK" ]; then
@@ -464,9 +407,9 @@ elif [ x$AuthMode3 = x"OPEN" -a x$EncrypType3 = x"NONE" ]; then
 iwconfig ath2 key off
 fi
 
-if [ x$started = x ]; then
-ifconfig ath2 up
-fi
+#if [ x$started = x ]; then
+#ifconfig ath2 up
+#fi
 
 elif [ x$RadioOff3 = x"1" -a x$started != "x" ];then
 ifconfig ath2 down
@@ -479,54 +422,22 @@ fi
 
 #######ath3
 
-started=`ifconfig ath3 2>/dev/null`
 
 # 判断无线是否启动
 if [ x$RadioOff4 = x"0" ]; then
 
-if [ x$started = x ]; then
-wlanconfig ath3 create wlandev wifi0 wlanmode ap
-fi
 
 
-# 设置无线模式
-if [ x$WirelessMode = x"1" ];then
-iwpriv ath3 mode 11B
-elif [ x$WirelessMode = x"4" ];then
-iwpriv ath3 mode 11G
-elif [ x$WirelessMode = x"0" ];then
-iwpriv ath3 mode 11G
-elif [ x$WirelessMode = x"9" -o x$WirelessMode = x"6" ];then
-if [ x$HT_BW = x"0" ];then
-		iwpriv ath0 mode 11NGHT20
-  elif [ x$HT_BW = x"1" ];then
-			if [ $Channel -gt 7 ];then
-				iwpriv ath0 mode 11NGHT40MINUS
-			else
-				iwpriv ath0 mode 11NGHT40PLUS
-			fi
-fi
-fi
-
-
-if [ x$HT_BSSCoexistence=x"0" ];then
-	iwpriv ath0 disablecoext 1
-fi
 
 # 设置无线SSID
 if [ "$SSID4" != "" ];then
-iwconfig ath3 essid "$SSID4"
 echo $SSID4
+iwconfig ath3 essid "$SSID4"
 fi
 
 # 设置SSID是否隐藏
 iwpriv ath3 hide_ssid $HideSSID3
 
-# 设置扩展频段
-iwpriv ath3 chextoffset $HT_EXTCHA
-
-# 设置频段信道
-iwconfig ath3 channel $Channel
 
 WPAn=0;
 if [ x$AuthMode4 = x"WPAPSKWPA2PSK" ]; then
@@ -596,11 +507,24 @@ elif [ x$AuthMode4 = x"OPEN" -a x$EncrypType4 = x"NONE" ]; then
 iwconfig ath3 key off
 fi
 
-if [ x$started = x ]; then
-ifconfig ath3 up
-fi
+#if [ x$started = x ]; then
+#ifconfig ath3 up
+#fi
 
 
 elif [ x$RadioOff4 = x"1" -a x$started != "x" ];then
 ifconfig ath3 down
+fi
+
+if [ x$RadioOff = x"0" ]; then
+ifconfig ath0 up
+fi
+ifconfig ath1 up
+ifconfig ath2 up
+ifconfig ath3 up
+
+sleep 5
+
+if [ x$HT_BSSCoexistence=x"0" ];then
+	iwpriv ath0 disablecoext 1
 fi

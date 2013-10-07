@@ -13,7 +13,7 @@
 #elif defined (CONFIG_LKTOS_PRIVATE_OEM_NAME_CDRKING)
 #define Version				"CDRKING_WR-NET-022-ZI_V1.0.0"
 #else
-#define Version				"v2.1.6.2-gk"
+#define Version				"v2.1.8-hc"
 #endif
 
 #define LED_ON				1
@@ -27,6 +27,16 @@
 
 #define SIG_MODEM_EXIST                       (SIGUSR1+61)	
 #define SIG_MODEM_NOEXIST                  (SIGUSR1+62)	
+
+#define OK_MSG_luo(url) { \
+	websHeader(wp); \
+   	websWrite(wp, T("<body><blockquote><h4>Change setting successfully!</h4>\n")); \
+	if (url[0]) websWrite(wp, T("<form><input type=button value=\"  OK  \" OnClick=window.location.replace(\"%s\")></form></blockquote></body>"), url);\
+	else websWrite(wp, T("<form><input type=button value=\"  OK  \" OnClick=window.close()></form></blockquote></body>"));\
+   	websFooter(wp); \
+	websDone(wp, 200); \
+}
+
 
 int doKillPid(char_t *fmt, ...);
 int doSystem(char_t *fmt, ...);

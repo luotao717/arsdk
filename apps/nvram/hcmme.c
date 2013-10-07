@@ -41,11 +41,12 @@ extern void start_wan();
 extern void stop_wan();
 
 
-static unsigned char reboot_flag = 0;      
+static unsigned char reboot_flag = 0;  
+static unsigned char nvram_save = 0;
 static unsigned char restart_flag = 0;
 static int discovered = 0;
 static int master_registed = 0;
-static struct timeval tv_master={0};
+static struct timeval tv_master={0}, tv_recv_blank={0};
 
 static int sock_mme, log =0;
 static char plcmac[6];
@@ -572,6 +573,7 @@ static int setEthPortConfig( hl2mp_port_config_t *ethPortConfig, int *flag ,unsi
         sprintf(nvram_buff_name, "port%dconfig", ethPortConfig->pid - 1);
         sprintf(nvram_buff_value, "%d", reg_val);
         nvram_set(nvram_buff_name, nvram_buff_value);
+		nvram_save = 1;
     }*/
 
 	return 1;
@@ -601,8 +603,9 @@ static int setWifiPortConfig( hl2mp_port_config_t *wifiPortConfig,int *flag)
 
 void wan_routerconfig(hl2mp_wan_config_t* hl2mp_wan_config)//配置wan口
 {   
-    
+    struct in_addr wanaddr;
     unsigned char buff_value[50];
+    inet_aton(nvram_bufget(RT2860_NVRAM,"wan_ipaddr"), &wanaddr);
     switch(hl2mp_wan_config->CONNTYPE)
         {
         case 0:
@@ -1092,7 +1095,7 @@ static int setwanconfig(hl2mp_wan_config_t* hl2mp_wan_config, unsigned char num,
         nvram_unset(buff_name);
     }   
 */
-    //nvram_commit();
+    nvram_save = 1;
     reboot_flag = 1;
 
     return 0;
@@ -1141,9 +1144,10 @@ static int setwifiConfig(hl2mp_wifi_config_t *hl2mp_wifi_config, int *lag)
         {
         nvram_bufset(RT2860_NVRAM,"SSID4", ssid_buff);
         }
+        nvram_save = 1;
+        restart_flag = 1;
    }
-    //nvram_commit();
-    restart_flag = 1;
+   
     return 0;
 }                    
 
@@ -1293,6 +1297,7 @@ int recv_proc(int sock,struct sockaddr_ll *recv_sll)
                    //to do 恢复出厂设置
                    /*     nvram_set("restore_defaults","1");
                         nvram_commit();*/
+						nvram_save = 1;
                       	 system("ralink_init clear 2860");
 				system("ralink_init renew 2860 /sbin/RT2860_default_vlan");
                     }
@@ -1332,6 +1337,7 @@ int recv_proc(int sock,struct sockaddr_ll *recv_sll)
                     }
                     nvram_set("update_path", buff_path);
                     nvram_commit();*/
+					nvram_save = 1;
                     response_h.STS=0;
                     response_h.OPCODE = htons_mme(HL2MP_OP_REMOTE_UPDATE_RESPONSE);
                     response_h.NUM=0;//pad 0
@@ -1471,7 +1477,8 @@ int recv_proc(int sock,struct sockaddr_ll *recv_sll)
                     }  
                     
 				default:
-					break;
+                    return 0;
+					//break;
 			
 		}
 
@@ -1532,23 +1539,11 @@ int recv_proc(int sock,struct sockaddr_ll *recv_sll)
         if(send_buff != NULL){
         free(send_buff);
         }
+
+        gettimeofday(&tv_recv_blank, NULL);
         
     }
-    if(reboot_flag == 1)
-    {
-        nvram_commit(RT2860_NVRAM);
-        DBG_PRINT("sleep 3...\n");
-        sleep(3);
-        system("reboot");
-    }
-    if(restart_flag == 1)
-        {
-         nvram_commit(RT2860_NVRAM);
-         DBG_PRINT("sleep ...\n");
-      // system("rc restart");
-        }
-    reboot_flag = 0;
-    restart_flag = 0;
+   
     return 0;
 }
 
@@ -1560,7 +1555,7 @@ main()
 {
 	struct ifreq ifr;
 	struct sockaddr_ll eth_sll;
-	struct timeval t_val={0}, tv_discover={0};
+	struct timeval t_val={0}, tv_discover={0}, tv_rand={0};
 	fd_set fds;
 	int ret = -1, buff_eocmac_ready = 0;
     unsigned short port4pvid = 0;
@@ -1589,7 +1584,8 @@ main()
         }
     }
     #endif
-    
+    gettimeofday(&tv_rand, NULL);
+    srand(tv_rand.tv_usec);
 	sleep(rand() >> 28);
     if(nvram_testget("mme_log") != NULL)
         log = atoi(nvram_testget("mme_log"));
@@ -1733,7 +1729,7 @@ main()
                 gettimeofday(&tv_discover, NULL);
             }
         }
-        else if(time_up(tv_master, 120))
+        else if(time_up(tv_master, 60))
        {
            master_registed = 0;
        }
@@ -1756,6 +1752,33 @@ main()
 	    {
 	        recv_proc(sock_mme, &eth_sll);
 	    }
+        
+        if(time_up(tv_recv_blank, 3))
+        {   
+            if( nvram_save == 1)
+            {
+                DBG_PRINT("nvram_commit...\n");
+                nvram_commit(RT2860_NVRAM);
+            }
+            if(reboot_flag == 1)
+            {
+                DBG_PRINT("sleep 1...\n");
+                sleep(1);
+                system("reboot");
+            }
+            if(restart_flag == 1)
+                {
+                 DBG_PRINT("sleep 1...\n");
+                 sleep(1);
+           //      system("rc restart");
+                }
+            nvram_save = 0;
+            reboot_flag = 0;
+            restart_flag = 0;
+
+
+
+        }
 
 	}
     return 0;

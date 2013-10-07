@@ -66,6 +66,22 @@ int main(int argc, char* argv[])
 			printf("\r\n error msg=%s",errBuf);
 		}
 	}
+	else if(!strncmp("wan",argv[2],3))
+	{
+		result=lktos_initconfig_init_wan(plattype,errBuf);
+		if(!result)
+		{
+			printf("\r\n error msg=%s",errBuf);
+		}
+	}
+	else if(!strncmp("lan",argv[2],3))
+	{
+		result=lktos_networkconfig_init_lan(plattype,errBuf);
+		if(!result)
+		{
+			printf("\r\n error msg=%s",errBuf);
+		}
+	}
 	else
 	{
 		usage();
