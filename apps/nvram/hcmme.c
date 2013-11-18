@@ -17,30 +17,25 @@
 #include <unistd.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include "nvram.h"
+
+#include <nvram.h>
+#include <linux/reboot.h>
+#include "hexicom.h"
+#include "../lktos_app/pctools/apmib.h"
 
 
-#define htonl_mme(val) (((val >> 24) & 0x000000FF)|((val >> 8) & 0x0000FF00)|((val << 8) & 0x00FF0000)|((val << 24) & 0xFF000000))
-#define htons_mme(val) (((val >> 8) & 0x00FF)|((val << 8) & 0xFF00))
 
 
-static char *test_s="1";
 
-static int nvram_unset(char *s)
-{
-    return 0;
-}
+#define htonl_mme(val) ((((val) >> 24) & 0x000000FF)|(((val) >> 8) & 0x0000FF00)|(((val) << 8) & 0x00FF0000)|(((val) << 24) & 0xFF000000))
+#define htons_mme(val) ((((val) >> 8) & 0x00FF)|(((val) << 8) & 0xFF00))
 
-int nvram_testget(char *s)
-{
-    return test_s;
-}
+#define KERNEL_IMA 1
+#define ROOTFS 2
 
-
-extern void start_wan();
-extern void stop_wan();
-
-
+#define nvram_get(name) nvram_bufget(RT2860_NVRAM, name)
+#define nvram_set(name, value) nvram_bufset(RT2860_NVRAM, name, value)
+#define nvram_unset(name) nvram_bufset(RT2860_NVRAM, name, "")
 static unsigned char reboot_flag = 0;  
 static unsigned char nvram_save = 0;
 static unsigned char restart_flag = 0;
@@ -50,50 +45,9 @@ static struct timeval tv_master={0}, tv_recv_blank={0};
 
 static int sock_mme, log =0;
 static char plcmac[6];
-
-
-#define DBG_PRINT printf
-#define DBG_PRINTBUF(buff, len) if(log) print_buff(buff, len)
-
-#define HOMEPLUG_MTYPE 0x88E1
-#define HL2MP_OP_DISCOVER  0xA000
-#define HL2MP_OP_DISCOVER_RESPONSE  0xA001
-#define HL2MP_OP_GET_PROTO_VERSION 0xA002
-#define HL2MP_OP_GET_PROTO_VERSION_RESPONSE 0xA003
-#define HL2MP_OP_SET_AGENT_MODE 0xA010
-#define HL2MP_OP_SET_AGENT_MODE_RESPONSE 0xA011
-
-#define HL2MP_OP_REMOTE_UPDATE 0xA012
-#define HL2MP_OP_REMOTE_UPDATE_RESPONSE 0xA013
-
-#define HL2MP_OP_GET_IF_STATUS  0xA020
-#define HL2MP_OP_GET_IF_STATUS_RESPONSE  0xA021
-#define HL2MP_OP_IF_CONFIG  0xA022
-#define HL2MP_OP_IF_CONFIG_RESPONSE  0xA023
-#define HL2MP_OP_WAN_CONFIG  0xA030
-#define HL2MP_OP_WAN_CONFIG_RESPONSE  0xA031
-//#define HL2MP_OP_SSID_CONFIG  0xB024
-//#define HL2MP_OP_SSID_CONFIG_RESPONSE 0xB025
-#define HL2MP_OP_WIFI_CONFIG 0xA024
-#define HL2MP_OP_WIFI_CONFIG_RESPONSE 0xA025
-
-#define PHYRD 0x01
-#define PHYWR 0x02
-#define VLANCONFIG 0x03
-
-
-
-#define VLAN_MME_HEADER_OFF 16 //6+6+4 带tagvlan报文的mme偏移
-#define MME_HEADER_OFF 12 //6+6带tagvlan报文的mme偏移
-
-#define VLAN_MAX 12 //最多需要12个vlan
-#define VLAN_MAX_V 12 //最多需要12个vlan
-#define PORT_NUM 4 //有线端口数目
-#define PORT_WNUM 4 //无线端口数目
-#define WAN_MAXNUM 8  //PORT_NUM + PORT_WNUM
-#define ROUTER_MAXNUM 1
-
-#define WAN_PORT_MASK 0xf1
+static int flag_kernelimage = 0;
+static int flag_rootfs = 0;
+static int checkok_count = 0;
 
 
 
@@ -137,7 +91,7 @@ typedef struct __packed{
     unsigned char port[2];
     unsigned char user[16];
     unsigned char pwd[16];
-    unsigned char path[32];
+    unsigned char path[128];
 }hl2mp_remoteupdate_t;
 
 
@@ -525,6 +479,9 @@ static int getwifiConfig(hl2mp_wifi_config_t *hl2mp_wifi_config, unsigned char p
    sprintf(tmpbuf,"SSID%d",port);
    wifissid=nvram_bufget(RT2860_NVRAM,tmpbuf);
    memcpy(hl2mp_wifi_config->SSID, wifissid,32);
+   
+   hl2mp_wifi_config->WIFIID = port;
+   
     return 0;
 }
 
@@ -603,17 +560,29 @@ static int setWifiPortConfig( hl2mp_port_config_t *wifiPortConfig,int *flag)
 
 void wan_routerconfig(hl2mp_wan_config_t* hl2mp_wan_config)//配置wan口
 {   
-    struct in_addr wanaddr;
+    struct in_addr lanaddr;
+	struct in_addr lanmaskaddr;
+	struct in_addr wanmaskaddr;
     unsigned char buff_value[50];
-    inet_aton(nvram_bufget(RT2860_NVRAM,"wan_ipaddr"), &wanaddr);
+	unsigned long netmask = 0;
+	
+    inet_aton(nvram_bufget(RT2860_NVRAM,"lan_ipaddr"), &lanaddr);
+    inet_aton(nvram_bufget(RT2860_NVRAM,"wan_netmask"), &wanmaskaddr);
+    inet_aton(nvram_bufget(RT2860_NVRAM,"lan_netmask"), &lanmaskaddr);	
+	
+	netmask = wanmaskaddr.s_addr & lanmaskaddr.s_addr;
+	
     switch(hl2mp_wan_config->CONNTYPE)
         {
         case 0:
-            nvram_bufset(RT2860_NVRAM,"wanConnectionMode", "STATIC");
-            nvram_bufset(RT2860_NVRAM,"wan_ipaddr", inet_ntoa(*(struct in_addr*)(hl2mp_wan_config->IPADDR)));
-           nvram_bufset(RT2860_NVRAM,"wan_netmask", inet_ntoa(*(struct in_addr*)(hl2mp_wan_config->NETMASK)));
-            nvram_bufset(RT2860_NVRAM,"wan_gateway", inet_ntoa(*(struct in_addr*)(hl2mp_wan_config->GATEWAY)));
-           nvram_bufset(RT2860_NVRAM,"wan_primary_dns", inet_ntoa(*(struct in_addr*)(hl2mp_wan_config->DNS)));
+			if(((unsigned long)(lanaddr.s_addr) & netmask) != ((unsigned long)(hl2mp_wan_config->IPADDR) & netmask))
+			{
+	            nvram_bufset(RT2860_NVRAM,"wanConnectionMode", "STATIC");
+	            nvram_bufset(RT2860_NVRAM,"wan_ipaddr", inet_ntoa(*(struct in_addr*)(hl2mp_wan_config->IPADDR)));
+	            nvram_bufset(RT2860_NVRAM,"wan_netmask", inet_ntoa(*(struct in_addr*)(hl2mp_wan_config->NETMASK)));
+	            nvram_bufset(RT2860_NVRAM,"wan_gateway", inet_ntoa(*(struct in_addr*)(hl2mp_wan_config->GATEWAY)));
+	            nvram_bufset(RT2860_NVRAM,"wan_primary_dns", inet_ntoa(*(struct in_addr*)(hl2mp_wan_config->DNS)));
+			}
             break;
         case 1:
             nvram_bufset(RT2860_NVRAM,"wanConnectionMode", "DHCP");
@@ -660,17 +629,15 @@ static int setwanconfig(hl2mp_wan_config_t* hl2mp_wan_config, unsigned char num,
 	unsigned char currentBridgeNum=0;
     unsigned int i, j, k, l, lq, m, r = 0, s = 0, r_c = 0;//k为循环变量；i为vlan_v数目；j为vlan数目；m为路由数目
                                     //lq 为无线桥接口建立的br数r为内部lan vlanid
-    
     typedef struct __packed vlan
     {
     unsigned short vlanid;
     unsigned char portmem;//每一位表示包含的port member，example  0101:   port2   port0   
     } vlan_t;
-    
     typedef struct __packed vlan_v
     {
     unsigned short vlan_vid;
-    unsigned char portmem_v;//每一位表示包含的虚拟wifi口，example  0101:   wl2   wl0   
+    unsigned char portmem_v;//每一位表示包含端口 
     unsigned char type_v;//是否属于路由lan口
     } vlan_v_t;
     
@@ -681,7 +648,7 @@ static int setwanconfig(hl2mp_wan_config_t* hl2mp_wan_config, unsigned char num,
     for(r=271; r<271 + WAN_MAXNUM*WAN_MAXNUM; r++)
     {
         for(k=0; k<WAN_MAXNUM; k++)
-        {   
+        {  
             DBG_PRINT("vid %d!!\n",htons_mme(hl2mp_wan_config->VLANID));
             for(l=0;l<WAN_MAXNUM+1;l++)//连续7个不同，为局端管理保留一个
            {
@@ -1126,7 +1093,7 @@ static int setwifiConfig(hl2mp_wifi_config_t *hl2mp_wifi_config, int *lag)
         }
    }*/
     
-    if(ssid_buff != NULL && *ssid_buff != "")
+    if(ssid_buff != NULL && *ssid_buff != '\0')
    {
         if(hl2mp_wifi_config->WIFIID == 1)
         {
@@ -1147,7 +1114,6 @@ static int setwifiConfig(hl2mp_wifi_config_t *hl2mp_wifi_config, int *lag)
         nvram_save = 1;
         restart_flag = 1;
    }
-   
     return 0;
 }                    
 
@@ -1241,6 +1207,10 @@ int recv_proc(int sock,struct sockaddr_ll *recv_sll)
 		DBG_PRINT("disconnected! \n");
 		return -1;
 	}
+    DBG_PRINT("\n recv: ");
+    DBG_PRINTBUF(buff, ret);
+
+
 
 	ethHeader = (struct ethhdr*)buff;
     if(htons(ethHeader->h_proto) == 0x8100)
@@ -1265,7 +1235,8 @@ int recv_proc(int sock,struct sockaddr_ll *recv_sll)
     if((!memcmp(recv_sll->sll_addr,ethHeader->h_dest,6)) && (*(buff+20) == 0 || *(buff+24) ==0 )&& ((*(unsigned short*)(buff+19) == htons_mme(0xa001)) ||(*(unsigned short*)(buff+15) == htons_mme(0xa001))))
      {
           discovered = 1;
-          DBG_PRINT("verygood! local eoc discovered !!!!!############\n");  
+          DBG_PRINT("verygood! local eoc discovered !!!!!############\n");
+	   system("echo 1 > /var/eocflag");
           memcpy(plcmac, &buff[6], ETHER_ADDR_LEN);
           return 0;
       }
@@ -1297,12 +1268,12 @@ int recv_proc(int sock,struct sockaddr_ll *recv_sll)
                    //to do 恢复出厂设置
                    /*     nvram_set("restore_defaults","1");
                         nvram_commit();*/
-						nvram_save = 1;
-                      	 system("ralink_init clear 2860");
-				system("ralink_init renew 2860 /sbin/RT2860_default_vlan");
+				    //nvram_save = 1;
+                    system("ralink_init clear 2860");
+				    system("ralink_init renew 2860 /sbin/RT2860_default_vlan");
                     }
                     
-                     if(req & 0x80 == 1)
+                     if(req & 0x80 > 1)
                    {
                         reboot_flag = 1;
                    } 
@@ -1325,21 +1296,28 @@ int recv_proc(int sock,struct sockaddr_ll *recv_sll)
             case HL2MP_OP_REMOTE_UPDATE:
                 {   
                     hl2mp_remoteupdate=(hl2mp_remoteupdate_t*)((char*)generic_mme_header + sizeof(generic_mme_t)-1);
-                    //to do
-                 /*   if( hl2mp_remoteupdate->type == 0 && hl2mp_remoteupdate->proto== 2 )
+                    if( hl2mp_remoteupdate->type == 0 && hl2mp_remoteupdate->proto== 2 )
                    {
-                    if(*(hl2mp_remoteupdate->path) == '/')
-                        sprintf(buff_path, "%s%s", inet_ntoa(*(struct in_addr*)(hl2mp_remoteupdate->ip)),hl2mp_remoteupdate->path);
-                    else
-                        sprintf(buff_path, "%s/%s", inet_ntoa(*(struct in_addr*)(hl2mp_remoteupdate->ip)), hl2mp_remoteupdate->path);
                     if(*(unsigned short*)(hl2mp_remoteupdate->port) > 0 )
-                        sprintf(buff_path, "%s:%s", buff_path, hl2mp_remoteupdate->path);
+                        sprintf(buff_path, "http://%s:%d", inet_ntoa(*(struct in_addr*)(hl2mp_remoteupdate->ip)), ntohs(*(unsigned short*)(hl2mp_remoteupdate->port)));
+                    if(*(hl2mp_remoteupdate->path) == '/'){
+                        sprintf(buff_path, "%s%s", buff_path, hl2mp_remoteupdate->path);
+                   }
+                    else{
+                        sprintf(buff_path, "%s/%s", buff_path, hl2mp_remoteupdate->path);        
+                        }
                     }
                     nvram_set("update_path", buff_path);
-                    nvram_commit();*/
-					nvram_save = 1;
+
                     response_h.STS=0;
-                    response_h.OPCODE = htons_mme(HL2MP_OP_REMOTE_UPDATE_RESPONSE);
+                    if(eval("wget", "-c", "-q", "-O", "/var/update", buff_path) != 0)
+                   {
+                        response_h.STS = 1;
+                    }
+
+                    nvram_save = 1;
+                    
+                    response_h.OPCODE = HL2MP_OP_REMOTE_UPDATE_RESPONSE;
                     response_h.NUM=0;//pad 0
                     
                     send_buff_proc = NULL;
@@ -1424,7 +1402,6 @@ int recv_proc(int sock,struct sockaddr_ll *recv_sll)
 								getwanconfig(hl2mp_wan_config_info + (tempi -1), tempi);
                                 //DBG_PRINT("eth port status =%u--%u--%u--%u--%u\n",req->STATUS[tempi].type,req->STATUS[tempi].pid,htons(req->STATUS[tempi].pvid),req->STATUS[tempi].speed,req->STATUS[tempi].duplex);
 							}
-							printf("\r\nvlan testid=%0x-len=%d",(hl2mp_wan_config_info+1)->VLANID,send_buff_proc_len);
                             response_h.NUM= WAN_MAXNUM;
 
 
@@ -1547,6 +1524,122 @@ int recv_proc(int sock,struct sockaddr_ll *recv_sll)
     return 0;
 }
 
+
+int update_process()
+{
+    int file_begin = 0, file_end = 0;
+    char* line;
+    IMG_HEADER_Tp pHeader;
+    int checkOk=0;
+    int firmwareType=0;
+    char *filename = "/var/update";
+    int ret = 0;
+
+    file_begin = 0;
+    
+    line = getMemInFile(filename, file_begin, 16);
+
+
+    if(line != NULL)
+    {
+      pHeader = (IMG_HEADER_Tp)line;
+
+      if(pHeader->signature[0] == 'k' && pHeader->signature[1] == 'f')
+      {   
+          firmwareType = KERNEL_IMA;
+
+          if(flag_kernelimage == 1)
+          {
+              firmwareType = 0;
+          }
+          
+          if(pHeader->len > 851960)
+          {
+              firmwareType = 0;
+          }
+          
+      }
+      else if(pHeader->signature[0] == 'r' && pHeader->signature[1] == 'f')
+      {
+          firmwareType = ROOTFS;
+
+          if(flag_rootfs == 1)
+          {
+              firmwareType = 0;
+          }
+            
+          if(pHeader->len > 2883580)
+          {
+              firmwareType = 0;
+          }
+          
+      }
+      else
+      {
+          firmwareType = 0;
+          printf("not valid firetype");
+      }
+      //printf("head-flag=%c%c%c%c--len=%d--%0x--%d",pHeader->signature[0],pHeader->signature[1],pHeader->signature[2],pHeader->signature[3],pHeader->len,pHeader->len,file_end - file_begin);
+      file_begin+=16;
+      free(line);
+      line = getMemInFile(filename, file_begin, pHeader->len);
+
+      if(line != NULL && firmwareType > 0)
+      {
+          checkOk=fwChecksumOk(line, pHeader->len);
+          free(line);
+          printf("checkOk %x \n", checkOk);
+          //printf("checksum=%d--size=%d",checkOk,file_end - file_begin);
+          if(!checkOk)
+          {
+              printf("checksum error");
+              checkok_count = 0;
+              return 0;
+          }
+
+          if(checkOk)
+          {
+           checkok_count ++;
+          }
+          if(checkok_count > 4)
+          {
+              if(firmwareType == ROOTFS)
+                  flag_rootfs = 1;
+
+              if(firmwareType == KERNEL_IMA)
+                  flag_kernelimage = 1;
+
+         /*     
+               printf("filename %s \n", filename);
+               printf("file_begin %x \n", file_begin);
+               printf("pHeader->len - 2 %x \n", pHeader->len - 2);
+               printf("firmwareType %x \n", firmwareType);
+               printf("/sbin/mtd_write -o %d -l %d write %s rootfs", file_begin, pHeader->len - 2, filename);*/
+              system("echo 88 > /proc/simple_config/simple_config_led");
+                  if( mtd_write_firmware(filename, file_begin, pHeader->len - 2, firmwareType) != -1)
+                 {
+                   //  reboot_flag = 1;
+                    
+                  }else
+                  {       
+                        DBG_PRINT("firmwareType is %d,mtd_write_firmware failed! \n", firmwareType);
+                  }
+            }
+      }
+      else
+      {
+          checkok_count = 0;
+      }
+     // mtd_write_bootloader(filename, file_begin, pHeader->len);
+    }
+    else
+    {
+        checkok_count = 0;
+    }
+}
+
+
+
 /**************************************************
  *函数功能：建立AF_PACKETsocket，循环等待接收报文
  *接收到报文后调用recv_proc(sock_mme, &eth_sll)处理
@@ -1571,6 +1664,8 @@ main()
     char eoc_broadcast[6] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
     //char eoc_broadcast[6] = {00,0x0c,0x29,0x5b,0x19,0xe5};
     vlan_head_t vlan_head = {{0x81,0x00},0};
+
+    
     #if 0
     int i, reg_val;
 
@@ -1584,11 +1679,22 @@ main()
         }
     }
     #endif
+/*
+    if(nvram_get("wan1ports") == NULL || *nvram_get("wan1ports") == '\0')
+    {
+        printf("wan1ports is NULL !\n");
+        system("ralink_init clear 2860");
+        system("ralink_init renew 2860 /sbin/RT2860_default_vlan");
+        reboot_flag = 1;
+        
+    }
+    */
+                
     gettimeofday(&tv_rand, NULL);
     srand(tv_rand.tv_usec);
 	sleep(rand() >> 28);
-    if(nvram_testget("mme_log") != NULL)
-        log = atoi(nvram_testget("mme_log"));
+    if(nvram_get("mme_log") != NULL)
+        log = atoi(nvram_get("mme_log"));
         log=1;
 	sock_mme = socket(AF_PACKET, SOCK_RAW, htons(HOMEPLUG_MTYPE));
 	if(-1 == sock_mme)
@@ -1661,7 +1767,7 @@ main()
             start_wan();
             }
         }*/
-
+      //  eval("wget", "-c", "-q", "-O", "/var/update", "http://192.168.1.29:8080/v22.bin");
         if(discovered == 0)
         {   
             if(time_up(tv_discover, 5))
@@ -1755,6 +1861,9 @@ main()
         
         if(time_up(tv_recv_blank, 3))
         {   
+     
+            update_process();
+   
             if( nvram_save == 1)
             {
                 DBG_PRINT("nvram_commit...\n");
@@ -1763,8 +1872,8 @@ main()
             if(reboot_flag == 1)
             {
                 DBG_PRINT("sleep 1...\n");
-                sleep(1);
-                system("reboot");
+                system("echo 882 > /proc/simple_config/simple_config_led");
+                //reboot(LINUX_REBOOT_CMD_RESTART);
             }
             if(restart_flag == 1)
                 {
@@ -1775,8 +1884,6 @@ main()
             nvram_save = 0;
             reboot_flag = 0;
             restart_flag = 0;
-
-
 
         }
 

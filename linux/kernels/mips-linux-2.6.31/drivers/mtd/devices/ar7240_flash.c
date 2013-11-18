@@ -11,6 +11,7 @@
 #include <linux/semaphore.h>
 #include <linux/mtd/mtd.h>
 #include <linux/mtd/partitions.h>
+#include <linux/magic.h>
 #include <asm/delay.h>
 #include <asm/io.h>
 #include <asm/div64.h>
@@ -18,6 +19,74 @@
 #include "ar7240.h"
 #include "ar7240_flash.h"
 
+#define	FIXED_PARTITION_LAYOUT	1
+#ifdef FIXED_PARTITION_LAYOUT
+#ifdef FLASH_SIZE_8M
+static struct mtd_partition plt_partitions[] = {
+	{
+		.name		= "u-boot",
+		.offset		= 0,
+		.size		= 0x010000,
+	//    .mask_flags	= MTD_WRITEABLE,
+	}, {
+		.name		= "uImage",
+		.offset		= 0x010000,
+		.size		= 0x7d0000,
+	//    .mask_flags	= MTD_WRITEABLE,
+	}, {
+		.name		= "rootfs",
+		.offset		= 0x010000,
+		.size		= 0x7d0000,
+	}, {
+		.name		= "nvram",
+		.offset		= 0x7e0000,
+		.size		= 0x010000,
+	}, {
+		.name		= "art",
+		.offset		= 0x7f0000,
+		.size		= 0x010000,
+	}
+};
+#else
+static struct mtd_partition plt_partitions[] = {
+	{
+		.name		= "u-boot",
+		.offset		= 0,
+		.size		= 0x010000,
+	//    .mask_flags	= MTD_WRITEABLE,
+	}, {
+		.name		= "uImage",
+		.offset		= 0x010000,
+		.size		= 0x390000,
+	//    .mask_flags	= MTD_WRITEABLE,
+	}, {
+		.name		= "rootfs",
+		.offset		= 0x010000,
+		.size		= 0x390000,
+	}, {
+		.name		= "web",
+		.offset		= 0x3a0000,
+		.size		= 0x020000,
+	}, {
+		.name		= "config",
+		.offset		= 0x3c0000,
+		.size		= 0x020000,
+	}, {
+		.name		= "NVRAM",
+		.offset		= 0x3e0000,
+		.size		= 0x010000,
+	}, {
+		.name		= "ART-2411",
+		.offset		= 0x3f0000,
+		.size		= 0x010000,
+	}, {
+		.name		= "flash",
+		.offset		= 0x010000,
+		.size		= 0x390000,
+	}
+};
+#endif	/* FLASH_SIZE_8M */
+#endif
 /* this is passed in as a boot parameter by bootloader */
 extern int __ath_flash_size;
 
@@ -227,7 +296,13 @@ static int __init ar7240_flash_init(void)
 	int i, np;
 	ar7240_flash_geom_t *geom;
 	struct mtd_info *mtd;
+#ifndef FIXED_PARTITION_LAYOUT	
+	int np;
 	struct mtd_partition *mtd_parts;
+#else
+	unsigned char buf[64];
+	unsigned int *magic, len;
+#endif
 	uint8_t index;
 
 	init_MUTEX(&ar7240_flash_sem);
@@ -271,12 +346,39 @@ static int __init ar7240_flash_init(void)
 		mtd->write		= ar7240_flash_write;
 		mtd->writesize		= 1;
 
+#ifndef FIXED_PARTITION_LAYOUT
 		np = parse_mtd_partitions(mtd, part_probes, &mtd_parts, 0);
 		if (np > 0) {
 			add_mtd_partitions(mtd, mtd_parts, np);
 		} else {
 			printk("No partitions found on flash bank %d\n", i);
 		}
+#else
+		magic = (unsigned int *) buf;
+		/* Look at every 64 KB boundary */
+		for (i = 0; i < plt_partitions[1].size; i += (64 * 1024)) {
+			// Fill something avoid read fail.
+			memset(buf, 0xe5, sizeof(buf));
+			//  Read block 0 to test for romfs and cramfs superblock
+			if (mtd->read(mtd, i, sizeof(buf), &len, buf) ||
+				len != sizeof(buf))
+				continue;
+			
+			if (le32_to_cpu(*magic) == SQUASHFS_MAGIC) {
+				printk(KERN_NOTICE
+					"%s: squash filesystem with lzma found at 0x%08x\n",
+					mtd->name, i);
+			
+				plt_partitions[2].offset = i;
+				plt_partitions[2].size = plt_partitions[1].size - i + plt_partitions[1].offset;
+				break;
+			}
+		}
+		if(i >= plt_partitions[1].size) {
+			printk(KERN_ERR "ERROR %s: No squash rootfs found!\n", mtd->name);
+		}
+		add_mtd_partitions(mtd, plt_partitions, 8);
+#endif	
 	}
 
 	return 0;

@@ -62,6 +62,14 @@ ar7240_usb_otp_config(void)
     }
 }
 
+// get button status
+int ar7240_reset_button_status(void) {
+	if (ar7240_reg_rd(AR7240_GPIO_IN) & (1 << GPIO_RST_BUTTON_BIT)) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
 void ar7240_gpio_config(void)
 {
     /* Disable clock obs 

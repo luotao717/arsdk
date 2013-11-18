@@ -110,6 +110,7 @@ struct eth_device {
 extern int eth_initialize(bd_t *bis);		/* Initialize network subsystem */
 extern int eth_register(struct eth_device* dev);/* Register network device	*/
 extern void eth_try_another(int first_restart);	/* Change the device		*/
+extern void eth_try_eth1(void);	/* Change the device to eth1		*/
 #ifdef CONFIG_NET_MULTI
 extern void eth_set_current(void);		/* set nterface to ethcur var.  */
 #endif

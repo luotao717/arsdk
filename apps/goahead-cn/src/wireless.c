@@ -2652,6 +2652,8 @@ void Security(int nvram, webs_t wp, char_t *path, char_t *query)
 static void APSecurity(webs_t wp, char_t *path, char_t *query)
 {
 	Security(RT2860_NVRAM, wp, path, query);
+	system("echo ruanwlanspec >> /var/tttlog");
+	printf("\r\nrun wlan in apsec");
 	doSystem("runwlan.sh");
 }
 

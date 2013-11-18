@@ -7,7 +7,7 @@
 
 #define CONFIG_MIPS32		1  /* MIPS32 CPU core	*/
 
-#define CONFIG_BOOTDELAY	4	/* autoboot after 4 seconds	*/
+#define CONFIG_BOOTDELAY	2	/* autoboot after 4 seconds	*/
 
 #define CONFIG_BAUDRATE		115200 
 #define CFG_BAUDRATE_TABLE  { 	115200}

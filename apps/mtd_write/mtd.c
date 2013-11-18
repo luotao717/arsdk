@@ -49,7 +49,7 @@
 #ifdef CONFIG_MTD_NAND_RALINK
 #define BUFSIZE (0x4000)
 #else
-#define BUFSIZE (1 * 1024 *4 * 16)
+#define BUFSIZE (1 * 1024 * 64 )
 #endif
 #define MAX_ARGS 3
 
@@ -57,7 +57,7 @@ char *buf;
 int buflen;
 int quiet;
 int verbose;
-int write_check=1;
+int write_check=0;
 
 int mtd_check(char *mtd)
 {
@@ -213,6 +213,9 @@ mtd_write(int imagefd, int offset, int len, const char *mtd)
 	int ret = 0, statistic = 0;
 	unsigned char *test_buf;
 	unsigned int erase_test_char = 256, erase_begin_pos;
+	int countblock=1;
+
+	mtd_erase(mtd);
 
 	fd = mtd_open(mtd, O_RDWR | O_SYNC);
 	if(fd < 0) {
@@ -239,7 +242,7 @@ mtd_write(int imagefd, int offset, int len, const char *mtd)
 		exit(1);
 	}
 
-	for (; len;) {
+	for (; len;countblock++) {
 #ifdef CONFIG_MTD_NAND_RALINK
 		struct mtd_oob_buf oob;
 		unsigned char oobd[mtdInfo.oobsize];
@@ -276,6 +279,7 @@ mtd_write(int imagefd, int offset, int len, const char *mtd)
 		len = len - r;
 
 		/* need to erase the next block before writing data to it */
+		printf("\r\n-------------------------mtd.length=%0x",mtdInfo.erasesize);
 		while (w > e) {
 			mtdEraseInfo.start = e;
 			mtdEraseInfo.length = mtdInfo.erasesize;
@@ -292,8 +296,9 @@ mtd_write(int imagefd, int offset, int len, const char *mtd)
 		}
 
 		if (!quiet)
-			fprintf(stderr, "\b\b\b[w]");
-		ioctl(fd, MEMUNLOCK, &mtdEraseInfo);
+			fprintf(stderr, "\b\b\b[w-%d]",countblock);
+		//ioctl(fd, MEMUNLOCK, &mtdEraseInfo);
+	#if 1
 		if ((result = write(fd, buf, r)) < r) {
 			if (result < 0) {
 				fprintf(stderr, "Error writing image.\n");
@@ -305,8 +310,9 @@ mtd_write(int imagefd, int offset, int len, const char *mtd)
 				exit(1);
 			}
 		}
+	#endif
 
-#if 1
+#if 0
 		/*
 		 * Post-FlashWrite check
 		 */
@@ -344,12 +350,12 @@ mtd_write(int imagefd, int offset, int len, const char *mtd)
  		}
 #endif
 
-		if(verbose == 1){
-			fprintf(stdout, "%d\n", statistic);
-		}else if(verbose == 2){	// output HTML format
-			fprintf(stdout, "%d... ", statistic);
-		}
-		fflush(stdout);
+		//if(verbose == 1){
+			//fprintf(stdout, "%d\n", statistic);
+		//}else if(verbose == 2){	// output HTML format
+			//fprintf(stdout, "%d... ", statistic);
+		//}
+		//fflush(stdout);
 		statistic += result;
 	}
 	if (!quiet)

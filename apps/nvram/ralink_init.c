@@ -254,6 +254,75 @@ int ra_nv_set(int argc,char **argv)
 			printf("\nwrite ok");	
 			return 0;
 		}
+		if(!strcmp(key,"writeeoc"))
+		{
+			unsigned char tmpbuf11[0x2000]={0};
+			flash_read(tmpbuf11,0,0x2000);
+
+			tmpbuf11[0x0]='h';
+			tmpbuf11[0x1]='e';
+			tmpbuf11[0x2]='o';
+			tmpbuf11[0x3]='c';
+			tmpbuf11[0x4]=';';
+			flash_write_nvram_boot(tmpbuf11);
+			return 0;
+		}
+		if(!strcmp(key,"writecmts"))
+		{
+			unsigned char tmpbuf11[0x2000]={0};
+			flash_read(tmpbuf11,0,0x2000);
+
+			tmpbuf11[0x0]='c';
+			tmpbuf11[0x1]='m';
+			tmpbuf11[0x2]='t';
+			tmpbuf11[0x3]='s';
+			tmpbuf11[0x4]=';';
+			flash_write_nvram_boot(tmpbuf11);
+			return 0;
+		}
+		if(!strcmp(key,"upgradestart"))
+		{
+			unsigned char tmpbuf11[0x2000]={0};
+			flash_read(tmpbuf11,0,0x2000);
+
+			int i=5;
+			for(i=5;i<64;i++)
+			{
+				tmpbuf11[i]=255;
+			}
+			/*
+			tmpbuf11[0x5]='a';
+			tmpbuf11[0x6]='u';
+			tmpbuf11[0x7]='t';
+			tmpbuf11[0x8]='o';
+			tmpbuf11[0x9]='s';
+			tmpbuf11[0xa]='t';
+			tmpbuf11[0xb]=';';
+			tmpbuf11[0xc]='f';
+			tmpbuf11[0xd]='f';
+			tmpbuf11[0xe]='f';
+			tmpbuf11[0xf]='f';
+			*/
+			//strcpy(tmpbuf11+5,"autost");
+			flash_write_nvram_boot(tmpbuf11);
+			return 0;
+		}
+		if(!strcmp(key,"upgradeok"))
+		{
+			unsigned char tmpbuf11[0x2000]={0};
+			flash_read(tmpbuf11,0,0x2000);
+
+			tmpbuf11[0x5]='a';
+			tmpbuf11[0x6]='u';
+			tmpbuf11[0x7]='t';
+			tmpbuf11[0x8]='o';
+			tmpbuf11[0x9]='o';
+			tmpbuf11[0xa]='k';
+			tmpbuf11[0xb]=';';
+			//strcpy(tmpbuf11+5,"autook");
+			flash_write_nvram_boot(tmpbuf11);
+			return 0;
+		}
 	}
 
 	if ((index = getNvramIndex(fz)) == -1) {
@@ -1455,7 +1524,7 @@ int renew_nvram(int mode, char *fname)
 			//printf("\r\nssidt=%s",new_ssid);
 			if(flashReadFlag)
 			{
-				 sprintf(mac_6, " %02X%02X",(macBuf[4] & 0377), (macBuf[5] & 0377));
+				 sprintf(mac_6, " %02X%02X%02x",(macBuf[3] & 0377),(macBuf[4] & 0377), (macBuf[5] & 0377));
 				 strcat(new_ssid, mac_6);
 				 //printf("\r\n4bit=%s",mac_6);
 			}

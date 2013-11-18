@@ -25,7 +25,7 @@ USB_UPGRADE_CGI = usb_upgrade.cgi
 #CPU_MEM_RRD_UPDATER	= cpu_mem_updater
 #NETWORK_RRD_UPDATER	= network_updater
 
-ALL_EXE = $(UPLOAD_CGI)
+ALL_EXE = $(UPLOAD_CGI) $(UPLOAD_SETTINGS)
 ifeq ("$(CONFIG_USER_STORAGE)", "y")
 ALL_EXE += $(USB_UPGRADE_CGI)
 endif

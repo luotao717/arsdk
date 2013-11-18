@@ -451,6 +451,25 @@ ag7240_mac_addr_loc(void)
 #endif
 }
 
+unsigned char * ag7240_env_nvram(void)
+{
+	extern flash_info_t flash_info[];
+
+#ifdef BOARDCAL
+    /*
+    ** BOARDCAL environmental variable has the address of the cal sector
+    */
+    return ((unsigned char *)(BOARDCAL-0x10000));
+    
+#else
+	/* MAC address is store in the 2nd 4k of last sector */
+	fsdfsdfdsf;
+	return ((unsigned char *)
+		(KSEG1ADDR(AR7240_SPI_BASE) +
+		flash_info[0].size - (2*64 * 1024) /* sector_size */ ));
+#endif
+}
+
 static void ag7240_get_ethaddr(struct eth_device *dev)
 {
     unsigned char *eeprom;
@@ -467,17 +486,19 @@ static void ag7240_get_ethaddr(struct eth_device *dev)
         printf("%s: unknown ethernet device %s\n", __func__, dev->name);
         return;
     }
+	printf("\r\neeprom--mac=%02x-%02x-%02x-%02x-%02x-%02x\r\n",mac[0],mac[1],mac[2],mac[3],mac[4],mac[5]);
     /* Use fixed address if the above address is invalid */
-    if (mac[0] != 0x00 || (mac[0] == 0xff && mac[5] == 0xff)) {
+    //if (mac[0] != 0x00 || (mac[0] == 0xff && mac[5] == 0xff)) {
+    if(1){	
 #else
     if (1) {
 #endif 
         mac[0] = 0x00;
-        mac[1] = 0x03;
-        mac[2] = 0x7f;
-        mac[3] = 0x09;
-        mac[4] = 0x0b;
-        mac[5] = 0xad;
+        mac[1] = 0xc2;
+        mac[2] = 0x45;
+        mac[3] = 0xff;
+        mac[4] = 0x05;
+        mac[5] = 0xb7;
         printf("No valid address in Flash. Using fixed address\n");
     } else {
         printf("Fetching MAC Address from 0x%p\n", __func__, eeprom);

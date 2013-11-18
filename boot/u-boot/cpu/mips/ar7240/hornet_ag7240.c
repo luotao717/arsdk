@@ -417,7 +417,6 @@ static void ag7240_get_ethaddr(struct eth_device *dev)
         printf("%s: unknown ethernet device %s\n", __func__, dev->name);
         return;
     }
-
     /* Use fixed address if the above address is invalid */
     if (mac[0] != 0x00 || (mac[0] == 0xff && mac[5] == 0xff)) {
         mac[0] = 0x00;

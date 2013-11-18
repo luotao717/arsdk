@@ -2282,6 +2282,12 @@ endif
 
 ap121-2.6.31_config		    : 	unconfig    hornet_common_config
 	@echo "#define FLASH_SIZE $(FLASH_SIZE)" >>include/config.h
+	@echo "#define GPIO_RST_BUTTON_BIT		12" >> include/config.h
+	@echo "#define CONFIG_DELAY_TO_AUTORUN_HTTPD		3" >>include/config.h
+	@echo "#define CONFIG_DELAY_TO_AUTORUN_CONSOLE		8" >>include/config.h
+	@echo "#define CONFIG_DELAY_TO_AUTORUN_NETCONSOLE	9" >>include/config.h
+	# max delay time for button pressing
+	@echo "#define CONFIG_MAX_BUTTON_PRESSING 10" >>include/config.h
 	@./mkconfig -a ap121 mips mips ap121 ar7240 ar7240
 
 ap121-2.6.31-2MB_config		: 	unconfig    hornet_common_config

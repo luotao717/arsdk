@@ -49,7 +49,7 @@ int main(int argc,char **argv)
   }
   else
   {
-     sprintf(cmdBuf,"/sbin/mtd_write -o 0 -l %ld write /var/userFire rootfs",fileInfo.st_size);
+     sprintf(cmdBuf,"/sbin/mtd_write -o 0 -l %ld write /var/userFire flash",fileInfo.st_size);
      //system("echo 884 > /proc/simple_config/simple_config_led");
   }
 	//printf("\r\nupcmd=%s\r\n",cmdBuf);

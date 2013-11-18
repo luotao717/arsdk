@@ -693,5 +693,5 @@ var HC_completed	= "完成";
 var HC_completed_info	= "请稍后，如浏览器不自动刷新，请自动刷新页面";
 var HC_reboot_completed	= "重启设备成功";
 var HC_setting_upload	= "上传配置文件";
-var MM_copyright_info	= "版本所有";
+var MM_copyright_info	= "Copyright @2012-2013 Hexicom Technologies 版权所有";
 

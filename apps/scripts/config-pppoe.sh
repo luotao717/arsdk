@@ -17,8 +17,10 @@ if [ "$5" = "" ]; then
 	usage $0
 fi
 
+mkdir -p /etc/ppp/peers/ 
 DNRD_PID=/var/run/dnrd.pid
 killall -9 dnrd
+nat.sh
 rm -f /tmp/connectPass
 #syslogd -m 0
 pppoe.sh $1 $2 $3 $4 $5

@@ -1,0 +1,147 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<LINK href="../dynaform/css_main.css" rel=stylesheet type="text/css">
+<SCRIPT language="javascript" src="../dynaform/common.js" type="text/javascript"></SCRIPT>
+<script type="text/javascript" src="util_gw.js"> </script>
+<script type="text/javascript">
+function upnpTblClick(url) 
+{
+	if ( document.vpnpass.upnpEnabled.checked == 1)
+		openWindow(url, 'UpnpMapTbl',600, 400 );
+}
+</script>
+</head>
+
+<body onload = "setTagStr(document,'ntw_bsc_sec');LoadHelp('BasicSecurityHelpRpm.htm')">
+<form method=post name="vpnpass" action="/goform/formWebWanAdvance">
+<table width=90% border=0 cellpadding=0 cellspacing=0 align=center>
+  <tr>
+    <td class=content><table width=100% border=0 cellpadding=0 cellspacing=0>
+     <TR>
+          <TD class=h1 id="t_titlt">Basic Security</TD>
+        </TR>
+        <TR>
+          <TD class=blue></TD>
+        </TR>
+      <tr>
+        <td><table class=space width=100% border=0 cellspacing=0 cellpadding=2>
+		 <TR>
+      <TD class=h2 colspan=2 id="t_fw">Firewall</TD>
+    </TR>
+	<TR>
+      <TD class=Item align=left><B><SPAN id="t_spi_fw">SPI Firewall:</SPAN></B></TD>
+      <TD width = "100%"><INPUT type="radio" name="spifirewall" value="ON" id="enable_spi" <% if (getIndex("padServerRenew")) write("checked"); %>>
+        <SPAN id="t_enable_spi">Enable</SPAN>
+        <INPUT type ="radio" name="spifirewall" value="OFF" id="disable_spi" <% if (!getIndex("padServerRenew")) write("checked"); %>>
+        <SPAN id="t_disable_spi">Disable</SPAN></TD>
+    </TR>
+	 <TR>
+      <TD class="blue"  colspan=2></TD>
+    </TR>
+          <tr style="display:none">
+            <td class=head>Enable UPNP:</td>
+            <td><input type="checkbox" name="upnpEnabled" value="ON" <% if (getIndex("upnpEnabled")) write("checked"); %>></td>
+          </tr>
+          <tr style="display:none">
+            <td class=head>Enable Ping Access on WAN:</td>
+            <td><input type="checkbox" name="pingWanAccess" value="ON" <% if (getIndex("pingWanAccess")) write("checked"); %>></td>
+          </tr>
+          <tr style="display:none">
+            <td class=head>Enable Web Server Access on WAN:</td>
+            <td><input type="checkbox" name="webWanAccess" value="ON" <% if (getIndex("webWanAccess")) write("checked"); %>></td>
+          </tr>
+          <tr style="display:none">
+            <td class=head>Enable IGMP proxy:</td>
+            <td><input type="checkbox" name="igmpproxyEnabled" value="ON" <% if (getIndex("igmpproxyDisabled")==0) write("checked"); %>></td>
+          </tr>
+		  <TR>
+      <TD class=h2 colspan=2 id="t_vpn">VPN</TD>
+    </TR>
+          
+          <tr>
+            <td class=Item>PPTP passthrough:</td>
+            <td><input type="radio" name="WANPassThru2" <% if (getIndex("VPNPassThruPPTP")) write("checked"); %> value="ON">
+            Enable <input type="radio" name="WANPassThru2" <% if (!getIndex("VPNPassThruPPTP")) write("checked"); %> value="OFF">Disable</td>
+          </tr>
+          <tr>
+            <td class=Item>L2TP passthrough:</td>
+            <td> <input type="radio" name="WANPassThru3" <% if (getIndex("VPNPassThruL2TP")) write("checked"); %> value="ON">
+            Enable  <input type="radio" name="WANPassThru3" <% if (!getIndex("VPNPassThruL2TP")) write("checked"); %> value="OFF">Disable</td>
+          </tr>
+		  <tr>
+            <td class=Item>IPsec passthrough:</td>
+            <td> <input type="radio" name="WANPassThru1" <% if (getIndex("VPNPassThruIPsec")) write("checked"); %> value="ON">
+            Enable  <input type="radio" name="WANPassThru1" <% if (!getIndex("VPNPassThruIPsec")) write("checked"); %> value="OFF">Disable</td>
+          </tr>
+		   <TR>
+      <TD class="blue"  colspan=2></TD>
+    </TR>
+	<TR>
+      <TD class=h2 colspan=2 id="t_nat">ALG</TD>
+    </TR>
+    <TR>
+      <TD class=Item align=left><B><SPAN id="t_ftp_alg">FTP ALG:</SPAN></B></TD>
+      <TD width = "100%"><INPUT type="radio" name="webfuturebyte2" value="ON" id="enable_ftp_alg" <% if (getIndex("futurebyte2")) write("checked"); %>>
+        <SPAN id="t_enable_ftp_alg">Enable</SPAN>
+        <INPUT type ="radio" name="webfuturebyte2" value="OFF" id="disable_ftp_alg" <% if (!getIndex("futurebyte2")) write("checked"); %>>
+        <SPAN id="t_disable_ftp_alg">Disable</SPAN></TD>
+    </TR>
+    <TR>
+      <TD class=Item align=left><B><SPAN id="t_tftp_alg">TFTP ALG:</SPAN></B></TD>
+      <TD width = "100%"><INPUT type="radio" name="webfuturebyte3" value="ON" id="enable_tftp_alg" <% if (getIndex("futurebyte3")) write("checked"); %>>
+        <SPAN id="t_enable_tftp_alg">Enable</SPAN>
+        <INPUT type ="radio" name="webfuturebyte3" value="OFF" id="disable_tftp_alg" <% if (!getIndex("futurebyte3")) write("checked"); %>>
+        <SPAN id="t_disable_tftp_alg">Disable</SPAN></TD>
+    </TR>
+    <TR>
+      <TD class=Item align=left><B><SPAN id="t_h323_alg">H323 ALG:</SPAN></B></TD>
+      <TD width = "100%"><INPUT type="radio" name="webfuturebyte4" value="ON" id="enable_h323_alg" <% if (getIndex("futurebyte4")) write("checked"); %>>
+        <SPAN id="t_enable_h323_alg">Enable</SPAN>
+        <INPUT type ="radio" name="webfuturebyte4" value="OFF" id="disable_h323_alg" <% if (!getIndex("futurebyte4")) write("checked"); %>>
+        <SPAN id="t_disable_h323_alg">Disable</SPAN></TD>
+    </TR>
+    <TR>
+      <TD class=Item align=left><B><SPAN id="t_rtsp_alg">RTSP ALG:</SPAN></B></TD>
+      <TD width = "100%"><INPUT type="radio" name="webfuturebyte5" value="ON" id="enable_rtsp_alg" <% if (getIndex("futurebyte5")) write("checked"); %>>
+        <SPAN id="t_enable_rtsp_alg">Enable</SPAN>
+        <INPUT type ="radio" name="webfuturebyte5" value="OFF" id="disable_rtsp_alg" <% if (!getIndex("futurebyte5")) write("checked"); %>>
+        <SPAN id="t_disable_rtsp_alg">Disable</SPAN></TD>
+    </TR>
+    <TR>
+      <TD class="blue"  colspan=2></TD>
+    </TR>
+          <tr style="display:none">
+            <td class=head>Port loopback:</td>
+            <td> <input type="checkbox" name="PortLo" <% if (getIndex("port_lo")) write("checked"); %> value="ON"></td>
+          </tr>
+          <tr style="display:none">
+            <td class=head>NAT Fast Forward:</td>
+            <td> <input type="checkbox" name="FastNat" <% if (getIndex("fast_nat")) write("checked"); %> value="ON"></td>
+          </tr>
+          <tr style="display:none">
+            <td class=head>Special strategy:</td>
+            <td><select name="netspyIndex">
+                <option  <% if (getIndex("netspy_index")==0) write("selected"); %> value="0">None</option>
+                <option <% if (getIndex("netspy_index")==17) write("selected"); %> value="17">Private Policy 1</option>
+                <option <% if (getIndex("netspy_index")==3) write("selected"); %> value="3">Private Policy 2</option>
+                <option <% if (getIndex("netspy_index")==9) write("selected"); %> value="9">Private Policy 3</option>
+                <option <% if (getIndex("netspy_index")==225) write("selected"); %> value="225">Universal Strategy 1</option>
+                <option <% if (getIndex("netspy_index")==257) write("selected"); %> value="257">Universal Strategy 2</option>
+                <option <% if (getIndex("netspy_index")==481) write("selected"); %> value="481">Universal Strategy 3</option></select></td>
+          </tr>
+		   <tr>
+		   <td></td>
+        <td><input type="hidden" value="/userRpm/BasicSecurityRpm.htm" name="submit-url"><input type="submit" class="button"  value="Save" />&nbsp;&nbsp;<input type="reset" class="button"  value="Reset" onClick="window.location.reload()"></td>
+      </tr>
+        </table></td>
+      </tr>
+      <tr><td>&nbsp;</td></tr>
+     
+    </table></td>
+  </tr>
+  <tr><td>&nbsp;</td></tr>
+</table>
+</form>
+</body>
+</html>

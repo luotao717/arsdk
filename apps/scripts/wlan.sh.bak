@@ -7,7 +7,7 @@ ifconfig br2 up
 RadioOff=`nvram_get 2860 RadioOff`
 RadioOff2=`nvram_get 2860 RadioOff2`
 RadioOff3=`nvram_get 2860 RadioOff3`
-RadioOff4=`nvram_get 2860 RadioOff3`
+RadioOff4=`nvram_get 2860 RadioOff4`
 WirelessMode=`nvram_get 2860 WirelessMode`
 SSID1=`nvram_get 2860 SSID1`
 SSID2=`nvram_get 2860 SSID2`

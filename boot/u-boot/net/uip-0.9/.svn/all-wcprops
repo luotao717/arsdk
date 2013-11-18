@@ -1,0 +1,107 @@
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/10/trunk/u-boot/net/uip-0.9
+END
+uip_arch.h
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/10/trunk/u-boot/net/uip-0.9/uip_arch.h
+END
+uip_arp.c
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/10/trunk/u-boot/net/uip-0.9/uip_arp.c
+END
+fsdata.c
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/10/trunk/u-boot/net/uip-0.9/fsdata.c
+END
+uip.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/10/trunk/u-boot/net/uip-0.9/uip.h
+END
+uip_arp.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/10/trunk/u-boot/net/uip-0.9/uip_arp.h
+END
+fsdata.h
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/10/trunk/u-boot/net/uip-0.9/fsdata.h
+END
+fs.c
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/10/trunk/u-boot/net/uip-0.9/fs.c
+END
+fs.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/10/trunk/u-boot/net/uip-0.9/fs.h
+END
+httpd.c
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/10/trunk/u-boot/net/uip-0.9/httpd.c
+END
+tapdev.c
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/10/trunk/u-boot/net/uip-0.9/tapdev.c
+END
+main.c
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/10/trunk/u-boot/net/uip-0.9/main.c
+END
+uipopt.h
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/10/trunk/u-boot/net/uip-0.9/uipopt.h
+END
+tapdev.h
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/10/trunk/u-boot/net/uip-0.9/tapdev.h
+END
+httpd.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/10/trunk/u-boot/net/uip-0.9/httpd.h
+END
+uip_arch.c
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/10/trunk/u-boot/net/uip-0.9/uip_arch.c
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/10/trunk/u-boot/net/uip-0.9/Makefile
+END
+uip.c
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/10/trunk/u-boot/net/uip-0.9/uip.c
+END

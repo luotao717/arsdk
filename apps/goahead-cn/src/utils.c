@@ -815,20 +815,20 @@ static int getIndex(int eid, webs_t wp, int argc, char_t **argv)
 		char *opmode = (char *)nvram_bufget(RT2860_NVRAM, "OperationMode");
 		char *wanmode = (char *)nvram_bufget(RT2860_NVRAM, "wanConnectionMode");
 		if (atoi(opmode)==1) {
-		#if defined CONFIG_WAN_AT_P4
+		//#if defined CONFIG_WAN_AT_P4
 		//fdsfsd;
-			system("mii_mgr -g -p 4 -r 1 > /tmp/wanConnectStatus");
-		#else
-			system("mii_mgr -g -p 0 -r 1 > /tmp/wanConnectStatus");
-		#endif
-			fp = fopen("/tmp/wanConnectStatus", "r");
-			if (!fp) return NULL;
-			while(fgets(long_buf, 512, fp)) {
-				p = strstr(long_buf, "=");	
-				*(p+2+3)='\0';
-				if(((atoi(p+2+2)) & 0x0002))  p=NULL;	
-			}				
-			fclose(fp);
+			//system("mii_mgr -g -p 4 -r 1 > /tmp/wanConnectStatus");
+		//#else
+			//system("mii_mgr -g -p 0 -r 1 > /tmp/wanConnectStatus");
+		//#endif
+			//fp = fopen("/tmp/wanConnectStatus", "r");
+			//if (!fp) return NULL;
+			//while(fgets(long_buf, 512, fp)) {
+				//p = strstr(long_buf, "=");	
+				//*(p+2+3)='\0';
+				//if(((atoi(p+2+2)) & 0x0002))  p=NULL;	
+			//}				
+			//fclose(fp);
 			p==NULL;//by luotao for force
 			if (p==NULL || (!strcmp(wanmode,"3G"))) {//Is connected
 				if (!strcmp(wanmode, "DHCP")) {
@@ -901,7 +901,7 @@ static int getTitle(int eid, webs_t wp, int argc, char_t **argv)
 	return websWrite(wp, T("TOTOLINK"));
 #else
 	//return websWrite(wp, T("HC WIFI-M"));
-	return websWrite(wp, T("CNU204-HC"));
+	return websWrite(wp, T("CNU204N"));
 #endif
 }
 

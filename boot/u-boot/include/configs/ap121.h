@@ -72,8 +72,8 @@
 #undef MTDPARTS_DEFAULT
 
 #if (FLASH_SIZE == 4)
-#define	CONFIG_BOOTARGS     "console=ttyS0,115200 root=31:02 rootfstype=squashfs init=/sbin/init mtdparts=ar7240-nor0:256k(u-boot),64k(u-boot-env),2752k(rootfs),896k(uImage),64k(NVRAM),64k(ART)"
-#define MTDPARTS_DEFAULT    "mtdparts=ar7240-nor0:256k(u-boot),64k(u-boot-env),2752k(rootfs),896k(uImage),64k(NVRAM),64k(ART)"
+#define	CONFIG_BOOTARGS     "console=ttyS0,115200 root=31:02 rootfstype=squashfs init=/sbin/init mtdparts=ar7240-nor0:64k(u-boot),64k(u-boot-env),2944k(rootfs),896k(uImage),64k(NVRAM),64k(ART)"
+#define MTDPARTS_DEFAULT    "mtdparts=ar7240-nor0:64k(u-boot),64k(u-boot-env),2944k(rootfs),896k(uImage),64k(NVRAM),64k(ART)"
 #else
 #define	CONFIG_BOOTARGS     "console=ttyS0,115200 root=31:01 rootfstype=squashfs init=/sbin/init mtdparts=ar7240-nor0:64k(u-boot),1216k(rootfs),640k(uImage),64k(NVRAM),64k(ART)"
 #define MTDPARTS_DEFAULT    "mtdparts=ar7240-nor0:64k(u-boot),1152k(rootfs),704k(uImage),64k(NVRAM),64k(ART)"
@@ -442,7 +442,7 @@
 #define CFG_ENV_SIZE		0x10000
 
 #if (FLASH_SIZE == 4)
-    #define CONFIG_BOOTCOMMAND "bootm 0x9f300000"
+    #define CONFIG_BOOTCOMMAND "bootm 0x9f010000"
 #else
     #ifdef VXWORKS_UBOOT
        #define CONFIG_BOOTCOMMAND "bootm 0x9f050000"
@@ -543,10 +543,30 @@
 #define CONFIG_COMMANDS	(( CONFIG_CMD_DFL | CFG_CMD_PING | CFG_CMD_NET | CFG_CMD_MII))
 #endif /* #ifndef COMPRESSED_UBOOT */
 
+/*-----------------------------------------------------------------------
+ * Web Failsafe configuration
+ */
+#define WEBFAILSAFE_UPLOAD_RAM_ADDRESS			0x80080000		// TODO: need to check why we have problem storing downloaded data from the beginning of RAM
+#define WEBFAILSAFE_UPLOAD_UBOOT_ADDRESS		CFG_FLASH_BASE
+#define WEBFAILSAFE_UPLOAD_KERNEL_ADDRESS		WEBFAILSAFE_UPLOAD_UBOOT_ADDRESS + 0x10000
+#define WEBFAILSAFE_UPLOAD_UBOOT_SIZE_IN_BYTES	(64 * 1024)
+
+// progress state info
+#define WEBFAILSAFE_PROGRESS_START				0
+#define WEBFAILSAFE_PROGRESS_TIMEOUT			1
+#define WEBFAILSAFE_PROGRESS_UPLOAD_READY		2
+#define WEBFAILSAFE_PROGRESS_UPGRADE_READY		3
+#define WEBFAILSAFE_PROGRESS_UPGRADE_FAILED		4
+
+// update type
+#define WEBFAILSAFE_UPGRADE_TYPE_FIRMWARE		0
+#define WEBFAILSAFE_UPGRADE_TYPE_UBOOT			1
+#define WEBFAILSAFE_UPGRADE_TYPE_ART			2
+
 #define CFG_ATHRS26_PHY  1
 
-#define CONFIG_IPADDR   192.168.1.2
-#define CONFIG_SERVERIP 192.168.1.10
+#define CONFIG_IPADDR   192.168.1.1
+#define CONFIG_SERVERIP 192.168.1.2
 #define CONFIG_ETHADDR 0x00:0xaa:0xbb:0xcc:0xdd:0xee
 #define CFG_FAULT_ECHO_LINK_DOWN    1
 
@@ -585,7 +605,7 @@
 #define CAL_SECTOR                     (CFG_MAX_FLASH_SECT - 1)
 
 /* For Kite, only PCI-e interface is valid */
-#define AR7240_ART_PCICFG_OFFSET        3
+#define milisecdelay(_x)			udelay((_x) * 1000)
 
 
 

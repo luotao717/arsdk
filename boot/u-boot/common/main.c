@@ -48,8 +48,11 @@ extern unsigned findbdr(unsigned int flashaddr);
 extern int do_reset (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[]);		/* for do_reset() prototype */
 #endif
 
+extern int ar7240_reset_button_status(void);
 extern int do_bootd (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[]);
-
+extern int NetLoopHttpd(void);
+extern int autoUpgradeTftp(void);
+extern int autoUpgradeTftpWithCheck(void);
 
 #define MAX_DELAY_STOP_STR 32
 
@@ -418,20 +421,90 @@ void main_loop (void)
 		findbdr(0);
 #endif
 		s = getenv ("bootcmd");
+		int counter = 0;
 
-//	debug ("### main_loop: bootcmd=\"%s\"\n", s ? s : "<UNDEFINED>");
+		if(ar7240_reset_button_status()){
+
+			// wait 0,5s
+			milisecdelay(500);
+
+			printf("Press reset button for at least:\n- %d sec. to run web failsafe mode\n- %d sec. to run U-Boot console\n- %d sec. to run U-Boot netconsole\n\n",
+					CONFIG_DELAY_TO_AUTORUN_HTTPD,
+					CONFIG_DELAY_TO_AUTORUN_CONSOLE,
+					CONFIG_DELAY_TO_AUTORUN_NETCONSOLE);
+
+			printf("Reset button is pressed for: %2d ", counter);
+
+			while(ar7240_reset_button_status()){
+
+				// LED ON and wait 0,15s
+				//ar7240_all_led_on();
+				milisecdelay(150);
+
+				// LED OFF and wait 0,85s
+				//ar7240_all_led_off();
+				milisecdelay(850);
+
+				counter++;
+
+				// how long the button is pressed?
+				printf("\b\b\b%2d ", counter);
+
+				if(!ar7240_reset_button_status()){
+					break;
+				}
+
+				if(counter > CONFIG_MAX_BUTTON_PRESSING){
+					break;
+				}
+			}
+
+			//ar7240_all_led_off();
+
+			if(counter > 0){
+
+				// run web failsafe mode
+				if(counter >= CONFIG_DELAY_TO_AUTORUN_HTTPD && counter < CONFIG_DELAY_TO_AUTORUN_CONSOLE){
+					printf("\n\nButton was pressed for %d sec...\nHTTP server is starting for firmware update...\n\n", counter);
+					NetLoopHttpd();
+					bootdelay = -1;
+				} else if(counter >= CONFIG_DELAY_TO_AUTORUN_CONSOLE && counter < CONFIG_DELAY_TO_AUTORUN_NETCONSOLE){
+					printf("\n\nButton was pressed for %d sec...\nStarting U-Boot console...\n\n", counter);
+					bootdelay = -1;
+				} else if(counter >= CONFIG_DELAY_TO_AUTORUN_NETCONSOLE) {
+					printf("\n\nButton was pressed for %d sec...\nStarting U-Boot netconsole...\n\n", counter);
+					bootdelay = -1;
+					run_command("run nc", 0);
+				} else {
+					printf("\n\n## Error: button wasn't pressed long enough!\nContinuing normal boot...\n\n");
+				}
+
+			} else {
+				printf("\n\n## Error: button wasn't pressed long enough!\nContinuing normal boot...\n\n");
+			}
+
+		}
+
 
 	if (bootdelay >= 0 && s && !abortboot (bootdelay)) {
 # ifdef CONFIG_AUTOBOOT_KEYED
 		int prev = disable_ctrlc(1);	/* disable Control C checking */
 # endif
 
+
 # ifndef CFG_HUSH_PARSER
+		dasdsa;
 		run_command (s, 0);
 # else
+		autoUpgradeTftpWithCheck();
 		parse_string_outer(s, FLAG_PARSE_SEMICOLON |
 				    FLAG_EXIT_FROM_LOOP);
 # endif
+
+			printf("Failed to execute bootcmd, "
+					"starting httpd to update firmware...\n");
+			//NetLoopHttpd();
+			autoUpgradeTftp();
 
 # ifdef CONFIG_AUTOBOOT_KEYED
 		disable_ctrlc(prev);	/* restore Control C checking */

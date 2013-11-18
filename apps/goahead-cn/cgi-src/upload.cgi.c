@@ -381,7 +381,7 @@ Content-type: text/html\n",
 <title>My Title111111--%s</title>\n\
 <link rel=\"stylesheet\" href=\"/style/normal_ws.css\" type=\"text/css\">\n\
 <script language=\"javascript\" src=\"/js/language_%s.js\"></script>\n\
-<SCRIPT language=javascript type=text/javascript>var rebootInf = new Array(\"%s\",80,55,1,0,0 );</SCRIPT><LINK href=\"/dynaform/css_main.css\" type=text/css rel=stylesheet><SCRIPT language=javascript src=\"/dynaform/common.js\"  type=text/javascript></SCRIPT><script language=JavaScript><!--\n\
+<SCRIPT language=javascript type=text/javascript>var rebootInf = new Array(\"%s\",80,65,1,0,0 );</SCRIPT><LINK href=\"/dynaform/css_main.css\" type=text/css rel=stylesheet><SCRIPT language=javascript src=\"/dynaform/common.js\"  type=text/javascript></SCRIPT><script language=JavaScript><!--\n\
 function LoadMain(){parent.location.href = 'http://' + rebootInf[0] + ':' + rebootInf[1];}function doLoad(){doReFresh();}var timeout = rebootInf[2] * 10;var rate = 0;function doReFresh(){window.setTimeout(\"growUp()\",timeout);}function growUp(){rate = rate + 1;document.getElementById(\"td1\").style.width = rate + \"%%\";var per=document.getElementById(\"percent\");per.innerHTML=rate+\"%%\";if(rate >= 100){var obj=document.getElementById(\"t_notice\"); obj.style.display=\"block\";document.getElementById(\"t_restart\").style.display=\"none\";document.getElementById(\"t_complete\").style.display=\"block\";document.getElementById(\"t_complete\").style.color=\"red\";per.style.color=\"red\";LoadMain();return;}doReFresh();}\n\
 //--></script>\n\
 <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">\n\
@@ -523,7 +523,7 @@ function LoadMain(){parent.location.href = 'http://' + rebootInf[0] + ':' + rebo
     system("killall goahead");
 #endif
 
-   system("echo 884 > /proc/simple_config/simple_config_led");
+   system("echo 88 > /proc/simple_config/simple_config_led");
 //     pid = fork();
 //    if(pid==0)
 //    {

@@ -16,7 +16,8 @@ STRIP :=mips-linux-uclibc-strip
 #
 #  As you can see, RRDTool(traffic graphic) is obsoleted.
 #
-UPLOAD_CGI = upload.cgi 
+UPLOAD_CGI = upload.cgi
+WEBPROC_CGI = webproc.cgi  
 UPLOAD_BOOTLOADER_CGI = upload_bootloader.cgi
 UPLOAD_SETTINGS = upload_settings.cgi
 USB_UPGRADE_CGI = usb_upgrade.cgi
@@ -25,7 +26,7 @@ USB_UPGRADE_CGI = usb_upgrade.cgi
 #CPU_MEM_RRD_UPDATER	= cpu_mem_updater
 #NETWORK_RRD_UPDATER	= network_updater
 
-ALL_EXE = $(UPLOAD_CGI) $(UPLOAD_SETTINGS)
+ALL_EXE = $(UPLOAD_CGI) $(UPLOAD_SETTINGS) $(WEBPROC_CGI)
 ifeq ("$(CONFIG_USER_STORAGE)", "y")
 ALL_EXE += $(USB_UPGRADE_CGI)
 endif
@@ -34,6 +35,10 @@ all:	$(ALL_EXE)
 
 $(UPLOAD_CGI): upload.cgi.o
 	$(CC) upload.cgi.o -o $@
+	$(STRIP) --remove-section=.note --remove-section=.comment $@
+
+$(WEBPROC_CGI): webproc.cgi.o
+	$(CC) webproc.cgi.o -o $@
 	$(STRIP) --remove-section=.note --remove-section=.comment $@
 
 $(UPLOAD_BOOTLOADER_CGI): upload_bootloader.cgi.o

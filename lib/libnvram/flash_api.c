@@ -213,6 +213,14 @@ int flash_write_all_mac_ar9331(char *buf) //by luotao for read wan mac from flas
 	flash_write_ar9331_eeprom( buf, 0, 0x2000);
 	return 1;
 }
+int flash_write_nvram_boot(char *buf) //by luotao for read wan mac from flash
+{
+	int fd, ret;
+	unsigned char bufftemp[200]={0};
+	unsigned int tempi=0;
+	flash_write( buf, 0, 0x2000);
+	return 1;
+}
 int flash_write_wlan_mac_ar9331(char *buf) //by luotao for read wan mac from flash
 {
 	int fd, ret;

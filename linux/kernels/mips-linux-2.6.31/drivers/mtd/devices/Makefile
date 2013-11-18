@@ -20,6 +20,7 @@ obj-$(CONFIG_MTD_AR7240_SPI_FLASH)	+= ar7240_flash.o
 obj-$(CONFIG_MTD_AR7100_SPI_FLASH)  += ar7100_flash.o
 ifeq ($(ATH_SST_FLASH), y)
 CFLAGS_ar7240_flash.o += -DATH_SST_FLASH=1
+CFLAGS_ath_flash.o 	+= -DATH_SST_FLASH=1
 endif
 obj-$(CONFIG_MTD_ATH_FLASH)	+= ath_flash.o
 ifeq ($(ATH_SST_FLASH), y)

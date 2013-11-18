@@ -1,5 +1,5 @@
 NVDIR = ../../lib/libnvram
-CFLAGS += -I$(NVDIR) -I../../linux/kernels/mips-linux-2.6.31/drivers/char
+CFLAGS += -I$(NVDIR) -I../../linux/kernels/mips-linux-2.6.31/drivers/char -I../../include
 LDFLAGS += -L../../lib/libnvram
 #LIBNVRAM = $(NVDIR)/libnvram-0.9.28.so
 LIBNVRAM = $(NVDIR)/libnvram.a
@@ -10,6 +10,7 @@ EXEC = nvram_daemon ralink_init upgrade ftpup reload ppp_daemon hcmme
 
 CC :=mips-linux-uclibc-gcc
 
+vpath %.c ../shared/
 all: $(EXEC)
 
 nvram_daemon: nvram_daemon.o
@@ -30,7 +31,7 @@ reload: reload.o
 ppp_daemon: ppp_daemon.o
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
-hcmme: hcmme.o
+hcmme: hcmme.c $(LIBNVRAM) shutils.c upgrade_common.c 
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 ralink_init.o: $(LIBNVRAM)

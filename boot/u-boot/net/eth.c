@@ -420,6 +420,15 @@ void eth_try_another(int first_restart)
 	}
 }
 
+void eth_try_eth1(void)
+{
+	if(strncmp(eth_current->name,"eth0",4) == 0)
+	{
+		eth_try_another(0);//force
+	}
+
+}
+
 #ifdef CONFIG_NET_MULTI
 void eth_set_current(void)
 {

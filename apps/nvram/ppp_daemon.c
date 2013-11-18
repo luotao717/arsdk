@@ -88,6 +88,7 @@ int main(int argc, char **argv)
 {
 	char *cmd[128]={0};
 	char *wan_mode;
+	int dnsflag=1;
 	wan_mode = nvram_bufget(RT2860_NVRAM, "wanConnectionMode");
 	while(1)
 	{
@@ -113,8 +114,19 @@ int main(int argc, char **argv)
 		            	
 		           		 sprintf(cmd,"config-pppoe.sh %s %s %s 1480 1480",nvram_bufget(RT2860_NVRAM, "wan_pppoe_user"),nvram_bufget(RT2860_NVRAM, "wan_pppoe_pass"),"br1");
 					 system(cmd);
+					 				 dnsflag=1;
 		            }
 			}
 		}	
+		else
+		{
+			if(dnsflag)
+      {
+    		system("cp -f /etc/resolv.dnsmasq /tmp/resolv.conf");
+    		system("killall dnsmasq");
+    		system("dnsmasq /etc/resolv.conf &");
+    		dnsflag=0;
+      }
+		}
 	}
 }

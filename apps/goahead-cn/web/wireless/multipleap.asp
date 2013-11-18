@@ -402,7 +402,7 @@ function Load_Setting()
 	if (mssidb == "1")
 	{
 		var mssid16b = "<% get16MBSSIDBuilt(); %>";
-		var num = 4;//old value=8
+		var num = 2;//old value=8
 		if (mssid16b == "1")
 			num = 16;
 		
@@ -1109,7 +1109,7 @@ function resetForm()
       <input type=checkbox name=isolated_ssid value="2"></span>&nbsp;&nbsp;<script>dw(MM_disable)</script>
       <input type=checkbox name=wlan_ssid3_disabled value="1"></td>
   </tr>
-  <tr id="div_hssid3"> 
+  <tr id="div_hssid3" style="display:none"> 
     <td class="thead">SSID 3:</td>
     <td><input type=text name=mssid_3 size=32 maxlength=32 value="<% getCfgToHTML(1, "SSID4"); %>">
       <span style="display:none">&nbsp;&nbsp;<script>dw(MM_hidden)</script>
@@ -1118,7 +1118,7 @@ function resetForm()
       <input type=checkbox name=isolated_ssid value="3"></span>&nbsp;&nbsp;<script>dw(MM_disable)</script>
       <input type=checkbox name=wlan_ssid4_disabled value="1"></td>
   </tr>
-  <tr id="div_hssid4"> 
+  <tr id="div_hssid4" style="display:none"> 
     <td class="thead"><script>dw(MM_multiple)</script> SSID 4:</td>
     <td><input type=text name=mssid_4 size=32 maxlength=32 value="<% getCfgToHTML(1, "SSID5"); %>">
       &nbsp;&nbsp;<script>dw(MM_hidden)</script>

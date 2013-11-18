@@ -838,7 +838,7 @@ function syncWithMyPcTime()
 </tr>
 <tr id="portband">
   <td class="thead"><script>dw(VLAN_bandport)</script>:</td>
-  <td>ETH1<input type="checkbox" name="ethport3" value="ON">&nbsp;&nbsp;&nbsp;&nbsp;WIFI1<input type="checkbox" name="wifiport0" id ="wifiport0" value="ON">&nbsp;&nbsp;&nbsp;&nbsp;WIFI2<input type="checkbox" name="wifiport1" id="wifiport1" value="ON">&nbsp;&nbsp;&nbsp;&nbsp;WIFI3<input type="checkbox" name="wifiport2" id="wifiport2" value="ON">&nbsp;&nbsp;&nbsp;&nbsp;WIFI4<input type="checkbox" name="wifiport3" id="wifiport3" value="ON">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+  <td>ETH1<input type="checkbox" name="ethport3" value="ON">&nbsp;&nbsp;&nbsp;&nbsp;WIFI1<input type="checkbox" name="wifiport0" id ="wifiport0" value="ON">&nbsp;&nbsp;&nbsp;&nbsp;WIFI2<input type="checkbox" name="wifiport1" id="wifiport1" value="ON">&nbsp;&nbsp;&nbsp;&nbsp;<span style="display:none">WIFI3<input type="checkbox" name="wifiport2" id="wifiport2" value="ON">&nbsp;&nbsp;&nbsp;&nbsp;WIFI4<input type="checkbox" name="wifiport3" id="wifiport3" value="ON">&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
 </tr>
 <tr id="vlantagset">
   <td class="thead"><script>dw(VLAN_settings)</script>:</td>

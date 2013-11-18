@@ -1042,6 +1042,7 @@ int lktos_initconfig_init_wan(T_LKTOS_INITCONFIG_PLATFORM_TYPE_ platform,unsigne
 			break;
 		case AR9331_HEXICOM:
 			resultFlag=arInitConfigWan(platform);
+			system("runwlan.sh");
 			break;
 		default:
 			strcpy(errormsg,"wrong palt form!");

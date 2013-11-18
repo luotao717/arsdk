@@ -20,6 +20,7 @@
 int ramad_start(void);
 #endif
 static char *saved_pidfile;
+static int workModeFlag=0;
 
 void loadDefault(int chip_id)
 {
@@ -236,9 +237,24 @@ int main(int argc,char **argv)
 {
 	pid_t pid;
 	int fd;
+	struct stat filebuf;
+	int countTime=0;
 
-	if (strcmp(nvram_bufget(RT2860_NVRAM, "WebInit"),"1")) {
+	if (strcmp(nvram_bufget(RT2860_NVRAM, "WebInit"),"1")) 
+	{
 		loadDefault(2860);
+	}
+	if (!strcmp(nvram_bufget(RT2860_NVRAM, "workModeOk"),"1"))
+	{
+		workModeFlag=1;
+	}
+	else if (!strcmp(nvram_bufget(RT2860_NVRAM, "workModeOk"),"2"))
+	{
+		workModeFlag=2;
+	}
+	else
+	{
+		workModeFlag=0;
 	}
 	if (initGpio() != 0)
 		exit(EXIT_FAILURE);
@@ -250,8 +266,33 @@ int main(int argc,char **argv)
 	//start the management daemon (blocking)
 	ramad_start();
 #else
-	while (1) {
-		pause();
+	if(!workModeFlag)
+	{
+		for(countTime=0;countTime<10;countTime++)
+		{
+			if(stat("/var/eocflag",&filebuf)==0)
+			{
+				printf("is Eoc Mode\r\n");
+				system("ralink_init clear 2860");
+				system("ralink_init renew 2860 /sbin/RT2860_default_vlan_eoc");
+				sleep(5);
+				system("reboot");
+			}
+			sleep(5);
+		}
+		printf("is CMTS Mode\r\n");
+		system("ralink_init clear 2860");
+		system("ralink_init renew 2860 /sbin/RT2860_default_vlan_cmts");
+		sleep(5);
+		system("reboot");
+	}
+	else
+	{
+
+		while (1) 
+		{
+			pause();
+		}
 	}
 #endif
 

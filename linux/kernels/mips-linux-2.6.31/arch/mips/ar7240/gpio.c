@@ -466,7 +466,7 @@ extern void ar7240_restart(char *);
 static int reboot_system_our(void)
 {
 	//printk("\r\n timrer");
-	if(reboot_flag > 50)
+	if(reboot_flag > 70)
 	{
 		printk("\r\nreboot from kernel");
 		ar7240_restart(NULL);
@@ -513,6 +513,8 @@ static int gpio_simple_config_led_write (struct file *file, const char *buf,
 	else if (val == 88)  /* reboot timeer start */
 	{
 		reboot_flag = 0 ;
+		printk("\r\nreboot now1--70");
+		printk("\r\nreboot now111--70");
 		OS_INIT_TIMER(NULL, &os_timer_t_reboot, reboot_system_our, &os_timer_t_reboot);
 		OS_SET_TIMER(&os_timer_t_reboot, 1000);
 	} 

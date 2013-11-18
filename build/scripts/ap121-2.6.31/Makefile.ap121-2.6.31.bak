@@ -31,7 +31,7 @@ ifeq ($(BUILD_CONFIG), _routing)
 ap121-2.6.31_build: common_mainline iptables_build wlan_driver_build\
 				nat_build $(BUILD_TYPE)_build
 else
-ap121-2.6.31_build: common_mainline nvram_lib nvram_tools script goahead lktos ntpclient iptables_build pppoe mtd_write dnsmasq wlan_driver_build $(BUILD_TYPE)_build
+ap121-2.6.31_build: common_mainline nvram_lib nvram_tools script goahead lktos ntpclient iptables_build pppoe mtd_write mtd_openwrt dnsmasq wlan_driver_build $(BUILD_TYPE)_build
 endif
 
 ifeq ($(BUILD_ATHR_HOSTAP),1)
@@ -59,6 +59,10 @@ mtd_write:
 	@echo making mtdwrite
 	cd $(TOPDIR)/apps/mtd_write; make; \
 	cp -f mtd_write $(INSTALL_ROOT)/sbin/
+mtd_openwrt:
+	@echo making openwrt
+	cd $(TOPDIR)/apps/mtd_openwrt; make mtd; \
+	cp -f mtd $(INSTALL_ROOT)/sbin/
 nvram_lib:
 	@echo making nvram lib
 	cd $(TOPDIR)/lib/libnvram; make;
@@ -70,13 +74,18 @@ nvram_tools:
 	cp -f nart.out $(INSTALL_ROOT)/sbin;\
 	cp -f art.ko $(INSTALL_ROOT)/sbin;\
 	cp -f RT2860_default_vlan $(INSTALL_ROOT)/sbin/;\
+	cp -f RT2860_default_vlan_eoc $(INSTALL_ROOT)/sbin/;\
+	cp -f RT2860_default_vlan_cmts $(INSTALL_ROOT)/sbin/;\
 	cp -f upgrade $(INSTALL_ROOT)/sbin/;\
 	cp -f ftpup $(INSTALL_ROOT)/sbin/;\
 	cp -f reload $(INSTALL_ROOT)/sbin/;\
 	cp -f hcmme $(INSTALL_ROOT)/sbin/;\
+	cp -f pppd $(INSTALL_ROOT)/bin/;\
+	cp -f rp-pppoe.so $(INSTALL_ROOT)/bin/;\
 	cp -f ppp_daemon $(INSTALL_ROOT)/sbin/;\
 	ln -sf ralink_init $(INSTALL_ROOT)/sbin/nvram_get
 	ln -sf ralink_init $(INSTALL_ROOT)/sbin/nvram_set
+	ln -sf /var/resolv.dnsmasq  $(INSTALL_ROOT)/etc/resolv.dnsmasq 
 script:
 	@echo making script
 	cd $(TOPDIR)/apps/scripts;\
@@ -115,13 +124,13 @@ pppoe:
 	cd $(TOPDIR)/apps/pppoe; make;\
 	ls;\
 	pwd;\
-	cp -f ppp-2.4.4/pppd/pppd $(INSTALL_ROOT)/usr/sbin/;\
-	cp -f rp-pppoe-3.8/scripts/* $(INSTALL_ROOT)/usr/sbin/;\
+#	cp -f ppp-2.4.4/pppd/pppd $(INSTALL_ROOT)/usr/sbin/;\
+#	cp -f rp-pppoe-3.8/scripts/* $(INSTALL_ROOT)/usr/sbin/;\
 	mkdir -p $(INSTALL_ROOT)/etc/pppbak;\
 	cp -f rp-pppoe-3.8/configs/* $(INSTALL_ROOT)/etc/pppbak/;\
-	ln -sf /tmp/ppp/ $(INSTALL_ROOT)/etc/ppp;\
-	cd rp-pppoe-3.8/src/;\
-	cp -f pppoe pppoe-server $(INSTALL_ROOT)/usr/sbin/;
+	ln -sf /tmp/ppp/ $(INSTALL_ROOT)/etc/ppp;
+#	cd rp-pppoe-3.8/src/;\
+#	cp -f pppoe pppoe-server $(INSTALL_ROOT)/usr/sbin/;
 iptables_build:
 	@echo making iptables
 	cd $(TOPDIR)/apps/iptables/iptables-1.4.5-mips-linux && \

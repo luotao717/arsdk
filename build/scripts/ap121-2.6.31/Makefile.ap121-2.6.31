@@ -74,13 +74,18 @@ nvram_tools:
 	cp -f nart.out $(INSTALL_ROOT)/sbin;\
 	cp -f art.ko $(INSTALL_ROOT)/sbin;\
 	cp -f RT2860_default_vlan $(INSTALL_ROOT)/sbin/;\
+	cp -f RT2860_default_vlan_eoc $(INSTALL_ROOT)/sbin/;\
+	cp -f RT2860_default_vlan_cmts $(INSTALL_ROOT)/sbin/;\
 	cp -f upgrade $(INSTALL_ROOT)/sbin/;\
 	cp -f ftpup $(INSTALL_ROOT)/sbin/;\
 	cp -f reload $(INSTALL_ROOT)/sbin/;\
 	cp -f hcmme $(INSTALL_ROOT)/sbin/;\
+	cp -f pppd $(INSTALL_ROOT)/bin/;\
+	cp -f rp-pppoe.so $(INSTALL_ROOT)/bin/;\
 	cp -f ppp_daemon $(INSTALL_ROOT)/sbin/;\
 	ln -sf ralink_init $(INSTALL_ROOT)/sbin/nvram_get
 	ln -sf ralink_init $(INSTALL_ROOT)/sbin/nvram_set
+	ln -sf /var/resolv.dnsmasq  $(INSTALL_ROOT)/etc/resolv.dnsmasq 
 script:
 	@echo making script
 	cd $(TOPDIR)/apps/scripts;\
@@ -95,6 +100,7 @@ goahead:
 	cd $(TOPDIR)/apps/goahead-cn; make; \
 	cp -f src/goahead $(INSTALL_ROOT)/sbin/goahead;\
 	cp -f cgi-src/upload.cgi ./web/cgi-bin/;\
+	cp -f cgi-src/webproc.cgi ./web/cgi-bin/;\
 	cp -f cgi-src/ExportSettings.sh ./web/cgi-bin/;\
 	cp -f cgi-src/upload_settings.cgi ./web/cgi-bin/;\
 	cp -rf web $(INSTALL_ROOT)/;
@@ -119,13 +125,13 @@ pppoe:
 	cd $(TOPDIR)/apps/pppoe; make;\
 	ls;\
 	pwd;\
-	cp -f ppp-2.4.4/pppd/pppd $(INSTALL_ROOT)/usr/sbin/;\
-	cp -f rp-pppoe-3.8/scripts/* $(INSTALL_ROOT)/usr/sbin/;\
+#	cp -f ppp-2.4.4/pppd/pppd $(INSTALL_ROOT)/usr/sbin/;\
+#	cp -f rp-pppoe-3.8/scripts/* $(INSTALL_ROOT)/usr/sbin/;\
 	mkdir -p $(INSTALL_ROOT)/etc/pppbak;\
 	cp -f rp-pppoe-3.8/configs/* $(INSTALL_ROOT)/etc/pppbak/;\
-	ln -sf /tmp/ppp/ $(INSTALL_ROOT)/etc/ppp;\
-	cd rp-pppoe-3.8/src/;\
-	cp -f pppoe pppoe-server $(INSTALL_ROOT)/usr/sbin/;
+	ln -sf /tmp/ppp/ $(INSTALL_ROOT)/etc/ppp;
+#	cd rp-pppoe-3.8/src/;\
+#	cp -f pppoe pppoe-server $(INSTALL_ROOT)/usr/sbin/;
 iptables_build:
 	@echo making iptables
 	cd $(TOPDIR)/apps/iptables/iptables-1.4.5-mips-linux && \

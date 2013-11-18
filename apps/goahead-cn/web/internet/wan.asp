@@ -379,10 +379,10 @@ function Load_Setting()
 		}
 	}
 	
-	if (pppoe_xkjs == 1)
-		document.getElementById("pppoe_xkjs").style.display = "";
-	else
-		document.getElementById("pppoe_xkjs").style.display = "none";
+	//if (pppoe_xkjs == 1)
+		//document.getElementById("pppoe_xkjs").style.display = "";
+	//else
+		//document.getElementById("pppoe_xkjs").style.display = "none";
 
 	if (l2tpb == 1 && pptpb == 1 && dongle3gb == 1) {
 		document.wanCfg.connectionType.options[3] = new Option("L2TP","L2TP",false, false);	
@@ -838,7 +838,7 @@ function syncWithMyPcTime()
 </tr>
 <tr id="portband">
   <td class="thead"><script>dw(VLAN_bandport)</script>:</td>
-  <td>ETH1<input type="checkbox" name="ethport3" value="ON">&nbsp;&nbsp;&nbsp;&nbsp;WIFI1<input type="checkbox" name="wifiport0" id ="wifiport0" value="ON">&nbsp;&nbsp;&nbsp;&nbsp;WIFI2<input type="checkbox" name="wifiport1" id="wifiport1" value="ON">&nbsp;&nbsp;&nbsp;&nbsp;WIFI3<input type="checkbox" name="wifiport2" id="wifiport2" value="ON">&nbsp;&nbsp;&nbsp;&nbsp;WIFI4<input type="checkbox" name="wifiport3" id="wifiport3" value="ON">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+  <td>ETH1<input type="checkbox" name="ethport3" value="ON">&nbsp;&nbsp;&nbsp;&nbsp;WIFI1<input type="checkbox" name="wifiport0" id ="wifiport0" value="ON">&nbsp;&nbsp;&nbsp;&nbsp;WIFI2<input type="checkbox" name="wifiport1" id="wifiport1" value="ON">&nbsp;&nbsp;&nbsp;&nbsp;<span style="display:none">WIFI3<input type="checkbox" name="wifiport2" id="wifiport2" value="ON">&nbsp;&nbsp;&nbsp;&nbsp;WIFI4<input type="checkbox" name="wifiport3" id="wifiport3" value="ON">&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
 </tr>
 <tr id="vlantagset">
   <td class="thead"><script>dw(VLAN_settings)</script>:</td>

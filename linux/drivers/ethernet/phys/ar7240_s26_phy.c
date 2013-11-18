@@ -971,6 +971,7 @@ athrs26_phy_is_up(int ethUnit)
                     linkCount++;
                     DRV_PRINT(DRV_DEBUG_PHYCHANGE,("\nenet%d port%d up\n",
                                                ethUnit, phyUnit));
+		      printk("\nenet%d port%d up\n",ethUnit, phyUnit);
                     lastStatus->isPhyAlive = TRUE;
                 }  
             }

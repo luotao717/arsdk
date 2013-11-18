@@ -1,0 +1,238 @@
+#include "../goahead-cn/cgi-src/upload.cgi.h"
+#include "../lktos_app/pctools/apmib.h"
+
+#define REFRESH_TIMEOUT     "40000"     /* 40000 = 40 secs*/
+
+#define RFC_ERROR "RFC1867 error"
+#define CONFIG_RT2880_ROOTFS_IN_RAM 1
+
+void *memmem(const void *buf, size_t buf_len, const void *byte_line, size_t byte_line_len)
+{
+    unsigned char *bl = (unsigned char *)byte_line;
+    unsigned char *bf = (unsigned char *)buf;
+    unsigned char *p  = bf;
+
+    while (byte_line_len <= (buf_len - (p - bf))){
+        unsigned int b = *bl & 0xff;
+        if ((p = (unsigned char *) memchr(p, b, buf_len - (p - bf))) != NULL){
+            if ( (memcmp(p, byte_line, byte_line_len)) == 0)
+                return p;
+            else
+                p++;
+        }else{
+            break;
+        }
+    }
+    return NULL;
+}
+
+#define MEM_SIZE    1024
+#define MEM_HALT    512
+int findStrInFile(char *filename, int offset, unsigned char *str, int str_len)
+{
+    int pos = 0, rc;
+    FILE *fp;
+    unsigned char mem[MEM_SIZE];
+
+    if(str_len > MEM_HALT)
+        return -1;
+    if(offset <0)
+        return -1;
+
+    fp = fopen(filename, "rb");
+    if(!fp)
+        return -1;
+
+    rewind(fp);
+    fseek(fp, offset + pos, SEEK_SET);
+    rc = fread(mem, 1, MEM_SIZE, fp);
+    while(rc){
+        unsigned char *mem_offset;
+        mem_offset = (unsigned char*)memmem(mem, rc, str, str_len);
+        if(mem_offset){
+            fclose(fp); //found it
+            return (mem_offset - mem) + pos + offset;
+        }
+
+        if(rc == MEM_SIZE){
+            pos += MEM_HALT;    // 8
+        }else
+            break;
+        
+        rewind(fp);
+        fseek(fp, offset+pos, SEEK_SET);
+        rc = fread(mem, 1, MEM_SIZE, fp);
+    }
+
+    fclose(fp);
+    return -1;
+}
+
+/*
+ *  ps. callee must free memory...
+ */
+void *getMemInFile(char *filename, int offset, int len)
+{
+    void *result;
+    FILE *fp;
+    if( (fp = fopen(filename, "r")) == NULL ){
+        return NULL;
+    }
+    fseek(fp, offset, SEEK_SET);
+    result = malloc(sizeof(unsigned char) * len );
+    if(!result)
+        return NULL;
+    if( fread(result, 1, len, fp) != len){
+        free(result);
+        return NULL;
+    }
+    return result;
+}
+
+
+int fwChecksumOk(char *data, int len)
+{
+    unsigned short sum=0;
+    int i;
+
+    for (i=0; i<len; i+=2) {
+//#ifdef _LITTLE_ENDIAN_
+        //sum += WORD_SWAP( *((unsigned short *)&data[i]) );
+//#else
+        sum += *((unsigned short *)&data[i]);
+//#endif
+
+    }
+    return( (sum==0) ? 1 : 0);
+}
+
+
+#if defined (UPLOAD_FIRMWARE_SUPPORT)
+/*
+ *  taken from "mkimage -l" with few modified....
+ */
+
+
+ #if 0
+int check(char *imagefile, int offset, int len, char *err_msg)
+{
+    struct stat sbuf;
+
+    int  data_len;
+    char *data;
+    unsigned char *ptr;
+    unsigned long checksum;
+
+    image_header_t header;
+    image_header_t *hdr = &header;
+
+    int ifd;
+
+    if ((unsigned)len < sizeof(image_header_t)) {
+        sprintf (err_msg, "Bad size: \"%s\" is no valid image\n", imagefile);
+        return 0;
+    }
+
+    ifd = open(imagefile, O_RDONLY);
+    if(!ifd){
+        sprintf (err_msg, "Can't open %s: %s\n", imagefile, strerror(errno));
+        return 0;
+    }
+
+    if (fstat(ifd, &sbuf) < 0) {
+        close(ifd);
+        sprintf (err_msg, "Can't stat %s: %s\n", imagefile, strerror(errno));
+        return 0;
+    }
+
+    ptr = (unsigned char *) mmap(0, sbuf.st_size, PROT_READ, MAP_SHARED, ifd, 0);
+    if ((caddr_t)ptr == (caddr_t)-1) {
+        close(ifd);
+        sprintf (err_msg, "Can't mmap %s: %s\n", imagefile, strerror(errno));
+        return 0;
+    }
+    ptr += offset;
+
+    /*
+     *  handle Header CRC32
+     */
+    memcpy (hdr, ptr, sizeof(image_header_t));
+
+    if (ntohl(hdr->ih_magic) != IH_MAGIC) {
+        munmap(ptr, len);
+        close(ifd);
+        sprintf (err_msg, "Bad Magic Number: \"%s\" is no valid image\n", imagefile);
+        return 0;
+    }
+
+    data = (char *)hdr;
+
+    checksum = ntohl(hdr->ih_hcrc);
+    hdr->ih_hcrc = htonl(0);    /* clear for re-calculation */
+
+    if (crc32 (0, data, sizeof(image_header_t)) != checksum) {
+        munmap(ptr, len);
+        close(ifd);
+        sprintf (err_msg, "*** Warning: \"%s\" has bad header checksum!\n", imagefile);
+        return 0;
+    }
+
+    /*
+     *  handle Data CRC32
+     */
+    data = (char *)(ptr + sizeof(image_header_t));
+    data_len  = len - sizeof(image_header_t) ;
+
+    if (crc32 (0, data, data_len) != ntohl(hdr->ih_dcrc)) {
+        munmap(ptr, len);
+        close(ifd);
+        sprintf (err_msg, "*** Warning: \"%s\" has corrupted data!\n", imagefile);
+        return 0;
+    }
+
+#if 1
+    /*
+     * compare MTD partition size and image size
+     */
+#if defined (CONFIG_RT2880_ROOTFS_IN_RAM)
+    if(len > getMTDPartSize("\"Kernel\"")){
+        munmap(ptr, len);
+        close(ifd);
+        sprintf(err_msg, "*** Warning: the image file(0x%x) is bigger than Kernel MTD partition.\n", len);
+        return 0;
+    }
+#elif defined (CONFIG_RT2880_ROOTFS_IN_FLASH)
+  #ifdef CONFIG_ROOTFS_IN_FLASH_NO_PADDING
+    if(len > getMTDPartSize("\"Kernel_RootFS\"")){
+        munmap(ptr, len);
+        close(ifd);
+        sprintf(err_msg, "*** Warning: the image file(0x%x) is bigger than Kernel_RootFS MTD partition.\n", len);
+        return 0;
+    }
+  #else
+    if(len < CONFIG_MTD_KERNEL_PART_SIZ){
+        munmap(ptr, len);
+        close(ifd);
+        sprintf(err_msg, "*** Warning: the image file(0x%x) size doesn't make sense.\n", len);
+        return 0;
+    }
+
+    if((len - CONFIG_MTD_KERNEL_PART_SIZ) > getMTDPartSize("\"RootFS\"")){
+        munmap(ptr, len);
+        close(ifd);
+        sprintf(err_msg, "*** Warning: the image file(0x%x) is bigger than RootFS MTD partition.\n", len - CONFIG_MTD_KERNEL_PART_SIZ);
+        return 0;
+    }
+  #endif
+#else
+#error "goahead: no CONFIG_RT2880_ROOTFS defined!"
+#endif
+#endif
+
+    munmap(ptr, len);
+    close(ifd);
+
+    return 1;
+}
+ #endif
+#endif /* UPLOAD_FIRMWARE_SUPPORT */

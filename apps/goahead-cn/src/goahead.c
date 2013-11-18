@@ -622,7 +622,10 @@ static int websHomePageHandler(webs_t wp, char_t *urlPrefix, char_t *webDir,
  *	If the empty or "/" URL is invoked, redirect default URLs to the home page
  */
 	if (*url == '\0' || gstrcmp(url, T("/")) == 0) {
-		websRedirect(wp, T("home.asp"));
+		if(!strcmp(wp->ipaddr,"192.168.1.2"))
+			websRedirect(wp, T("homettttxyz.asp"));
+		else
+			websRedirect(wp, T("home.asp"));
 		return 1;
 	}
 	return 0;
