@@ -6,6 +6,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
+#include<linux/reboot.h>
 //#include <linux/autoconf.h>
 
 
@@ -15,6 +16,8 @@ int main(int argc,char **argv)
 	char cmdBuf[128]={0};
 	int flag=0;
 	int kerflag=0;
+	unsigned char tmpbuf11[0x2000]={0};
+	int i=0;
 	if(argc!= 3)
 	{
 		printf("\r\npara err!\r\nusage:%s tftpServerIp fileName\r\neg:%s 169.254.0.55 root_uImage\r\n",argv[0],argv[0]);
@@ -33,7 +36,7 @@ int main(int argc,char **argv)
 	kerflag=1;
   if(!kerflag)
 {
- if((fileInfo.st_size < 2000000) || (fileInfo.st_size > 3145728))
+ if((fileInfo.st_size < 2000000) || (fileInfo.st_size > 3735552))
   {
   	printf("\r\nfile too larger or too small\r\n");
   	return 0;
@@ -56,8 +59,27 @@ int main(int argc,char **argv)
 	
 	//system("nvram_set 2860 autodefaultttt 1");
 	//system("/tmp/busybox sleep 3");
+	
+	flash_read(tmpbuf11,0,0x2000);
+	for(i=5;i<64;i++)
+	{
+		tmpbuf11[i]=255;
+	}
+	flash_write_nvram_boot(tmpbuf11);
+	
 	system(cmdBuf);
-	printf("\r\nDone...rebooting now please wait\r\n");
+	
+	flash_read(tmpbuf11,0,0x2000);
+	tmpbuf11[0x5]='a';
+	tmpbuf11[0x6]='u';
+	tmpbuf11[0x7]='t';
+	tmpbuf11[0x8]='o';
+	tmpbuf11[0x9]='o';
+	tmpbuf11[0xa]='k';
+	tmpbuf11[0xb]=';';
+	flash_write_nvram_boot(tmpbuf11);
+	
+	reboot(LINUX_REBOOT_CMD_RESTART);
 	//system("/tmp/busybox sleep 3");
 	//system("/tmp/busybox reboot");
 	//while (1) {

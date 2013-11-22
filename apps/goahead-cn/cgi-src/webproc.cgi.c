@@ -320,14 +320,12 @@ char *getWorkType(void)
 		goto error;
 	}
 	pclose(fp);
-
 	if(nl = strchr(buf, '\n'))
 		*nl = '\0';
-
 	return buf;
 
 error:
-	fprintf(stderr, "warning, cant find default language type\n");
+	fprintf(stderr, "warning, cant find default work type\n");
 	return DEFAULT_WORKTYPE;
 }
 
@@ -375,19 +373,23 @@ int main (int argc, char *argv[])
 	char *stbip =getenv("stbip");
 	char *stbpath=getenv("stbpath");
 
-	if(!strcmp(getWorkType,"2"))
+	if(!strcmp(getWorkType(),"2"))
 	{
 		iscmts=1;
-		firewareName="stb_kf_cm.bin";
+		//firewareName="stb_kf_cm.bin";
+		firewareName="stb_kf.bin";
 	}
 	else
 	{
 		iscmts=0;
-		firewareName="stb_kf_eoc.bin";
+		//firewareName="stb_kf_eoc.bin";
+		firewareName="stb_kf.bin";
 	}
 	if(!strncmp(cmdtype,"stbget",7))
 	{
 		sprintf(tmp_buff,"flag_version=%s:%s:%s&iscm=%d","0100","b001","f001",iscmts);
+		printf("Server: %s\nPragma: no-cache\nContent-type: text/html\n",getenv("SERVER_SOFTWARE"));
+		printf("\n%s\n",tmp_buff);
 	}
 	else if(!strncmp(cmdtype,"stbset",7))
 	{
@@ -401,7 +403,18 @@ int main (int argc, char *argv[])
 		}
 		sprintf(cmdBuf,"upgrade %s %s",stbip,firewareName);
 		sprintf(tmp_buff,"%s","ok");
-		system(cmdBuf);
+		printf("Server: %s\nPragma: no-cache\nContent-type: text/html\n",getenv("SERVER_SOFTWARE"));
+		printf("\n%s\n",tmp_buff);
+		fflush(stdout);
+		pid=fork();
+		if(0 == pid)
+		{
+	    		//sleep(3);
+			//reboot(LINUX_REBOOT_CMD_RESTART);
+			system(cmdBuf);
+			exit(1);
+		}
+		
 	}
 	else if(!strncmp(cmdtype,"stbstatget",11))
 	{
@@ -411,8 +424,6 @@ int main (int argc, char *argv[])
 	{
 		sprintf(tmp_buff,"%s","unknow command!");
 	}
-	printf("Server: %s\nPragma: no-cache\nContent-type: text/html\n",getenv("SERVER_SOFTWARE"));
-	printf("\n%s\n",tmp_buff);
 	exit(0);
 }
 
