@@ -423,15 +423,17 @@ void main_loop (void)
 		s = getenv ("bootcmd");
 		int counter = 0;
 
+		milisecdelay(500);
+		milisecdelay(500); //waiting for button
 		if(ar7240_reset_button_status()){
 
 			// wait 0,5s
 			milisecdelay(500);
 
-			printf("Press reset button for at least:\n- %d sec. to run web failsafe mode\n- %d sec. to run U-Boot console\n- %d sec. to run U-Boot netconsole\n\n",
+			printf("Press reset button for at least:\n- %d sec. to run web mode\n- %d sec. to run auto upgrade\n- %d sec. to run auto upgrade yet\n\n",
 					CONFIG_DELAY_TO_AUTORUN_HTTPD,
-					CONFIG_DELAY_TO_AUTORUN_CONSOLE,
-					CONFIG_DELAY_TO_AUTORUN_NETCONSOLE);
+					CONFIG_DELAY_TO_AUTORUN_UPGRADE,
+					CONFIG_DELAY_TO_AUTORUN_CONSOLE);
 
 			printf("Reset button is pressed for: %2d ", counter);
 
@@ -464,17 +466,19 @@ void main_loop (void)
 			if(counter > 0){
 
 				// run web failsafe mode
-				if(counter >= CONFIG_DELAY_TO_AUTORUN_HTTPD && counter < CONFIG_DELAY_TO_AUTORUN_CONSOLE){
+				if(counter >= CONFIG_DELAY_TO_AUTORUN_HTTPD && counter < CONFIG_DELAY_TO_AUTORUN_UPGRADE){
 					printf("\n\nButton was pressed for %d sec...\nHTTP server is starting for firmware update...\n\n", counter);
 					NetLoopHttpd();
 					bootdelay = -1;
-				} else if(counter >= CONFIG_DELAY_TO_AUTORUN_CONSOLE && counter < CONFIG_DELAY_TO_AUTORUN_NETCONSOLE){
-					printf("\n\nButton was pressed for %d sec...\nStarting U-Boot console...\n\n", counter);
+				} else if(counter >= CONFIG_DELAY_TO_AUTORUN_UPGRADE && counter < CONFIG_DELAY_TO_AUTORUN_CONSOLE){
+					printf("\n\nButton was pressed for %d sec...\nStarting auto upgrade...\n\n", counter);
+					autoUpgradeTftp();
 					bootdelay = -1;
-				} else if(counter >= CONFIG_DELAY_TO_AUTORUN_NETCONSOLE) {
-					printf("\n\nButton was pressed for %d sec...\nStarting U-Boot netconsole...\n\n", counter);
+				} else if(counter >= CONFIG_DELAY_TO_AUTORUN_CONSOLE) {
+					printf("\n\nButton was pressed for %d sec...\nStarting auto upgrade yet..\n\n", counter);
+					autoUpgradeTftp();
 					bootdelay = -1;
-					run_command("run nc", 0);
+					//run_command("run nc", 0);
 				} else {
 					printf("\n\n## Error: button wasn't pressed long enough!\nContinuing normal boot...\n\n");
 				}

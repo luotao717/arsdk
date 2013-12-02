@@ -310,3 +310,6 @@ sleep 5
 if [ x$HT_BSSCoexistence=x"0" ];then
 	iwpriv ath0 disablecoext 1
 fi
+
+iwpriv ath1 ap_bridge 0
+

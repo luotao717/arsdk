@@ -59,6 +59,15 @@ function Echange(nowthis,v_num){
                 <li><a href="wireless/basic.asp" target="mainFrame"><script>dw(MM_basic_settings)</script></a></li>  
               </ul>
           </div>
+		  <div class="column"><a href="adm/settings.asp" target="mainFrame" onClick="Echange(this,1)"><script>dw(MM_management)</script></a></div>
+          <div class="xiala" id="sj" style="display:none">
+              <ul>
+			  	<li><a href="internet/dhcpcliinfo.asp" target="mainFrame"><script>dw(MM_client_list)</script></a></li>
+                <li><a href="adm/statistic.asp" target="mainFrame"><script>dw(MM_statistics)</script></a></li>
+                <li><a href="adm/settings.asp" target="mainFrame"><script>dw(MM_sysconfig)</script></a></li>
+                <li><a href="adm/password.asp" target="mainFrame"><script>dw(MM_admin_settings)</script></a></li>
+              </ul>
+		     </div>
 		  <div class="column"><a href="adm/status.asp" target="mainFrame"><script>dw(MM_sysstatus)</script></a></div>
 		   </td>
      </tr>

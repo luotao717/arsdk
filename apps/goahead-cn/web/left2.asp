@@ -51,13 +51,8 @@ function Echange(nowthis,v_num){
     </tr>
     <tr>
         <td valign="top">
-			<div class="column"><a href="internet/lan.asp" target="mainFrame" onClick="Echange(this,0)"><script>dw(MM_network)</script></a></div>
-          <div class="xiala" id="sj" style="display:none">
-              <ul>
-                <li><a href="internet/lan.asp" target="mainFrame"><script>dw(MM_lan_settings)</script></a></li>
-              </ul>
-          </div>
-         	<div class="column"><a href="wireless/stainfo.asp" target="mainFrame" onClick="Echange(this,1)"><script>dw(MM_wireless)</script></a></div>
+			
+         	<div class="column"><a href="wireless/stainfo.asp" target="mainFrame" onClick="Echange(this,0)"><script>dw(MM_wireless)</script></a></div>
 	       	<div class="xiala" id="sj" style="display:none">
               <ul>
                <li><a href="wireless/stainfo.asp" target="mainFrame"><script>dw(MM_wireless_status)</script></a></li>
@@ -70,7 +65,7 @@ function Echange(nowthis,v_num){
 				<li><a href="wireless/advanced.asp" target="mainFrame"><script>dw(MM_advanced_settings)</script></a></li>          
               </ul>
           </div>
-          <div class="column"><a href="usb/storage_user_admin.asp" target="mainFrame" onClick="Echange(this,2)"><script>dw(MM_storage)</script></a></div>
+          <div class="column"><a href="usb/storage_user_admin.asp" target="mainFrame" onClick="Echange(this,1)"><script>dw(MM_storage)</script></a></div>
           <div class="xiala" id="sj" style="display:none">
               <ul>
  				<li><a href="usb/storage_user_admin.asp" target="mainFrame"><script>dw(MM_user)</script></a></li>
@@ -82,13 +77,13 @@ function Echange(nowthis,v_num){
 				<li><a href="usb/minidlna.asp" target="mainFrame"><script>dw(MM_minidlna_settings)</script></a></li>   
               </ul>
           </div>
-          <div class="column"><a href="adm/ntp.asp" target="mainFrame" onClick="Echange(this,3)"><script>dw(MM_service_settings)</script></a></div>
+          <div class="column"><a href="adm/ntp.asp" target="mainFrame" onClick="Echange(this,2)"><script>dw(MM_service_settings)</script></a></div>
           <div class="xiala" id="sj" style="display:none">
               <ul>
 				<li><a href="adm/ntp.asp" target="mainFrame"><script>dw(MM_ntp_settings)</script></a></li>                
               </ul>
           </div>
-          <div class="column"><a href="adm/statistic.asp" target="mainFrame" onClick="Echange(this,4)"><script>dw(MM_management)</script></a></div>
+          <div class="column"><a href="adm/statistic.asp" target="mainFrame" onClick="Echange(this,3)"><script>dw(MM_management)</script></a></div>
           <div class="xiala" id="sj" style="display:none">
               <ul>
                 <li><a href="wireless/opmode.asp" target="mainFrame"><script>dw(MM_bridge_settings)</script></a></li>
@@ -97,6 +92,7 @@ function Echange(nowthis,v_num){
                 <li><a href="adm/upload_firmware.asp" target="mainFrame"><script>dw(MM_firmware)</script></a></li>
                 <li><a href="adm/settings.asp" target="mainFrame"><script>dw(MM_sysconfig)</script></a></li>
                 <li><a href="adm/password.asp" target="mainFrame"><script>dw(MM_admin_settings)</script></a></li>
+				<li><a href="internet/dhcpcliinfo.asp" target="mainFrame"><script>dw(MM_client_list)</script></a></li>
               </ul>
 		     </div>
 		     <div class="column"><a href="adm/status.asp" target="mainFrame"><script>dw(MM_sysstatus)</script></a></div>
