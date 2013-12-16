@@ -38,6 +38,49 @@ typedef enum {
     FILTER_STATUS_REJECT
 } ieee80211_privasy_filter_status;
 
+//for option by luotao
+#define SERVER_PORT			67
+#define CLIENT_PORT			68
+#define DHCP_MAGIC			0x63825363
+
+/* DHCP option codes (partial list) */
+#define DHCP_PADDING		0x00
+#define DHCP_OPTION_OVER	0x34
+#define DHCP_MESSAGE_TYPE	0x35
+#define DHCP_VENDOR			0x3c
+#define DHCP_END			0xFF
+
+
+#define OPTION_FIELD		0
+#define FILE_FIELD			1
+#define SNAME_FIELD			2
+
+/* miscellaneous defines */
+#define MAC_BCAST_ADDR		(unsigned char *) "\xff\xff\xff\xff\xff\xff"
+#define OPT_CODE			0
+#define OPT_LEN				1
+#define OPT_DATA			2
+
+struct dhcpMessage {
+	u_int8_t op;
+	u_int8_t htype;
+	u_int8_t hlen;
+	u_int8_t hops;
+	u_int32_t xid;
+	u_int16_t secs;
+	u_int16_t flags;
+	u_int32_t ciaddr;
+	u_int32_t yiaddr;
+	u_int32_t siaddr;
+	u_int32_t giaddr;
+	u_int8_t chaddr[16];
+	u_int8_t sname[64];
+	u_int8_t file[128];
+	u_int32_t cookie;
+	u_int8_t options[308]; /* 312 - cookie */
+};
+
+
 #define IS_SNAP(_llc) ((_llc)->llc_dsap == LLC_SNAP_LSAP && \
                         (_llc)->llc_ssap == LLC_SNAP_LSAP && \
                         (_llc)->llc_control == LLC_UI)
@@ -939,6 +982,8 @@ ieee80211_input(struct ieee80211_node *ni, wbuf_t wbuf, struct ieee80211_rx_stat
     u_int16_t rxseq;
     u_int8_t *bssid;
 
+
+    IEEE80211_DPRINTF(vap, IEEE80211_MSG_INPUT, "tttttvap in not active, %s \n", "discard the frame");
     KASSERT((wbuf_get_pktlen(wbuf) >= ic->ic_minframesize),
             ("frame length too short: %u", wbuf_get_pktlen(wbuf)));
 
@@ -1432,6 +1477,62 @@ done:
     return wbuf;
 }
 
+/* get an option with bounds checking (warning, not aligned). */
+unsigned char *dhcp_get_option(struct dhcpMessage *packet, int code)
+{
+	int i, length;
+	unsigned char *optionptr=NULL;
+	int over = 0, done = 0, curr = OPTION_FIELD;
+	
+	optionptr = packet->options;
+	i = 0;
+	length = 308;
+	while (!done) {
+		if (i >= length) {
+			printk("bogus packet, option fields too long.\n");
+			return NULL;
+		}
+		if (optionptr[i + OPT_CODE] == code) {
+			if (i + 1 + optionptr[i + OPT_LEN] >= length) {
+				printk("bogus packet, option fields too long.\n");
+				return NULL;
+			}
+			return optionptr + i + 2;
+		}			
+		switch (optionptr[i + OPT_CODE]) {
+		case DHCP_PADDING:
+			i++;
+			break;
+		case DHCP_OPTION_OVER:
+			if (i + 1 + optionptr[i + OPT_LEN] >= length) {
+				printk("bogus packet, option fields too long.\n");
+				return NULL;
+			}
+			over = optionptr[i + 3];
+			i += optionptr[OPT_LEN] + 2;
+			break;
+		case DHCP_END:
+			if (curr == OPTION_FIELD && over & FILE_FIELD) {
+				optionptr = packet->file;
+				i = 0;
+				length = 128;
+				curr = FILE_FIELD;
+			} else if (curr == FILE_FIELD && over & SNAME_FIELD) {
+				optionptr = packet->sname;
+				i = 0;
+				length = 64;
+				curr = SNAME_FIELD;
+			} else done = 1;
+			break;
+		default:
+			i += optionptr[OPT_LEN + i] + 2;
+		}
+	}
+	return NULL;
+}
+
+
+
 /* 
  * delivers the data to the OS .
  *  will deliver standard 802.11 frames (with qos control removed)
@@ -1444,6 +1545,13 @@ static void
 ieee80211_deliver_data(struct ieee80211vap *vap, wbuf_t wbuf, struct ieee80211_node *ni, struct ieee80211_rx_status *rs,
                        u_int32_t hdrspace, int is_mcast, u_int8_t subtype) 
 {
+    struct ether_header *myeh;
+    unsigned char *dhcpopt = NULL;
+    int udplen,newudplen,newiplen;
+    int replace_len;
+    int opt_len;
+    int match_len;
+    
     if (!IEEE80211_VAP_IS_DELIVER_80211_ENABLED(vap)) {
         /*
          * if the OS is interested in ethernet frame,
@@ -1458,7 +1566,113 @@ ieee80211_deliver_data(struct ieee80211vap *vap, wbuf_t wbuf, struct ieee80211_n
                           "failed");
             return;
         }
+        myeh = (struct ether_header *)(wbuf_header(wbuf));
+        //printk("recieve packet vap is=%d---src=%02x-%02x-%02x-%02x-%02x-%02x,dst=%02x-%02x-%02x-%02x-%02x-%02x----type=%04x\r\n",vap->iv_unit,myeh->ether_shost[0],myeh->ether_shost[1],myeh->ether_shost[2],myeh->ether_shost[3],myeh->ether_shost[4],myeh->ether_shost[5],myeh->ether_dhost[0],myeh->ether_dhost[1],myeh->ether_dhost[2],myeh->ether_dhost[3],myeh->ether_dhost[4],myeh->ether_dhost[5],myeh->ether_type);
+        if(1 == vap->iv_unit && 0x0800 == myeh->ether_type)
+        {
+            struct iphdr* myiph = (struct iphdr *)(wbuf_header(wbuf)+14);
+            //printk("recieve ip packet pro=%02x,src=%0x,dst=%0x\n",myiph->protocol,myiph->saddr,myiph->daddr);
+            if(myiph->protocol == IPPROTO_UDP) // UDP
+            {
+			struct udphdr *myudph = (struct udphdr *)((unsigned int)myiph + (myiph->ihl << 2));
+			//printk("reccieve udp packet %s:%d udph->source=%x, udph->dest=%x\n", __FUNCTION__, __LINE__, __constant_htons(myudph->source), __constant_htons(myudph->dest));
 
+			if((myudph->source == __constant_htons(CLIENT_PORT)) && (myudph->dest == __constant_htons(SERVER_PORT))) // DHCP request
+			{
+                        struct dhcpMessage *dhcph = (struct dhcpMessage *)((unsigned int)myudph + sizeof(struct udphdr));
+                        //printk("recieve dhcp packet\n");
+                      
+                        if(dhcph->cookie == __constant_htonl(DHCP_MAGIC)) // match magic word
+                        {
+                            //printk("magic ok\n");
+                           
+                            
+                            opt_len = 11;
+                            match_len=0;
+                            replace_len = opt_len + 2;
+
+                            if((dhcpopt=dhcp_get_option(dhcph, DHCP_MESSAGE_TYPE)) != NULL)
+                            {
+					if (*dhcpopt == 1 || *dhcpopt ==3) // DHCP Request by luotao modify
+					{
+                                    //printk("recieve discover or request ==%d\n",*dhcpopt);
+                                    if((dhcpopt=dhcp_get_option(dhcph, DHCP_VENDOR)) != NULL)
+                                    {
+                                    	unsigned char str[33]={0};
+                                    	dhcpopt -= 2;
+                                    	match_len = dhcpopt[1] + 2;
+                                    	strncpy(str, dhcpopt, dhcpopt[1]);
+                                    	//printk("DHCP: found opt-60 [%d]%s, replace it\n", dhcpopt[1], str);
+                                    }
+                                    udplen = wbuf_get_pktlen(wbuf) - myiph->ihl*4-14;
+                                    newudplen = udplen - match_len +replace_len;
+                                    newiplen = myiph->ihl*4 + newudplen;
+                                    //printk("udplen=%d,ii=%d,skblen=%d,newudplen=%d,matchlen=%d,relalen=%d,iplen=%d\n",udplen,wbuf_get_pktlen(wbuf),wbuf->len,newudplen,match_len,replace_len,newiplen);
+                                    if ((wbuf->len-14 != newiplen) && (newiplen>wbuf->len-14+skb_tailroom(wbuf)))
+                                    {
+                                        struct sk_buff *newskb;
+                                        //printk("DBG: skb_copy_expand(%p, %d, %d, %d)\n", wbuf, skb_headroom(wbuf), ((opt_len+2)-skb_tailroom(wbuf)), GFP_ATOMIC);
+                                        newskb = skb_copy_expand(wbuf, skb_headroom(wbuf), (newiplen-wbuf->len-14), GFP_ATOMIC);
+                                        if (!newskb)
+                                        {
+                                            //return 0;
+                                            printk("get skb buff for dhcp option error\n");
+                                        }
+                                        else
+                                        {
+                                            kfree_skb(wbuf);
+                                            wbuf = newskb;
+                                        }
+                                    }
+                                   /* skb may be copied !! */
+                                    myiph = (struct iphdr *)(wbuf->data+14);
+                                    myudph = (struct udphdr *)((unsigned int)myiph + (myiph->ihl << 2));
+                                    dhcph = (struct dhcpMessage *)((unsigned int)myudph + sizeof(struct udphdr));
+
+                                    // add dhcp option 60 at tail
+                                    if (match_len == 0)
+                                    {
+                                    	dhcpopt = dhcp_get_option(dhcph, DHCP_END);
+                                    	dhcpopt -= 2;
+                                    	//printk("DHCP: add opt-60 at tail\n");
+                                    }
+
+                                    //printk("DBG: memmove(%p, %p, %d)\n", dhcpopt+replace_len, dhcpopt+match_len, myudph->len-((int)(dhcpopt+match_len)-(int)myudph));
+                                    //printk("value=%02x-%02x-%02x-%02x----%02x-%02x\n",*(dhcpopt+replace_len),*(dhcpopt+replace_len+1),*(dhcpopt+match_len),*(dhcpopt+match_len+1),*dhcpopt,*(dhcpopt+1));
+                                    memmove(dhcpopt+replace_len, dhcpopt+match_len, myudph->len-((int)(dhcpopt+match_len)-(int)myudph));
+
+                                    /* update skb info */
+                                    if (newiplen > (wbuf->len -14) )
+                                    	skb_put(wbuf, (newiplen- (wbuf->len-14)));
+                                    else
+                                    	skb_trim(wbuf, newiplen);
+
+                                    // update dhcp options
+                                    dhcpopt[0] = 60;
+                                    dhcpopt[1] = opt_len;
+                                    memcpy(&dhcpopt[2], "jscnwxssid2ttt", opt_len);
+
+                                    // update UDP header
+                                   myudph->len = htons(wbuf->len - myiph->ihl*4 - 14);
+                                   myiph->tot_len = htons(newiplen);
+
+                                    /* fix udp checksum if udp checksum was previously calculated */
+                                    if (myudph->check != 0)
+                                    {
+                                    	myudph->check = 0;
+                                    	myudph->check = csum_tcpudp_magic(myiph->saddr, myiph->daddr,newudplen, IPPROTO_UDP,csum_partial((char *)myudph,newudplen, 0));
+                                    }
+                                    ip_send_check(myiph);
+					}
+                            }
+
+                        }
+
+			}
+				
+            }
+
+        }
         /*
          * If IQUE is not enabled, the ops table is NULL and the following
          * steps will be skipped;
@@ -1569,7 +1783,6 @@ ieee80211_iter_input_all(void *arg, struct ieee80211vap *vap, bool is_last_vap)
     if (!ieee80211_vap_active_is_set(vap) && !vap->iv_input_mgmt_filter ) {
         return;
     }
-
     if (!is_last_vap) {
         wbuf1 = wbuf_clone(vap->iv_ic->ic_osdev, params->wbuf);
         if (wbuf1 == NULL) {
@@ -1596,6 +1809,7 @@ ieee80211_input_all(struct ieee80211com *ic,
     params.rs = rs;
     params.type = -1;
 
+    //printk("\r\nrevice a packet!!");
     ieee80211_iterate_vap_list_internal(ic,ieee80211_iter_input_all,(void *)&params,num_vaps);
     if (params.wbuf != NULL)        /* no vaps, reclaim wbuf */
         wbuf_free(params.wbuf);

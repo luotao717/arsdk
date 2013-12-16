@@ -223,6 +223,10 @@ fi
 # 设置SSID是否隐藏
 iwpriv ath1 hide_ssid $HideSSID1
 
+# 设置频段信道
+iwconfig ath1 channel $Channel
+
+
 WPAn=0;
 if [ x$AuthMode2 = x"WPAPSKWPA2PSK" ]; then
 WPAn=3;

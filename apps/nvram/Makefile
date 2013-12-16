@@ -4,7 +4,7 @@ LDFLAGS += -L../../lib/libnvram
 #LIBNVRAM = $(NVDIR)/libnvram-0.9.28.so
 LIBNVRAM = $(NVDIR)/libnvram.a
 LDLIBS += $(NVDIR)/libnvram.a
-EXEC = nvram_daemon ralink_init upgrade ftpup reload ppp_daemon hcmme
+EXEC = nvram_daemon ralink_init upgrade ftpup reload ppp_daemon hcmme autoyuenan
 #CONF_H	= $(ROOTDIR)/$(LINUXDIR)/include/linux/autoconf.h
 #UCONF_H	= $(ROOTDIR)/config/autoconf.h
 
@@ -22,6 +22,9 @@ ralink_init: ralink_init.o
 upgrade: upgrade.o
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
+autoyuenan:	autoyuenan.o
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+	
 ftpup: ftpup.o
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
@@ -38,6 +41,7 @@ ralink_init.o: $(LIBNVRAM)
 
 nvram_daemon.o: $(LIBNVRAM)
 upgrade.o: $(LIBNVRAM)
+autoyuenan.o: $(LIBNVRAM)
 ftpup.o: $(LIBNVRAM)
 reload.o: $(LIBNVRAM)
 ppp_daemon.o: $(LIBNVRAM)
