@@ -115,6 +115,7 @@ function Echange(nowthis,v_num){
                 <li><a href="wireless/opmode.asp" target="mainFrame"><script>dw(MM_bridge_settings)</script></a></li>
 				-->
                 <li><a href="adm/statistic.asp" target="mainFrame"><script>dw(MM_statistics)</script></a></li>
+				<li><a href="internet/dhcpcliinfo.asp" target="mainFrame"><script>dw(MM_client_list)</script></a></li>
 				<!--
                 <li><a href="adm/syslog.asp" target="mainFrame"><script>dw(MM_syslog)</script></a></li>
 				-->

@@ -23,6 +23,7 @@ int main(int argc,char **argv)
 		printf("\r\npara err!\r\nusage:%s tftpServerIp fileName\r\neg:%s 169.254.0.55 root_uImage\r\n",argv[0],argv[0]);
 		return 0;
 	}
+      system("nvram_set 2860 upgradeStatus 0");
 	sprintf(cmdBuf,"tftp -g -l /var/userFire -r %s %s",argv[2],argv[1]);
 	system(cmdBuf);
 	
@@ -30,6 +31,7 @@ int main(int argc,char **argv)
   if( flag == -1)
   {
   	printf("\r\nupgrade error!no file");
+      system("nvram_set 2860 upgradeStatus 2");
   	return 0;
   }
   if(!strcmp(argv[2],"kerneltao"))
@@ -39,11 +41,13 @@ int main(int argc,char **argv)
  if((fileInfo.st_size < 2000000) || (fileInfo.st_size > 3735552))
   {
   	printf("\r\nfile too larger or too small\r\n");
+      system("nvram_set 2860 upgradeStatus 2");
   	return 0;
  }
 }
  
   printf("\r\nsize=%ld\n", fileInfo.st_size);
+  system("nvram_set 2860 upgradeStatus 1");
   //system("echo 1 > /tmp/rebootFlag");
   if(kerflag)
   {

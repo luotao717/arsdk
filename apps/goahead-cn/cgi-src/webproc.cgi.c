@@ -329,6 +329,35 @@ error:
 	return DEFAULT_WORKTYPE;
 }
 
+#define DEFAULT_UPGRADESTATUS "10"
+char *getUpgradeStatus(void)
+{
+	static char buf[64];
+	char *nl;
+	FILE *fp;
+
+	memset(buf, 0, sizeof(buf));
+	if( (fp = popen("nvram_get 2860 upgradeStatus", "r")) == NULL )
+		goto error;
+
+	if(!fgets(buf, sizeof(buf), fp)){
+		pclose(fp);
+		goto error;
+	}
+
+	if(!strlen(buf)){
+		pclose(fp);
+		goto error;
+	}
+	pclose(fp);
+	if(nl = strchr(buf, '\n'))
+		*nl = '\0';
+	return buf;
+
+error:
+	fprintf(stderr, "warning, cant find default upgrade status\n");
+	return DEFAULT_UPGRADESTATUS;
+}
 
 void javascriptUpdate(int success)
 {
@@ -387,7 +416,7 @@ int main (int argc, char *argv[])
 	}
 	if(!strncmp(cmdtype,"stbget",7))
 	{
-		sprintf(tmp_buff,"flag_version=%s:%s:%s&iscm=%d","0100","b001","f001",iscmts);
+		sprintf(tmp_buff,"flag_version=%s:%s:%s&iscm=%d","0101","b001","f001",iscmts);
 		printf("Server: %s\nPragma: no-cache\nContent-type: text/html\n",getenv("SERVER_SOFTWARE"));
 		printf("\n%s\n",tmp_buff);
 	}
@@ -418,7 +447,9 @@ int main (int argc, char *argv[])
 	}
 	else if(!strncmp(cmdtype,"stbstatget",11))
 	{
-		sprintf(tmp_buff,"%d",10);
+		sprintf(tmp_buff,"%s",getUpgradeStatus());
+             printf("Server: %s\nPragma: no-cache\nContent-type: text/html\n",getenv("SERVER_SOFTWARE"));
+		printf("\n%s\n",tmp_buff);
 	}
 	else
 	{

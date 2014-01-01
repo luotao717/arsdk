@@ -14,6 +14,7 @@
 #define Version				"CDRKING_WR-NET-022-ZI_V1.0.0"
 #else
 #define Version				"v3.0.3-hc-wuxi"
+#define Version				"0101"
 #endif
 
 #define LED_ON				1
