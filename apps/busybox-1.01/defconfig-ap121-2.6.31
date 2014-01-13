@@ -283,9 +283,9 @@ CONFIG_STRINGS=y
 # CONFIG_TIME is not set
 # CONFIG_WATCHDOG is not set
 CONFIG_FACTORYRESET=y
-CONFIG_ETHREG=y
-CONFIG_ETHDEBUG=y
+# CONFIG_ETHREG is not set
 CONFIG_MDMM=y
+# CONFIG_ETHDEBUG is not set
 #
 # Linux Module Utilities
 #

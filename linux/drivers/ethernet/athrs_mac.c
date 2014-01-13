@@ -35,6 +35,7 @@
 #include <net/sch_generic.h>
 #include <linux/if_pppox.h>
 #include <linux/ip.h>
+#include <linux/proc_fs.h>// by luotao for proc
 #include <net/checksum.h>
 
 #include "osdep.h"
@@ -81,6 +82,309 @@ MODULE_PARM_DESC(fifo_5, "fifo cfg 5 settings");
 int flowmac_on = 0x0;
 module_param(flowmac_on, int, 0x0);
 MODULE_PARM_DESC(flowmac_on, "lan wlan flowcontrol on");
+
+struct proc_dir_entry *ar9331_vlan_entry;
+
+#define BITM(_count) 	(BIT(_count) - 1)
+#define BITS(_shift, _count)	(BITM(_count) << _shift)
+
+/*macro for register*/
+#define S26_VLAN_TBL_FUN0_REG	0x0040
+
+#define S26_VLAN_TBL_FUN0_VID	BITS(16,12)
+#define S26_VLAN_TBL_FUN0_VID_S	16
+
+#define S26_VLAN_TBL_FUN0_VT_BUSY 	BIT(3)	
+#define S26_VLAN_TBL_FUN0_VT_FUNC 	BITS(0,3)	
+#define S26_VT_FUNC_NO_OPER		0
+#define S26_VT_FUNC_FLUSH		1
+#define S26_VT_FUNC_LOAD		2
+#define S26_VT_FUNC_PURGE		3
+#define S26_VT_FUNC_RM_PORT		4
+#define S26_VT_FUNC_GET_NXT		5
+
+#define S26_VLAN_TBL_FUN1_REG	0x0044
+
+#define S26_VLAN_TBL_FUN1_VID_MEM	BITS(0,10)
+#define S26_VLAN_TBL_FUN1_VT_VALID	BIT(11)
+
+/*vlan table operation*/
+int s26_vlan_tbl_op(u32 op, u32 value)
+{
+	u32 w_value = 0;
+	u32 w_op = 0;
+	/*waiting the table is idle*/	
+	
+	/*operator the table*/
+	if ( (op & S26_VLAN_TBL_FUN0_VT_FUNC) == S26_VT_FUNC_LOAD ) {
+		/*field the mem*/
+		w_value = ( value & S26_VLAN_TBL_FUN1_VID_MEM) | 
+				S26_VLAN_TBL_FUN1_VT_VALID;	
+		athrs26_reg_write(S26_VLAN_TBL_FUN1_REG, w_value);
+	}
+
+	/*write the operator*/
+	w_op = op | S26_VLAN_TBL_FUN0_VT_BUSY;
+	athrs26_reg_write(S26_VLAN_TBL_FUN0_REG, w_op);
+	
+	return 0;
+}
+
+/* add the vlan table entry*/
+int s26_vlan_tbl_add(u32 vid, u32 portmem)
+{
+	u32 op = S26_VT_FUNC_LOAD | 
+		((vid << S26_VLAN_TBL_FUN0_VID_S) & S26_VLAN_TBL_FUN0_VID);
+
+	return s26_vlan_tbl_op(op, portmem);	
+}
+/* delete the vlan table entry*/
+int s26_vlan_tbl_del(u32 vid )
+{
+	u32 op = S26_VT_FUNC_PURGE  | 
+		((vid << S26_VLAN_TBL_FUN0_VID_S) & S26_VLAN_TBL_FUN0_VID);
+
+	//return s26_vlan_tbl_op(op, portmem);	
+        return s26_vlan_tbl_op(op, 0);	
+}
+/*clear the all entries of vlan table */
+int s26_vlan_tbl_flush(void)
+{
+	u32 op = S26_VT_FUNC_FLUSH ;
+
+	return s26_vlan_tbl_op(op, 0);	
+}
+
+#define S26_PORT_REG_BASE 	0x100	
+#define S26_PORT_REG_SHIFT	0x100
+#define S26_PORT_REG(N)		(S26_PORT_REG_BASE + (S26_PORT_REG_SHIFT * (N)) )
+
+#define S26_PORT_CONTROL_REG(N)	( S26_PORT_REG(N) + 0x04)
+#define S26_PORT_VLAN_REG(N)	( S26_PORT_REG(N) + 0x08)
+
+#define S26_PV_PVID	BITS(0,12)
+/*port 0 - port 4*/
+int s26_port_pvid(u32 port ,u32 pvid)
+{
+	u32 addr = 0;
+	u32 value = 0;
+	
+	addr  = S26_PORT_VLAN_REG(port);
+	value = athrs26_reg_read(addr);
+	value &= ~(S26_PV_PVID);
+	value |= pvid & (S26_PV_PVID);
+
+	athrs26_reg_write(addr, value);
+      return 1;
+}
+
+#define S26_EG_VLAN_MODE	BITS(8,2)
+#define S26_EG_VLAN_MODE_S	8	
+/* global set the port out put the vlan tag or not
+ * is_tag:
+ * 	0 unmodify
+ * 	1 untag
+ * 	2 tag
+ * 	3 double tag
+ * */
+int s26_port_vlan_tag(u32 port , u8 is_tag)
+{
+	u32 addr = 0;
+	u32 value = 0;
+	
+	addr  = S26_PORT_CONTROL_REG(port);
+	value = athrs26_reg_read(addr);
+	value &= ~(S26_EG_VLAN_MODE);
+	value |= (is_tag<< S26_EG_VLAN_MODE_S) & (S26_EG_VLAN_MODE);
+
+      athrs26_reg_write(addr, value);
+	return 1;
+}
+
+#define S26_PORT_QVLAN		BITS(30,2)
+#define S26_PORT_QVLAN_S 	30
+int s26_port_vlan_init(void)
+{
+	/*802.1Q*/
+	int port;
+	u32 addr = 0;
+	u32 value = 0;
+	
+	for ( port = 0 ; port <=4 ; port++ ){
+
+		addr  = S26_PORT_VLAN_REG(port);
+		value = athrs26_reg_read(addr);
+		value &= ~(S26_PORT_QVLAN);
+		value |= ((u32)0x3 << S26_PORT_QVLAN_S) & (S26_PORT_QVLAN); 
+
+		athrs26_reg_write(addr, value);
+	}
+	return 0;
+}
+
+
+static int ar9331_vlan_read( char *page, char **start, off_t off, int count, int *eof, void *data );
+static int ar9331_vlan_write( struct file *filp, const char *buff,unsigned long len, void *data );
+int ar9331_vlan_cmd_result_flag=-1;
+
+enum ParseState1 {
+	PS_WHITESPACE,
+	PS_TOKEN,
+	PS_STRING,
+	PS_ESCAPE
+};
+
+enum ParseState1 stackedState1;
+
+void parseargs1(char *argstr, int *argc_p, char **argv, char** resid)
+{
+	int argc = 0;
+	char c;
+	enum ParseState1 lastState = PS_WHITESPACE;
+
+	/* tokenize the argstr */
+	while ((c = *argstr) != 0) 
+		{
+		enum ParseState1 newState;
+
+		if (c == ';' && lastState != PS_STRING && lastState != PS_ESCAPE)
+			break;
+
+		if (lastState == PS_ESCAPE) 
+			{
+			newState = stackedState1;
+			} 
+		else if (lastState == PS_STRING) 
+			{
+			if (c == '"') 
+				{
+				newState = PS_WHITESPACE;
+				*argstr = 0;
+				} 
+			else 
+				{
+				newState = PS_STRING;
+				}
+			} 
+		else if ((c == ' ') || (c == '\t')) 
+			{
+			/* whitespace character */
+			*argstr = 0;
+			newState = PS_WHITESPACE;
+			} 
+		else if (c == '"') 
+			{
+			newState = PS_STRING;
+			*argstr++ = 0;
+			argv[argc++] = argstr;
+			} 
+		else if (c == '\\') 
+			{
+			stackedState1 = lastState;
+			newState = PS_ESCAPE;
+			} 
+		else 
+			{
+			/* token */
+			if (lastState == PS_WHITESPACE) 
+				{
+				argv[argc++] = argstr;
+				}
+			newState = PS_TOKEN;
+			}
+
+		lastState = newState;
+		argstr++;
+		}
+
+
+	argv[argc] = NULL;
+	if (argc_p != NULL)
+		*argc_p = argc;
+
+	if (*argstr == ';') 
+		{
+		*argstr++ = '\0';
+		}
+	*resid = argstr;
+}
+static int ar9331_vlan_read( char *page, char **start, off_t off, int count, int *eof, void *data )
+{
+	int len;
+	len = sprintf(page, "%d\n", ar9331_vlan_cmd_result_flag);
+
+
+	if (len <= off+count) *eof = 1;
+	*start = page + off;
+	len -= off;
+	if (len>count)
+		len = count;
+	if (len<0)
+	  	len = 0;
+
+	return len;
+}
+
+static int ar9331_vlan_write( struct file *filp, const char *buff,unsigned long len, void *data )
+{
+	char buf[300]={0};
+	int argc;
+	unsigned long i=0;
+	char *argv[128];
+	char *resid;
+	int resultFlag=-1;
+	memset(argv,0,sizeof(argv));
+	i=len;
+	if (i>300)
+		i=300;
+	if (buff && !copy_from_user(buf, buff,i))
+	{
+		buf[299]=0;
+		
+		parseargs1(buf, &argc, argv, &resid);
+		#if 0//for test	
+		printk("the count is %d--len=%ld---i=%ld\n\r",argc,len,i);
+		printk("buffer=%s\n\r",buf);
+		while (argc--)
+		{
+			printk("argv[%d]=%s\n\r",argc+1,argv[argc]);
+		}
+		#endif
+            //printk("fdsfdsfsd--%s--%d\n",argv[0],argc);
+            #if 1
+		if (!strncmp(argv[0],"initwuxicm",10))
+		{
+                    printk("start config\n");
+                    s26_port_vlan_init();
+                    s26_port_vlan_tag(0, 2);
+                    s26_port_pvid(0,1);
+                    //s26_port_vlan_tag(3, 1);
+                    //s26_port_pvid(3,8);
+                    s26_port_vlan_tag(3, 1);
+                    s26_port_pvid(3,1);
+                    //s26_port_vlan_tag(1, 1);
+                    //s26_port_pvid(1,1);
+                    s26_port_vlan_tag(1, 1);
+                    s26_port_pvid(1,8);
+                    s26_port_vlan_tag(2, 1);
+                    s26_port_pvid(2,1);
+                    s26_port_vlan_tag(4, 1);
+                    s26_port_pvid(4,1);
+                    //s26_vlan_tbl_add(1, 0x17);
+                    //s26_vlan_tbl_add(8, 0x09);
+
+                    //for phy0(port1) is wan
+                     s26_vlan_tbl_add(1, 0x1D);
+                    s26_vlan_tbl_add(8, 0x03);
+        	       resultFlag=0;
+                    ar9331_vlan_cmd_result_flag=resultFlag;
+        		return len;
+		}
+            #endif
+	}
+	return len;
+	//return 1;
+}
 
 static char *mii_str[2][4] = {
     {"GMii", "Mii", "RGMii", "RMii"},
@@ -292,7 +596,23 @@ athr_gmac_open(struct net_device *dev)
         if (mac->mac_unit == 0)
             athr_gmac_force_check_link();
     }
-
+    //athrs26_reg_write(0x104,(athrs26_reg_read(0x104) | 1<< 11));
+    // move to proc
+    #if 0
+    s26_port_vlan_init();
+    s26_port_vlan_tag(0, 2);
+    s26_port_pvid(0,1);
+    s26_port_vlan_tag(3, 1);
+    s26_port_pvid(3,8);
+    s26_port_vlan_tag(1, 1);
+    s26_port_pvid(1,1);
+    s26_port_vlan_tag(2, 1);
+    s26_port_pvid(2,1);
+    s26_port_vlan_tag(4, 1);
+    s26_port_pvid(4,1);
+    s26_vlan_tbl_add(1, 0x17);
+    s26_vlan_tbl_add(8, 0x09);
+    #endif
     return 0;
 
 rx_failed:
@@ -1304,10 +1624,27 @@ athr_gmac_hard_start(struct sk_buff *skb, struct net_device *dev)
     int                 ac = 0;
 
     assert(mac->mac_ifup);
-
+    #if 0 //by luotao for athros header
+   printk("\nsend0 %02x-%02x-%02x-%02x-%02x\n",*((skb->data)+0),*((skb->data)+1),*((skb->data)+2),*((skb->data)+3),*((skb->data)+4),*((skb->data)+5));
+   if (skb_cow_head(skb, 2) < 0) 
+   {
+		kfree_skb(skb);
+		return NULL;
+  }
+   else
+   {
+        skb_push(skb, 2);
+        //memmove(skb->data+2, skb->data + 2, 2 * 6);
+        skb->mac_header -= 2;
+        *((skb->data)+0) = 0x34;
+        *((skb->data)+1) = 0x40;
+   }
+   printk("send1 %02x-%02x-%02x-%02x-%02x\n",*((skb->data)+0),*((skb->data)+1),*((skb->data)+2),*((skb->data)+3),*((skb->data)+4),*((skb->data)+5));
+   #endif
     IF_ATHR_SKB_LEN_CHECK()
     {
         printk(MODULE_NAME ": bad skb, len %d\n", skb->len);
+        printk("\n packett error\n");
         goto dropit;
     }
 
@@ -1696,21 +2033,32 @@ process_pkts:
          *is not synced with non cached region putting temporary fix for 
          *invalidating cache contents Need to find the root cause.
          */
-        
+      //printk("\npacket0 %02x-%02x-%02x-%02x-%02x\n",*((skb->data)+0),*((skb->data)+1),*((skb->data)+2),*((skb->data)+3),*((skb->data)+4),*((skb->data)+5));
+         //skb_pull(skb, 2);
 	athr_mac_cache_inv((unsigned long)(skb->data), skb->len);
+             //printk("packet1 %02x-%02x-%02x-%02x-%02x\n",*((skb->data)+0),*((skb->data)+1),*((skb->data)+2),*((skb->data)+3),*((skb->data)+4),*((skb->data)+5));
+
 
         athr_ssdk_process_arp_header(mac, skb);
+                 //printk("packet2 %02x-%02x-%02x-%02x-%02x\n",*((skb->data)+0),*((skb->data)+1),*((skb->data)+2),*((skb->data)+3),*((skb->data)+4),*((skb->data)+5));
+
 
         athr_gmac_rx_qos(mac,skb);
+                 //printk("packet3 %02x-%02x-%02x-%02x-%02x\n",*((skb->data)+0),*((skb->data)+1),*((skb->data)+2),*((skb->data)+3),*((skb->data)+4),*((skb->data)+5));
+
 
         athr_gmac_vlan_igmp(mac,skb);
+                 //printk("packet4 %02x-%02x-%02x-%02x-%02x\n",*((skb->data)+0),*((skb->data)+1),*((skb->data)+2),*((skb->data)+3),*((skb->data)+4),*((skb->data)+5));
+
 
         mac->net_rx_packets ++;
         mac->net_rx_bytes += skb->len;
         /*
          * also pulls the ether header
          */
+         //printk("packet5 %02x-%02x-%02x-%02x-%02x\n",*((skb->data)+0),*((skb->data)+1),*((skb->data)+2),*((skb->data)+3),*((skb->data)+4),*((skb->data)+5));
         skb->protocol       = eth_type_trans(skb, dev);
+         //printk("packet6 %02x-%02x-%02x-%02x-%02x\n",*((skb->data)+0),*((skb->data)+1),*((skb->data)+2),*((skb->data)+3),*((skb->data)+4),*((skb->data)+5));
         skb->dev            = dev;
         bp->buf_pkt         = NULL;
         dev->last_rx        = jiffies;
@@ -2528,6 +2876,12 @@ athr_gmac_init(void)
 
         athr_register_hwaccels(mac);
 
+        //printk("\n mtu eth=%d\n",dev->mtu);
+         if (mac->mac_unit == 1)
+         {
+            dev->mtu=(dev->mtu)-4;
+         }
+
         if (register_netdev(dev))
         {
             printk(MODULE_NAME ": register netdev failed\n");
@@ -2611,6 +2965,14 @@ athr_gmac_init(void)
                                          (void *)&mac->push_dur);
     }
 
+    //register the proc for switch by lt
+    ar9331_vlan_entry=create_proc_entry("ar9331_vlan_entry",0,NULL);
+    if (ar9331_vlan_entry)
+    {
+        ar9331_vlan_entry->read_proc=ar9331_vlan_read;
+        ar9331_vlan_entry->write_proc=ar9331_vlan_write;
+    }
+    
    return 0;
 
 failed:

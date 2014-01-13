@@ -16,6 +16,7 @@ export TOOLCHAINBINDIR=$(TOOLCHAINDIR)/$(TOOLARCH)
 export BUILD_DIR=$(TOPDIR)/build
 export USBDIR=${KERNELPATH}/drivers/usb
 export USBMODPATH=$(INSTALL_ROOT)/lib/modules/$(KERNELVER)/usb
+export SSDK_DIR=$(ENETDIR)/s17_ssdk
 
 #
 # Makefile for ap121-2.6.31 Newma build.  It has dependancies for both
@@ -53,7 +54,7 @@ endif
 endif
 
 common_build:	check_tftp rootfs_prep toolchain_build lzma_uimage \
-		kernel_info enet_build usb_build busybox_build art_mod sar cgi
+		kernel_info enet_build eth_diag usb_build busybox_build art_mod sar cgi
 
 mtd_write:
 	@echo making mtdwrite
@@ -144,7 +145,7 @@ iptables_build:
 # Unique rules for the ag7240 PHY with the ar7240 (Python)  board
 #
 
-enet_build:
+enet_build:	ssdk_build
 	cd $(ENETDIR) && rm -f *.o *.ko *.mod.*
 	$(MAKEARCH) -C $(KERNELPATH) SUBDIRS=$(ENETDIR) modules
 	test -d $(MODULEPATH) || mkdir -p $(MODULEPATH)
@@ -280,6 +281,14 @@ sqlzma_clean:
 	cd $(SQUASHFSLZMADIR) && \
 	$(MAKE) clean
 
+ssdk_build:
+	@echo making SSDK....
+	cd $(SSDK_DIR) && \
+	$(MAKE) clean; $(MAKE) && \
+	cp build/bin/ssdk_ks_km.a $(ENETDIR)/phys/ && \
+	cp build/bin/ssdk_sh $(INSTALL_ROOT)/sbin/ssdk_sh
+	@echo end of making SSDK
+
 lzma_uimage: kernel_build sqlzma_build uboot
 	@echo "Generating LZMA'ed kernel....."
 	cd $(KERNELPATH)/arch/$(KERNELARCH)/boot && \
@@ -323,6 +332,8 @@ squashfs_build: image_root $(TOPDIR)/build/util/mksquashfs4.0
 	chmod 644 $(IMAGEPATH)/$(SQUASHFSFILE)
 	cp $(IMAGEPATH)/$(SQUASHFSFILE) $(TFTPPATH)
 	@echo END make squashfs at `date`
+	@echo make single img
+	make -f ./Makefile.4M
 
 toolchain_clean:
 	@echo BEGIN cleaning toolchain......

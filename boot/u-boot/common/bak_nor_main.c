@@ -224,8 +224,7 @@ static int menukey = 0;
 static __inline__ int abortboot(int bootdelay)
 {
 	int abort = 0;
-       int pressKey=0;
-       int getKey=0;
+
 #ifdef CONFIG_SILENT_CONSOLE
 	if (gd->flags & GD_FLG_SILENT) {
 		/* Restore serial console */
@@ -246,9 +245,8 @@ static __inline__ int abortboot(int bootdelay)
 	 * Don't check if bootdelay < 0
 	 */
 	if (bootdelay >= 0) {
-            pressKey=tstc();
-		if (pressKey) {	/* we got a key press	*/
-			getKey=(void) getc();  /* consume input	*/
+		if (tstc()) {	/* we got a key press	*/
+			(void) getc();  /* consume input	*/
 			puts ("\b\b\b 0");
 			abort = 1; 	/* don't auto boot	*/
 		}
@@ -261,24 +259,20 @@ static __inline__ int abortboot(int bootdelay)
 		--bootdelay;
 		/* delay 100 * 10ms */
 		for (i=0; !abort && i<100; ++i) {
-                   pressKey=tstc();
-			if (pressKey) {	/* we got a key press	*/
+			if (tstc()) {	/* we got a key press	*/
+				abort  = 1;	/* don't auto boot	*/
+				bootdelay = 0;	/* no more delay	*/
 # ifdef CONFIG_MENUKEY
 				menukey = getc();
-                        fdsfdsfdfs;
 # else
-				getKey=getc();  /* consume input	*/
+				(void) getc();  /* consume input	*/
 # endif
-                         if(getKey == 22)
-                         {
-                                abort  = 1;	/* don't auto boot	*/
-        				bootdelay = 0;	/* no more delay	*/
 				break;
-                         }
 			}
 			udelay (10000);
 		}
-		printf ("\b\b\b%2d", bootdelay);
+
+		printf ("\b\b\b%2d ", bootdelay);
 	}
 
 	putc ('\n');

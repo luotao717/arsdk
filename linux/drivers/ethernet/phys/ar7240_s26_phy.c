@@ -540,7 +540,8 @@ int athrs26_reg_init_lan(void *arg)
     DPRINTF("S26 PORT_CONTROL_REGISTER2 :%x\n", athrs26_reg_read ( PORT_CONTROL_REGISTER2 ));
     DPRINTF("S26 PORT_CONTROL_REGISTER3 :%x\n", athrs26_reg_read ( PORT_CONTROL_REGISTER3 ));
     DPRINTF("S26 PORT_CONTROL_REGISTER4 :%x\n", athrs26_reg_read ( PORT_CONTROL_REGISTER4 ));
-
+    printk("S26 PORT_CONTROL_REGISTER4 :%x\n", athrs26_reg_read ( PORT_CONTROL_REGISTER4 ));
+    printk("S26 PORT_CONTROL_REGISTER4 :%x\n", athrs26_reg_read ( 0x44 ));
     /* Disable WAN mac inside S26 */
     athrs26_reg_write(PORT_STATUS_REGISTER5,0x0);
 #ifdef CONFIG_ATHR_VLAN_IGMP
@@ -1005,7 +1006,6 @@ unsigned int athrs26_reg_read(unsigned int s26_addr)
     }
 
     phy_reg_write(unit,phy_address, reg_address, data);
-
     phy_address = (0x17 & ((addr_temp >> 4) | 0x10));
     reg_address = ((addr_temp << 1) & 0x1e);
     s26_rd_csr_low = (uint32_t) phy_reg_read(unit,phy_address, reg_address);

@@ -804,7 +804,21 @@ static int arInitConfigAll(T_LKTOS_INITCONFIG_PLATFORM_TYPE_ platform)
 		}
 
 	}
-	
+	//for cmts mode
+	#if 1
+	if(atoi(nvram_bufget(ralinkMode, "workModeOk")) == 2)
+	{
+            printf("\r\n for spec cmts mode");
+            system("echo initwuxicm > /proc/ar9331_vlan_entry");
+            eval("brctl", "delif", "br0", "eth1");
+            eval("vconfig", "add", "eth1", "1");
+	      eval("ifconfig", "eth1.1", "up");
+            eval("brctl", "addif", "br0", "eth1.1");
+             eval("vconfig", "add", "eth1", "8");
+	      eval("ifconfig", "eth1.8", "up");
+            eval("brctl", "addif", "br1", "eth1.8");
+	}
+    #endif
 	//set_vlan_map_ralink(platform,para);
 	//eval("iptables", "--flush");
 	//eval("iptables", "--flush", "-t", "nat");

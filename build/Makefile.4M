@@ -1,0 +1,91 @@
+#/bin/sh
+############################################################################
+# Hexicom Tech Inc.
+# 
+# 
+# luotao China
+#
+# (c) Copyright 20013-2015, Hexicom Technology, Inc.
+#
+# written consent of Ralink Technology, Inc. is obtained.
+############################################################################
+
+#
+# Change uboot/kernel size if necessary
+#
+
+KERNEL_SIZE = 0xD0000
+ROOTFS_SIZE = 0x2C0000
+
+#-----------------------------------------------
+
+USER_NAME  = $(shell whoami)
+#
+# Uboot Image Information
+#
+KERNEL_DIR = ../images/ap121-2.6.31
+KERNEL_IMAGE = vmlinux.lzma.uImage
+
+#
+# Linux Kernel Image Information
+#
+ROOTFS_DIR = ../images/ap121-2.6.31
+ROOTFS_IMAGE = ap121-2.6.31-squashfs
+
+
+#
+# Single Image Information
+#
+PACKED_DIR = ../images/ap121-2.6.31
+PACKED_IMAGE = stb_kf.bin
+
+all: check_img
+
+	@echo ""
+	@echo -e "\n-Original Kernel Image Size"
+	@wc -c $(KERNEL_DIR)/$(KERNEL_IMAGE)
+
+	@echo -e "\n-Original ROOTFS Image Size"
+	@wc -c $(ROOTFS_DIR)/$(ROOTFS_IMAGE)
+
+# Copy Kernel 
+	@cp $(KERNEL_DIR)/$(KERNEL_IMAGE) $(PACKED_DIR)/$(PACKED_IMAGE)
+
+# Finish Kernel Padding
+	@SIZE=`wc -c $(KERNEL_DIR)/$(KERNEL_IMAGE) | awk '{ print $$1 }'` ; \
+	KERNEL_PART_SIZE=`printf "%d" $(KERNEL_SIZE)` ; \
+	PAD=`expr $$KERNEL_PART_SIZE - $$SIZE` ; \
+	dd if=/dev/zero count=1 bs=$$PAD 2> /dev/null | \
+	tr \\000 \\377 >> $(PACKED_DIR)/$(PACKED_IMAGE)
+
+# Copy Rootfs
+	@cat $(ROOTFS_DIR)/$(ROOTFS_IMAGE) >> $(PACKED_DIR)/$(PACKED_IMAGE)
+
+# Finish Rootfs Padding
+	@SIZE=`wc -c $(ROOTFS_DIR)/$(ROOTFS_IMAGE) | awk '{ print $$1 }'` ; \
+	ROOTFS_PART_SIZE=`printf "%d" $(ROOTFS_SIZE)` ; \
+	PAD=`expr $$ROOTFS_PART_SIZE - $$SIZE` ; \
+	dd if=/dev/zero count=1 bs=$$PAD 2> /dev/null | \
+	tr \\000 \\377 >> $(PACKED_DIR)/$(PACKED_IMAGE)
+
+# Packed Image Size
+	@echo -e "\n-Packed Image Size"
+	@wc -c $(PACKED_DIR)/$(PACKED_IMAGE)
+
+clean:
+	rm -f $(PACKED_DIR)/$(PACKED_IMAGE)
+
+check_img:
+	@if [ ! -f $(KERNEL_DIR)/$(KERNEL_IMAGE) ]; then \
+	echo "" ; \
+	echo "Please copy \"$(KERNEL_IMAGE)\" to current directory"; \
+	echo "" ; \
+	exit 1; \
+	fi 
+
+	@if [ ! -f $(ROOTFS_DIR)/$(ROOTFS_IMAGE) ]; then \
+	echo "" ; \
+	echo "Please copy \"$(ROOTFS_IMAGE)\" to current directory"; \
+	echo "" ; \
+	exit 1; \
+	fi
