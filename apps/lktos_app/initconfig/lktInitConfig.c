@@ -622,6 +622,8 @@ static int arInitConfigAll(T_LKTOS_INITCONFIG_PLATFORM_TYPE_ platform)
 	char connectVlanEnArr[18]={0};
 	int connectVlanIdArr[18]={1};
 	char connectVlanPrioArr[18]={0};
+      unsigned char tmpMacBuf[7]={0};
+      char cmtsBuf[15]={0};
 
 	
 	memset(lan_if, 0, sizeof(lan_if));	
@@ -728,6 +730,14 @@ static int arInitConfigAll(T_LKTOS_INITCONFIG_PLATFORM_TYPE_ platform)
 			connectbrName=nvram_bufget(ralinkMode,tmpbuf);
 			eval("brctl", "addbr", connectbrName);
 			eval("brctl", "addif", connectbrName,wan_if);
+                   if(atoi(nvram_bufget(ralinkMode, "workModeOk")) == 2)
+                   {
+                       flash_read_wan_mac_ar9331(tmpMacBuf);
+                       sprintf(cmtsBuf,"%02x:%02x:%02x:%02x:%02x:%02x",tmpMacBuf[0],tmpMacBuf[1],tmpMacBuf[2],tmpMacBuf[3],tmpMacBuf[4],tmpMacBuf[5]);
+                       eval("ifconfig", "br1", "down");
+                       eval("ifconfig", "br1", "hw","ether",cmtsBuf);
+                       eval("ifconfig", "br1", "up");
+                   }
 			intVal=lktos_networkconfig_init_wan_ar9331HC(platform,connectbrName,vlanflag,vlanid,tmpbuf);
 			if(!intVal)
 			{
