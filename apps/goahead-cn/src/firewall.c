@@ -2873,6 +2873,9 @@ void firewall_init(void)
 	doSystem("iptables -t filter -A INPUT -j %s 1>/dev/null 2>&1", MALICIOUS_INPUT_FILTER_CHAIN);
 	doSystem("iptables -t filter -A %s -p tcp --syn -j %s 1>/dev/null 2>&1", MALICIOUS_INPUT_FILTER_CHAIN, SYNFLOOD_INPUT_FILTER_CHAIN);
 	doSystem("iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu 1>/dev/null 2>&1");
+      //doSystem("iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1400");
+    
+
  	iptablesAllFilterRun();
 
 	// init NAT(DMZ)

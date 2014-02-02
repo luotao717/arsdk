@@ -416,7 +416,7 @@ int main (int argc, char *argv[])
 	}
 	if(!strncmp(cmdtype,"stbget",7))
 	{
-		sprintf(tmp_buff,"flag_version=%s:%s:%s&iscm=%d","0101","b001","f001",iscmts);
+		sprintf(tmp_buff,"flag_version=%s:%s:%s&iscm=%d","0103","b001","f001",iscmts);
 		printf("Server: %s\nPragma: no-cache\nContent-type: text/html\n",getenv("SERVER_SOFTWARE"));
 		printf("\n%s\n",tmp_buff);
 	}

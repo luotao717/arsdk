@@ -355,6 +355,7 @@ static int ar9331_vlan_write( struct file *filp, const char *buff,unsigned long 
 		if (!strncmp(argv[0],"initwuxicm",10))
 		{
                     printk("start config\n");
+		      	 athrs26_reg_write(0x0030, 0x21F005F2);
                     s26_port_vlan_init();
                     s26_port_vlan_tag(0, 2);
                     s26_port_pvid(0,1);
@@ -2877,11 +2878,14 @@ athr_gmac_init(void)
         athr_register_hwaccels(mac);
 
         //printk("\n mtu eth=%d\n",dev->mtu);
-         if (mac->mac_unit == 1)
-         {
+         //if (mac->mac_unit == 1)
+         //{
             dev->mtu=(dev->mtu)-4;
-         }
-
+         //}
+         // if (mac->mac_unit == 0)
+        // {
+           // dev->mtu=(dev->mtu)-4;
+         //}
         if (register_netdev(dev))
         {
             printk(MODULE_NAME ": register netdev failed\n");

@@ -40,13 +40,75 @@
 
 static int ip_forward_finish(struct sk_buff *skb)
 {
+       struct iphdr *myiph;
+	struct tcphdr *mytcp;
+       u32 optlen=0, i;  
+        u8  *op;  
+        u16 newmss, oldmss;  
+        u8  *mss;  
 	struct ip_options * opt	= &(IPCB(skb)->opt);
 
 	IP_INC_STATS_BH(dev_net(skb_dst(skb)->dev), IPSTATS_MIB_OUTFORWDATAGRAMS);
 
 	if (unlikely(opt->optlen))
 		ip_forward_options(skb);
+     if (skb->protocol == htons(ETH_P_IP)) 
+     {
 
+            myiph = (struct iphdr *)(skb->data);
+            if (myiph->protocol == IPPROTO_TCP) {
+                    mytcp = (struct tcphdr *)(skb->data + sizeof(struct iphdr));
+                    if(mytcp->syn)
+                    {
+                       
+                        optlen = mytcp->doff*4 - sizeof(struct tcphdr);  
+                        //if(myiph->daddr == 0x7CACEACC && optlen > 0)
+                        if(optlen > 0)
+                        {
+                            op = ((u8*)mytcp + sizeof(struct tcphdr));
+                            //printk("NATED: Ingress : IP src:%X dst:%X--op:%X\n",myiph->saddr,myiph->daddr,op);
+                            //printk("NATED: Ingress : tcp src: %d tcp dst : %d syn:%d ack:%d psh:%d fin:%d\n", mytcp->source,mytcp->dest,mytcp->syn,mytcp->ack,mytcp->psh,mytcp->fin);
+                            for (i = 0; i < optlen; ) 
+                            {  
+                                if (op[i] == TCPOPT_MSS  && (optlen - i) >= TCPOLEN_MSS  && op[i+1] == TCPOLEN_MSS) 
+                                {  
+                                    u16 mssval;  
+                  
+                                    //newmss = htons( 1356 );  
+                                    //oldmss = (op[i+3] << 8) | op[i+2];
+                                    oldmss = (op[i+2] << 8) | op[i+3]; 
+                                    mssval = (op[i+2] << 8) | op[i+3];  
+                  
+                                    // 是否小于MTU-( iphdr + tcphdr )  
+                                   // if ( mssval > mtu - 40 ) 
+                                    //{  
+                                        //newmss = htons( mtu - 52 );   
+                                    //}  
+                                    //else {  
+                                        //break;  
+                                    //}
+                                    newmss = htons( 1450 );   
+                                    mss = &newmss;  
+                                    //op[i+2] = newmss & 0xFF;  
+                                    //op[i+3] = (newmss & 0xFF00) >> 8;
+                                    op[i+2] = (newmss & 0xFF00) >> 8;
+                                    op[i+3] = newmss & 0xFF;
+                                    // 计算checksum  
+                                    inet_proto_csum_replace2( &mytcp->check, skb,  oldmss, newmss, 0);  
+                                    mssval = (op[i+2] << 8) | op[i+3];  
+                                    //printk( "Change TCP MSS %d to %d--%d---%d/n", ntohs( oldmss ),  mssval,newmss, htons( 1450 ));  
+                                     break;  
+                  
+                                }  
+                                if (op[i] < 2)  
+                                    i++;  
+                                else  
+                                    i += op[i+1] ? : 1;  
+                             }  
+                        }
+                    }
+                }
+        }
 	return dst_output(skb);
 }
 
