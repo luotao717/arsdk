@@ -78,7 +78,7 @@ static char_t	websRealm[64] = T("INTELBRAS");	/* Realm name */
 static char_t	websRealm[64] = T("CD-R KING");	/* Realm name */
 #else 
 //static char_t	websRealm[64] = T("CNU WIFI DEV");	/* Realm name */
-static char_t	websRealm[64] = T("CNU204N");	/* Realm name */
+static char_t	websRealm[64] = T("WIFI CLUND 9331");	/* Realm name */
 #endif
 
 static int		websOpenCount = 0;		/* count of apps using this module */

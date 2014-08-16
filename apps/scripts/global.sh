@@ -11,7 +11,7 @@ getWanIfName()
 		wan_if="br0"
 	elif [ "$opmode" = "1" ]; then
 		if [ "$CONFIG_RAETH_ROUTER" = "y" -o "$CONFIG_MAC_TO_MAC_MODE" = "y" -o "$CONFIG_RT_3052_ESW" = "y" ]; then
-			wan_if="eth2.2"
+			wan_if="eth0"
 		else
 			wan_if="eth0"
 		fi

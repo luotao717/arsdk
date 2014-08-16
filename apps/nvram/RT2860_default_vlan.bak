@@ -2,6 +2,7 @@
 Default
 WebInit=1
 workModeOk=0
+upgradeStatus=10
 HostName=CNU-204N
 Login=admin
 Password=admin

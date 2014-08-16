@@ -13,7 +13,7 @@
 #elif defined (CONFIG_LKTOS_PRIVATE_OEM_NAME_CDRKING)
 #define Version				"CDRKING_WR-NET-022-ZI_V1.0.0"
 #else
-#define Version				"v3.0.3-hc-wuxi"
+#define Version				"v3.0.3-WIFI"
 #define Version				"0103"
 #endif
 

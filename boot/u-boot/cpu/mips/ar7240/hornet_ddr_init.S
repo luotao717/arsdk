@@ -62,6 +62,14 @@ ddr1_init:
     li t8, CFG_DDR_CONFIG2_VAL;
     set_mem(0xB8000004,t8);
 
+    //D.S 0xB80000D8 %LONG 0x0           ;      // 
+    li t8, 0x00;
+    set_mem( 0xB80000D8, t8);
+
+    //D.S 0xB800008C %LONG 0x0A59        ;      // 
+    li t8, 0x0A59;
+    set_mem( 0xB800008C, t8);
+
     // DDR1 Paramters
 
     //D.S 0xB8000010 %LONG 0x8           ;      // Precharge All
@@ -70,7 +78,7 @@ ddr1_init:
     
     //D.S 0xB800000C %LONG 0x2           ;      // Enable DLL, Weak Drive Strength
     //D.S 0xB8000010 %LONG 0x2           ;      // Extended Mode Register Set (EMRS)
-    li t8, 0x2;
+    li t8, 0x0402;								//
     set_mem(0xB800000C , t8);
     li t8, 0x2;
     set_mem(0xB8000010, t8);    
